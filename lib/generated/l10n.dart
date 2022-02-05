@@ -139,6 +139,66 @@ class S {
       args: [],
     );
   }
+
+  /// `hint`
+  String get hint {
+    return Intl.message(
+      'hint',
+      name: 'hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to delete`
+  String get dialogDeleteMessage {
+    return Intl.message(
+      'Are you sure you want to delete',
+      name: 'dialogDeleteMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `cancel`
+  String get cancel {
+    return Intl.message(
+      'cancel',
+      name: 'cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `delete`
+  String get delete {
+    return Intl.message(
+      'delete',
+      name: 'delete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `confirm`
+  String get confirm {
+    return Intl.message(
+      'confirm',
+      name: 'confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `add todo`
+  String get addTodo {
+    return Intl.message(
+      'add todo',
+      name: 'addTodo',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

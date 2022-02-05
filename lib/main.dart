@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simple_app/common/Color.dart';
 import 'package:simple_app/common/Global.dart';
 import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/provider/current_locale.dart';
@@ -72,7 +73,7 @@ class _MyAppState extends State<MyApp> {
       // // 当系统请求“暗模式”时使用时, 使用暗模式
       // darkTheme: ThemeData.dark(),
       theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: themeColor,
           brightness: context.watch<CurrentTheme>().isNightMode
               ? Brightness.dark
               : Brightness.light),

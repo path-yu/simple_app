@@ -22,7 +22,13 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "addTodo": MessageLookupByLibrary.simpleMessage("添加代办事项"),
         "calculator": MessageLookupByLibrary.simpleMessage("计算器"),
+        "cancel": MessageLookupByLibrary.simpleMessage("取消"),
+        "confirm": MessageLookupByLibrary.simpleMessage("确认"),
+        "delete": MessageLookupByLibrary.simpleMessage("删除"),
+        "dialogDeleteMessage": MessageLookupByLibrary.simpleMessage("你确定要删除吗"),
+        "hint": MessageLookupByLibrary.simpleMessage("提示"),
         "nightMode": MessageLookupByLibrary.simpleMessage("夜间模式"),
         "note": MessageLookupByLibrary.simpleMessage("便签"),
         "setting": MessageLookupByLibrary.simpleMessage("设置"),

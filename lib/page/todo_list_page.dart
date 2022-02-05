@@ -3,6 +3,7 @@ import 'package:simple_app/components/base/buildBaseAppBar.dart';
 import 'package:simple_app/components/search_bar.dart';
 import 'package:simple_app/generated/l10n.dart';
 
+import '../utils/showDialog.dart';
 import '../utils/showToast.dart';
 
 class TodoListPage extends StatefulWidget {
@@ -18,6 +19,7 @@ class _TodoListPageState extends State<TodoListPage> {
 
   // 监听键盘点击了确认按钮
   void addConfrim(String value) {
+    showConfirmDialog(context);
     if (value.isEmpty) {
       showToast('不能为空');
     } else {
@@ -38,7 +40,7 @@ class _TodoListPageState extends State<TodoListPage> {
               _todoController,
               addConfrim,
               TextInputAction.go,
-              '添加todo',
+              S.of(context).addTodo,
               prefixIcon: const Icon(Icons.add),
             )
           ],

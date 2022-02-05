@@ -7,5 +7,11 @@
   "calculator": "计算器",
   "todoList": "待办事项列表",
   "nightMode": "夜间模式",
-  "switchLanguage": "切换语言为英语"
+  "switchLanguage": "切换语言为英语",
+  "hint": "提示",
+  "dialogDeleteMessage": "你确定要删除吗",
+  "cancel": "取消",
+  "delete": "删除",
+  "confirm": "确认",
+  "addTodo":"添加代办事项"
 }

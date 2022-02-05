@@ -7,5 +7,11 @@
   "calculator": "calculator",
   "todoList": "todoList",
   "nightMode": "night mode",
-  "switchLanguage": "switch language to english"
+  "switchLanguage": "switch language to english",
+  "hint": "hint",
+  "dialogDeleteMessage": "Are you sure you want to delete",
+  "cancel": "cancel",
+  "delete": "delete",
+  "confirm": "confirm",
+  "addTodo": "add todo"
 }
