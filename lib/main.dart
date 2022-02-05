@@ -1,29 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:simple_app/router.dart';
 
-void main() {
+void main(List<String> args) {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Flutter Demo',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: Scaffold(
-          appBar: AppBar(
-            title: const Text('flutter test'),
-            centerTitle: true,
-          ),
-          body: const Center(
-            child: Text('tessst'),
-          ),
-        ));
+      debugShowCheckedModeBanner: false,
+      initialRoute: '/',
+      routes: routes,
+      title: 'Flutter_ScreenUtil',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+    );
   }
 }
