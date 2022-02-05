@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:simple_app/components/base/baseText.dart';
+import 'package:simple_app/components/base/buildBaseAppBar.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -13,14 +15,7 @@ class _SettingPageState extends State<SettingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: ScreenUtil().setSp(55),
-        title: Text(
-          '设置 ',
-          style: TextStyle(fontSize: ScreenUtil().setSp(18)),
-        ),
-        centerTitle: true,
-      ),
+      appBar: buildBaseAppBar('设置'),
       body: Column(
         children: [
           SwitchListTile(
@@ -30,7 +25,7 @@ class _SettingPageState extends State<SettingPage> {
                 SizedBox(
                   width: ScreenUtil().setWidth(10),
                 ),
-                const Text('切换语言为英语')
+                baseText('切换语言为英语')
               ],
             ),
             value: false,
@@ -43,7 +38,7 @@ class _SettingPageState extends State<SettingPage> {
                 SizedBox(
                   width: ScreenUtil().setWidth(10),
                 ),
-                const Text('夜间模式')
+                baseText('夜间模式')
               ],
             ),
             value: false,

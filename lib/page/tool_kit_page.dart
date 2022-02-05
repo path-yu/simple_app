@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:simple_app/page/note_page.dart';
 import 'package:simple_app/page/todo_list_page.dart';
 
+import '../components/base/buildBaseAppBar.dart';
 import '../utils/showToast.dart';
 
 class ToolKitPage extends StatefulWidget {
@@ -51,14 +52,7 @@ class _ToolKitPageState extends State<ToolKitPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          toolbarHeight: ScreenUtil().setSp(55),
-          title: Text(
-            '工具箱 ',
-            style: TextStyle(fontSize: ScreenUtil().setSp(18)),
-          ),
-          centerTitle: true,
-        ),
+        appBar: buildBaseAppBar('工具箱'),
         body: Container(
             margin: EdgeInsets.only(top: ScreenUtil().setSp(20)),
             child: SizedBox(
