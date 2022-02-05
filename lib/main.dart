@@ -8,6 +8,7 @@ import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/provider/current_locale.dart';
 import 'package:simple_app/provider/current_theme.dart';
 import 'package:simple_app/router.dart';
+import 'package:simple_app/utils/Notification.dart';
 
 final locale = CurrentLocale();
 final nightMode = CurrentTheme();
@@ -20,6 +21,7 @@ void main(List<String> args) async {
     ],
     child: const MyApp(),
   ));
+  await flutterLocalNotificationsPluginInit();
 }
 
 class MyApp extends StatefulWidget {
@@ -29,10 +31,15 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
+// 通过navigatorKey的方式 保存全局的context
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 class _MyAppState extends State<MyApp> {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   late String? strLocale;
+
+  bool isInit = false;
   @override
   void initState() {
     // 读取持久化数据
@@ -46,11 +53,16 @@ class _MyAppState extends State<MyApp> {
         nightMode.initNightMode(isNightMode: isNightMode);
       }
     });
+    setState(() {
+      isInit = true;
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    showNotification('今天的todo还未完成哦,请记得按时完成哦');
+    print(isInit);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
@@ -68,6 +80,8 @@ class _MyAppState extends State<MyApp> {
         Locale('en', 'US'), // English
         Locale('zh', 'CN'), // 中文
       ],
+      // 保存全局navigatorkey
+      navigatorKey: navigatorKey,
       // 当前语言
       locale: context.watch<CurrentLocale>().value,
       // // 当系统请求“暗模式”时使用时, 使用暗模式

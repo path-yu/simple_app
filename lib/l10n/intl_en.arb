@@ -13,5 +13,6 @@
   "cancel": "cancel",
   "delete": "delete",
   "confirm": "confirm",
-  "addTodo": "add todo"
+  "addTodo": "add todo",
+  "noNotificationPermission": "No notification permission, go to the settings interface to set the permission?"
 }

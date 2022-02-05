@@ -31,6 +31,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Are you sure you want to delete"),
         "hint": MessageLookupByLibrary.simpleMessage("hint"),
         "nightMode": MessageLookupByLibrary.simpleMessage("night mode"),
+        "noNotificationPermission": MessageLookupByLibrary.simpleMessage(
+            "No notification permission, go to the settings interface to set the permission?"),
         "note": MessageLookupByLibrary.simpleMessage("note"),
         "setting": MessageLookupByLibrary.simpleMessage("setting"),
         "switchLanguage":

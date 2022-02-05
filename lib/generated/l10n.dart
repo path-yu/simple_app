@@ -199,6 +199,16 @@ class S {
       args: [],
     );
   }
+
+  /// `No notification permission, go to the settings interface to set the permission?`
+  String get noNotificationPermission {
+    return Intl.message(
+      'No notification permission, go to the settings interface to set the permission?',
+      name: 'noNotificationPermission',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
