@@ -39,7 +39,7 @@ class _TodoListPageState extends State<TodoListPage> {
               addConfrim,
               TextInputAction.go,
               '添加todo',
-              prefixIcon: Icon(Icons.add),
+              prefixIcon: const Icon(Icons.add),
             )
           ],
         ),
