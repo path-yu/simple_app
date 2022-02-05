@@ -1,8 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:simple_app/components/base/baseText.dart';
 import 'package:simple_app/components/base/buildBaseAppBar.dart';
+import 'package:simple_app/generated/l10n.dart';
+
+import '../provider/current_locale.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -12,10 +16,19 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+  // 切换当前语言环境
+  void changeLanguage(bool value) {
+    if (value) {
+      context.read<CurrentLocale>().setLocale(const Locale('en', 'US'));
+    } else {
+      context.read<CurrentLocale>().setLocale(const Locale('zh', 'CN'));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildBaseAppBar('设置'),
+      appBar: buildBaseAppBar(S.of(context).setting),
       body: Column(
         children: [
           SwitchListTile(
@@ -25,11 +38,11 @@ class _SettingPageState extends State<SettingPage> {
                 SizedBox(
                   width: ScreenUtil().setWidth(10),
                 ),
-                baseText('切换语言为英语')
+                baseText(S.of(context).switchLanguage)
               ],
             ),
-            value: false,
-            onChanged: (value) {},
+            value: context.watch<CurrentLocale>().languageIsEnglishMode,
+            onChanged: changeLanguage,
           ),
           SwitchListTile(
             title: Row(
@@ -38,7 +51,7 @@ class _SettingPageState extends State<SettingPage> {
                 SizedBox(
                   width: ScreenUtil().setWidth(10),
                 ),
-                baseText('夜间模式')
+                baseText(S.of(context).nightMode)
               ],
             ),
             value: false,

@@ -1,0 +1,11 @@
+{
+  "toolKit": "toolKit",
+  "setting": "setting",
+  "translate": "translate",
+  "weatherQuery": "weather query",
+  "note": "note",
+  "calculator": "calculator",
+  "todoList": "todoList",
+  "nightMode": "night mode",
+  "switchLanguage": "switch language to english"
+}

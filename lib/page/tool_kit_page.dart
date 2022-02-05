@@ -1,8 +1,7 @@
-import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/page/note_page.dart';
 import 'package:simple_app/page/todo_list_page.dart';
 
@@ -17,20 +16,6 @@ class ToolKitPage extends StatefulWidget {
 }
 
 class _ToolKitPageState extends State<ToolKitPage> {
-  final List<Map> toolList = [
-    {"RouterPath": '', "label": '备忘录'},
-    {"RouterPath": '', "label": '翻译'},
-    {"RouterPath": '', "label": '大字版'},
-    {"RouterPath": '', "label": '天气查询'},
-    {"RouterPath": '', "label": '新华字典'},
-    {"RouterPath": '/note_list_page', "label": '便签', "comp": const NotePage()},
-    {"RouterPath": '', "label": '计算器'},
-    {
-      "RouterPath": '/todo_list_page',
-      "label": 'todoList',
-      "comp": const TodoListPage()
-    },
-  ];
   final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
     onPrimary: Colors.black87,
     primary: const Color.fromRGBO(248, 248, 248, 1.0),
@@ -51,8 +36,23 @@ class _ToolKitPageState extends State<ToolKitPage> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Map> toolList = [
+      {"RouterPath": '', "label": S.of(context).translate},
+      {"RouterPath": '', "label": S.of(context).weatherQuery},
+      {
+        "RouterPath": '/note_list_page',
+        "label": S.of(context).note,
+        "comp": const NotePage()
+      },
+      {"RouterPath": '', "label": S.of(context).calculator},
+      {
+        "RouterPath": '/todo_list_page',
+        "label": S.of(context).todoList,
+        "comp": const TodoListPage()
+      },
+    ];
     return Scaffold(
-        appBar: buildBaseAppBar('工具箱'),
+        appBar: buildBaseAppBar(S.of(context).toolKit),
         body: Container(
             margin: EdgeInsets.only(top: ScreenUtil().setSp(20)),
             child: SizedBox(

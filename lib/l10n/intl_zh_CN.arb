@@ -1,0 +1,11 @@
+{
+  "toolKit": "工具箱",
+  "setting": "设置",
+  "translate": "翻译",
+  "weatherQuery": "天气查询",
+  "note": "便签",
+  "calculator": "计算器",
+  "todoList": "待办事项列表",
+  "nightMode": "夜间模式",
+  "switchLanguage": "切换语言为英语"
+}

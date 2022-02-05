@@ -1,6 +1,7 @@
 import "package:flutter/cupertino.dart";
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:simple_app/generated/l10n.dart';
 
 import '../../page/setting_page.dart';
 import '../../page/tool_kit_page.dart';
@@ -13,24 +14,12 @@ class Tabs extends StatefulWidget {
 }
 
 class _TabsState extends State<Tabs> {
-  final List<BottomNavigationBarItem> bottomTabsList = [
-    const BottomNavigationBarItem(
-        icon: Icon(
-          Icons.toc_outlined,
-        ),
-        label: "工具箱"),
-    const BottomNavigationBarItem(
-        icon: Icon(
-          CupertinoIcons.settings,
-        ),
-        label: "设置"),
-  ];
   final tabsList = [
     const ToolKitPage(),
     const SettingPage(),
   ];
   //
-  int currentIndex = 1;
+  int currentIndex = 0;
   late Widget currentPage;
 
   @override
@@ -41,6 +30,18 @@ class _TabsState extends State<Tabs> {
 
   @override
   Widget build(BuildContext context) {
+    final List<BottomNavigationBarItem> bottomTabsList = [
+      BottomNavigationBarItem(
+          icon: const Icon(
+            Icons.toc_outlined,
+          ),
+          label: S.of(context).toolKit),
+      BottomNavigationBarItem(
+          icon: const Icon(
+            CupertinoIcons.settings,
+          ),
+          label: S.of(context).setting),
+    ];
     //设置尺寸（填写设计中设备的屏幕尺寸）如果设计基于360dp * 690dp的屏幕
     ScreenUtil.init(
         BoxConstraints(
