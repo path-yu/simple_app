@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:simple_app/components/base/baseText.dart';
 import 'package:simple_app/components/base/buildBaseAppBar.dart';
 import 'package:simple_app/generated/l10n.dart';
+import 'package:simple_app/provider/current_theme.dart';
 
 import '../provider/current_locale.dart';
 
@@ -22,6 +23,15 @@ class _SettingPageState extends State<SettingPage> {
       context.read<CurrentLocale>().setLocale(const Locale('en', 'US'));
     } else {
       context.read<CurrentLocale>().setLocale(const Locale('zh', 'CN'));
+    }
+  }
+
+  // 切换夜间模式
+  void changeNightMode(value) {
+    if (value) {
+      context.read<CurrentTheme>().changeMode(Brightness.dark);
+    } else {
+      context.read<CurrentTheme>().changeMode(Brightness.light);
     }
   }
 
@@ -54,8 +64,8 @@ class _SettingPageState extends State<SettingPage> {
                 baseText(S.of(context).nightMode)
               ],
             ),
-            value: false,
-            onChanged: (value) {},
+            value: context.watch<CurrentTheme>().isNightMode,
+            onChanged: changeNightMode,
           )
         ],
       ),

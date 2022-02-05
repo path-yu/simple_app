@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:simple_app/generated/l10n.dart';
 
+import '../../common/Color.dart';
 import '../../page/setting_page.dart';
 import '../../page/tool_kit_page.dart';
 
@@ -58,6 +59,7 @@ class _TabsState extends State<Tabs> {
         type: BottomNavigationBarType.fixed,
         currentIndex: currentIndex,
         items: bottomTabsList,
+        selectedItemColor: themeColor,
         onTap: (index) {
           setState(() {
             currentIndex = index;

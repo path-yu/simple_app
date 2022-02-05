@@ -29,7 +29,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "switchLanguage":
             MessageLookupByLibrary.simpleMessage("switch language to english"),
         "todoList": MessageLookupByLibrary.simpleMessage("todoList"),
-        "toolKit": MessageLookupByLibrary.simpleMessage("toolKit"),
+        "toolKit": MessageLookupByLibrary.simpleMessage("tool kit"),
         "translate": MessageLookupByLibrary.simpleMessage("translate"),
         "weatherQuery": MessageLookupByLibrary.simpleMessage("weather query")
       };

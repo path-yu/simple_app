@@ -50,10 +50,10 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  /// `toolKit`
+  /// `tool kit`
   String get toolKit {
     return Intl.message(
-      'toolKit',
+      'tool kit',
       name: 'toolKit',
       desc: '',
       args: [],
