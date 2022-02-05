@@ -30,7 +30,7 @@ class _TabsState extends State<Tabs> {
     const SettingPage(),
   ];
   //
-  int currentIndex = 0;
+  int currentIndex = 1;
   late Widget currentPage;
 
   @override
