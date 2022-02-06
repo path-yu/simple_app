@@ -21,5 +21,6 @@
   "underway": "正在进行",
   "deleteTodoMessage": "确定删除当前代办事项吗?",
   "complete": "已经完成",
-  "notEmpty": "不能为空!"
+  "notEmpty": "不能为空!",
+  "tryAgainExitApp": "再按一次退出App"
 }

@@ -50,6 +50,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("This is an announcement."),
         "toolKit": MessageLookupByLibrary.simpleMessage("tool kit"),
         "translate": MessageLookupByLibrary.simpleMessage("translate"),
+        "tryAgainExitApp":
+            MessageLookupByLibrary.simpleMessage("Press again to exit the App"),
         "underway": MessageLookupByLibrary.simpleMessage("underway"),
         "weatherQuery": MessageLookupByLibrary.simpleMessage("weather query")
       };

@@ -3,6 +3,7 @@ import "package:flutter/cupertino.dart";
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:simple_app/generated/l10n.dart';
+import 'package:simple_app/utils/showToast.dart';
 
 import '../../common/Color.dart';
 import '../../page/setting_page.dart';
@@ -38,6 +39,7 @@ class _TabsState extends State<Tabs> {
     if (_lastQuitTime == null ||
         DateTime.now().difference(_lastQuitTime!).inSeconds > 1) {
       _lastQuitTime = DateTime.now();
+      showToast(S.of(context).tryAgainExitApp);
       return true;
     } else {
       return false;

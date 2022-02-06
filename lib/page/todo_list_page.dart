@@ -135,7 +135,7 @@ class _TodoListPageState extends State<TodoListPage> {
     } else {
       int removeIndex = completeToDoList.indexOf(target);
       _completeToDoListKey.currentState?.animatedRemoveItem(removeIndex);
-      await Future.delayed(const Duration(milliseconds: 350), () {
+      await Future.delayed(const Duration(milliseconds: 200), () {
         changeState();
         _underWayTodoListKey.currentState?.addItem();
       });

@@ -279,6 +279,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Press again to exit the App`
+  String get tryAgainExitApp {
+    return Intl.message(
+      'Press again to exit the App',
+      name: 'tryAgainExitApp',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
