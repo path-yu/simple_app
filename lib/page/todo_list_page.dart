@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:simple_app/common/Color.dart';
 import 'package:simple_app/components/base/buildBaseAppBar.dart';
 import 'package:simple_app/components/search_bar.dart';
+import 'package:simple_app/components/todoList/todoList.dart';
 import 'package:simple_app/generated/l10n.dart';
 
 import '../utils/showDialog.dart';
@@ -19,6 +20,10 @@ class _TodoListPageState extends State<TodoListPage> {
   //定义一个controller
   final TextEditingController _todoController = TextEditingController();
 
+  final GlobalKey<TodoListState> _underWayTodoListKey =
+      GlobalKey<TodoListState>();
+  final GlobalKey<TodoListState> _completeToDoListKey =
+      GlobalKey<TodoListState>();
   // 监听键盘点击了确认按钮
   void addConfrim(String value) {
     showConfirmDialog(context);
@@ -59,6 +64,20 @@ class _TodoListPageState extends State<TodoListPage> {
                 ],
               ),
             ),
+            TodoList(
+                key: _underWayTodoListKey,
+                listData: const [],
+                title: '正在进行',
+                checkBoxChange: () {},
+                deleteToDoListItem: () {},
+                addTodoLitItem: () {}),
+            TodoList(
+                key: _completeToDoListKey,
+                listData: const [],
+                title: '已经完成',
+                checkBoxChange: () {},
+                deleteToDoListItem: () {},
+                addTodoLitItem: () {})
           ],
         ),
       ),
