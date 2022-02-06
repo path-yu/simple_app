@@ -35,7 +35,7 @@ class _TodoListPageState extends State<TodoListPage> {
       GlobalKey<TodoListState>();
   final GlobalKey<TodoListState> _completeToDoListKey =
       GlobalKey<TodoListState>();
-
+  final GlobalKey<SearchBarState> _searchBarKey = GlobalKey<SearchBarState>();
   // 输入框输入值
   String _inputValue = "";
   //全部的任务列表
@@ -174,6 +174,7 @@ class _TodoListPageState extends State<TodoListPage> {
                           addConfrim,
                           TextInputAction.go,
                           S.of(context).addTodo,
+                          key: _searchBarKey,
                           prefixIcon: const Icon(
                             Icons.add,
                             color: themeColor,
@@ -188,6 +189,7 @@ class _TodoListPageState extends State<TodoListPage> {
                     title: S.of(context).underway,
                     checkBoxChange: checkBoxChange,
                     deleteToDoListItem: deleteToDoListItem,
+                    searchBarKey: _searchBarKey,
                   ),
                   TodoList(
                     key: _completeToDoListKey,
@@ -195,6 +197,7 @@ class _TodoListPageState extends State<TodoListPage> {
                     title: S.of(context).complete,
                     checkBoxChange: checkBoxChange,
                     deleteToDoListItem: deleteToDoListItem,
+                    searchBarKey: _searchBarKey,
                   )
                 ],
               ),

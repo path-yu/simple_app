@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:simple_app/components/search_bar.dart';
 import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/provider/current_theme.dart';
 import 'package:simple_app/utils/showDialog.dart';
@@ -13,12 +14,14 @@ class TodoList extends StatefulWidget {
   final String title;
   final Function checkBoxChange;
   final Function deleteToDoListItem;
+  final GlobalKey<SearchBarState> searchBarKey;
   const TodoList({
     required Key key,
     required this.listData,
     required this.title,
     required this.checkBoxChange,
     required this.deleteToDoListItem,
+    required this.searchBarKey,
   }) : super(key: key);
   @override
   TodoListState createState() => TodoListState();
@@ -53,9 +56,12 @@ class TodoListState extends State<TodoList>
   }
 
   void handleRemveItem(index) async {
+    // 失去焦点
+    widget.searchBarKey.currentState!.textFieldFouceNode.unfocus();
     // 弹出对话框并等待其关闭 等获取它的返回值
     bool? delete = await showConfirmDialog(context,
         message: S.of(context).deleteTodoMessage);
+
     if (delete != null) {
       removeItem(index);
     }
@@ -112,7 +118,6 @@ class TodoListState extends State<TodoList>
 
   @override
   Widget build(BuildContext context) {
-    print(widget.listData.length);
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setSp(10)),
       child: Column(

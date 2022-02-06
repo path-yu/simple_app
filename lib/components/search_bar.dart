@@ -7,10 +7,10 @@ class SearchBar extends StatefulWidget {
   final void Function(String) addConfrim;
   final TextInputAction textInputAction;
   final String placeHolder;
-  Color fillColor;
-  Icon prefixIcon;
-  int inputWidth;
-  SearchBar(this._todoController, this.addConfrim, this.textInputAction,
+  final Color fillColor;
+  final Icon prefixIcon;
+  final int inputWidth;
+  const SearchBar(this._todoController, this.addConfrim, this.textInputAction,
       this.placeHolder,
       {Key? key,
       required this.prefixIcon,
@@ -19,10 +19,11 @@ class SearchBar extends StatefulWidget {
       : super(key: key);
 
   @override
-  _SearchBarState createState() => _SearchBarState();
+  SearchBarState createState() => SearchBarState();
 }
 
-class _SearchBarState extends State<SearchBar> {
+class SearchBarState extends State<SearchBar> {
+  final FocusNode textFieldFouceNode = FocusNode();
   @override
   void initState() {
     super.initState();
@@ -38,10 +39,13 @@ class _SearchBarState extends State<SearchBar> {
         controller: widget._todoController,
         textInputAction: widget.textInputAction,
         onSubmitted: widget.addConfrim,
-        style: const TextStyle(color: Colors.black87),
+        focusNode: textFieldFouceNode,
+        style:
+            TextStyle(color: Colors.black87, fontSize: ScreenUtil().setSp(15)),
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.symmetric(vertical: 4.0),
           hintText: widget.placeHolder,
+
           hintStyle: TextStyle(
               fontSize: ScreenUtil().setSp(15), color: Colors.black26),
           prefixIcon: widget.prefixIcon,
@@ -51,7 +55,10 @@ class _SearchBarState extends State<SearchBar> {
               iconSize: ScreenUtil().setSp(18),
               highlightColor: Colors.white,
               color: themeColor,
-              onPressed: () => widget._todoController.text = ""),
+              onPressed: () {
+                widget._todoController.text = "";
+                textFieldFouceNode.unfocus();
+              }),
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),
               borderSide: BorderSide.none),
