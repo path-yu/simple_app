@@ -31,16 +31,18 @@ class _SearchBarState extends State<SearchBar> {
   Widget build(BuildContext context) {
     return ConstrainedBox(
       constraints: BoxConstraints(
-          maxHeight: ScreenUtil().setSp(30),
+          maxHeight: ScreenUtil().setSp(40),
           maxWidth: ScreenUtil().setSp(widget.inputWidth)),
       child: TextField(
         controller: widget._todoController,
         textInputAction: widget.textInputAction,
         onSubmitted: widget.addConfrim,
+        style: const TextStyle(color: Colors.black87),
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.symmetric(vertical: 4.0),
           hintText: widget.placeHolder,
-          hintStyle: TextStyle(fontSize: ScreenUtil().setSp(15)),
+          hintStyle: TextStyle(
+              fontSize: ScreenUtil().setSp(15), color: Colors.black26),
           prefixIcon: widget.prefixIcon,
           // 设置右边图标
           suffixIcon: IconButton(

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:simple_app/common/Color.dart';
 import 'package:simple_app/components/base/buildBaseAppBar.dart';
 import 'package:simple_app/components/search_bar.dart';
 import 'package:simple_app/generated/l10n.dart';
@@ -33,16 +35,30 @@ class _TodoListPageState extends State<TodoListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildBaseAppBar(S.of(context).toolKit),
-      body: Center(
+      resizeToAvoidBottomInset: false, //输入框抵住键盘 内容不随键盘滚动
+      body: Container(
+        color: appBackgroundColor,
+        height: double.infinity,
         child: Column(
           children: [
-            SearchBar(
-              _todoController,
-              addConfrim,
-              TextInputAction.go,
-              S.of(context).addTodo,
-              prefixIcon: const Icon(Icons.add),
-            )
+            Container(
+              color: const Color(0xffEDEDED),
+              padding: EdgeInsets.all(ScreenUtil().setSp(10)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                      child: Center(
+                          child: SearchBar(
+                    _todoController,
+                    addConfrim,
+                    TextInputAction.go,
+                    S.of(context).addTodo,
+                    prefixIcon: const Icon(Icons.add),
+                  )))
+                ],
+              ),
+            ),
           ],
         ),
       ),
