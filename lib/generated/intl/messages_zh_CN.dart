@@ -31,7 +31,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "delete": MessageLookupByLibrary.simpleMessage("删除"),
         "deleteTodoMessage":
             MessageLookupByLibrary.simpleMessage("确定删除当前代办事项吗?"),
-        "dialogDeleteMessage": MessageLookupByLibrary.simpleMessage("你确定要删除吗"),
+        "dialogDeleteMessage": MessageLookupByLibrary.simpleMessage("你确定要删除吗?"),
         "hint": MessageLookupByLibrary.simpleMessage("提示"),
         "nightMode": MessageLookupByLibrary.simpleMessage("夜间模式"),
         "noNotificationPermission":
@@ -41,7 +41,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "setting": MessageLookupByLibrary.simpleMessage("设置"),
         "switchLanguage": MessageLookupByLibrary.simpleMessage("切换语言为英语"),
         "todoCompleteMessage":
-            MessageLookupByLibrary.simpleMessage("今日的todo已经完成, 请再接再厉"),
+            MessageLookupByLibrary.simpleMessage("今日的todo已经完成, 请再接再厉!"),
         "todoList": MessageLookupByLibrary.simpleMessage("待办事项列表"),
         "todoNoticeTitle": MessageLookupByLibrary.simpleMessage("这是一条通知"),
         "toolKit": MessageLookupByLibrary.simpleMessage("工具箱"),

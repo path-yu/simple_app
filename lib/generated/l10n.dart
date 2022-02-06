@@ -150,10 +150,10 @@ class S {
     );
   }
 
-  /// `Are you sure you want to delete`
+  /// `Are you sure you want to delete?`
   String get dialogDeleteMessage {
     return Intl.message(
-      'Are you sure you want to delete',
+      'Are you sure you want to delete?',
       name: 'dialogDeleteMessage',
       desc: '',
       args: [],
@@ -210,20 +210,20 @@ class S {
     );
   }
 
-  /// `This is an announcement`
+  /// `This is an announcement.`
   String get todoNoticeTitle {
     return Intl.message(
-      'This is an announcement',
+      'This is an announcement.',
       name: 'todoNoticeTitle',
       desc: '',
       args: [],
     );
   }
 
-  /// `Today's todo has been completed, please make persistent efforts`
+  /// `Today's todo has been completed, please make persistent efforts.`
   String get todoCompleteMessage {
     return Intl.message(
-      'Today\'s todo has been completed, please make persistent efforts',
+      'Today\'s todo has been completed, please make persistent efforts.',
       name: 'todoCompleteMessage',
       desc: '',
       args: [],
@@ -250,10 +250,10 @@ class S {
     );
   }
 
-  /// `Are you sure to delete the current todo`
+  /// `Are you sure to delete the current todo?`
   String get deleteTodoMessage {
     return Intl.message(
-      'Are you sure to delete the current todo',
+      'Are you sure to delete the current todo?',
       name: 'deleteTodoMessage',
       desc: '',
       args: [],

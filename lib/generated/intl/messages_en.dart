@@ -31,9 +31,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "confirm": MessageLookupByLibrary.simpleMessage("confirm"),
         "delete": MessageLookupByLibrary.simpleMessage("delete"),
         "deleteTodoMessage": MessageLookupByLibrary.simpleMessage(
-            "Are you sure to delete the current todo"),
+            "Are you sure to delete the current todo?"),
         "dialogDeleteMessage": MessageLookupByLibrary.simpleMessage(
-            "Are you sure you want to delete"),
+            "Are you sure you want to delete?"),
         "hint": MessageLookupByLibrary.simpleMessage("hint"),
         "nightMode": MessageLookupByLibrary.simpleMessage("night mode"),
         "noNotificationPermission": MessageLookupByLibrary.simpleMessage(
@@ -44,10 +44,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "switchLanguage":
             MessageLookupByLibrary.simpleMessage("switch language to english"),
         "todoCompleteMessage": MessageLookupByLibrary.simpleMessage(
-            "Today\'s todo has been completed, please make persistent efforts"),
+            "Today\'s todo has been completed, please make persistent efforts."),
         "todoList": MessageLookupByLibrary.simpleMessage("todoList"),
         "todoNoticeTitle":
-            MessageLookupByLibrary.simpleMessage("This is an announcement"),
+            MessageLookupByLibrary.simpleMessage("This is an announcement."),
         "toolKit": MessageLookupByLibrary.simpleMessage("tool kit"),
         "translate": MessageLookupByLibrary.simpleMessage("translate"),
         "underway": MessageLookupByLibrary.simpleMessage("underway"),
