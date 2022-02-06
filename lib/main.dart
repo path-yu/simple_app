@@ -10,18 +10,39 @@ import 'package:simple_app/provider/current_theme.dart';
 import 'package:simple_app/router.dart';
 import 'package:simple_app/utils/Notification.dart';
 
-final locale = CurrentLocale();
-final nightMode = CurrentTheme();
+CurrentTheme? nightMode;
+CurrentLocale? locale;
 
-void main(List<String> args) async {
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(create: (_) => locale),
-      ChangeNotifierProvider(create: (_) => nightMode),
-    ],
-    child: const MyApp(),
-  ));
-  await flutterLocalNotificationsPluginInit();
+late String? strLocale;
+final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+void main(List<String> args) {
+  WidgetsFlutterBinding.ensureInitialized();
+  // 读取持久化数据
+  _prefs.then((prefs) async {
+    strLocale = prefs.getString(ConstantKey.localeKey);
+
+    bool? isNightMode = prefs.getBool(ConstantKey.isNightMode);
+    if (strLocale != null) {
+      locale = CurrentLocale(locale: strLocaleToLocale(strLocale!));
+    } else {
+      locale = CurrentLocale();
+    }
+    if (isNightMode != null) {
+      nightMode = CurrentTheme(
+          themeMode: isNightMode ? Brightness.dark : Brightness.light);
+    } else {
+      nightMode = CurrentTheme(themeMode: Brightness.light);
+    }
+    runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => locale),
+        ChangeNotifierProvider(create: (_) => nightMode),
+      ],
+      child: const MyApp(),
+    ));
+    await flutterLocalNotificationsPluginInit();
+  });
 }
 
 class MyApp extends StatefulWidget {
@@ -35,23 +56,9 @@ class MyApp extends StatefulWidget {
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class _MyAppState extends State<MyApp> {
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-
-  late String? strLocale;
   @override
   void initState() {
     super.initState();
-    // 读取持久化数据
-    _prefs.then((prefs) {
-      strLocale = prefs.getString(ConstantKey.localeKey);
-      bool? isNightMode = prefs.getBool(ConstantKey.isNightMode);
-      if (strLocale != null) {
-        locale.initLocale(nativeLocale: locale.strLocaleToLocale(strLocale!));
-      }
-      if (isNightMode != null) {
-        nightMode.initNightMode(isNightMode: isNightMode);
-      }
-    });
   }
 
   @override
@@ -88,9 +95,10 @@ class _MyAppState extends State<MyApp> {
         _prefs.then((prefs) {
           strLocale = prefs.getString(ConstantKey.localeKey);
           // 如果本地环境不为中文,而且没有设置过语言,则设置为英文
-          if (locale.localeToStrLocale(deviceLocale!) != 'zh' &&
+          if (locale == null &&
+              localeToStrLocale(deviceLocale!) != 'zh' &&
               strLocale == null) {
-            locale.setLocale(const Locale('en', 'US'));
+            locale?.setLocale(const Locale('en', 'US'));
           }
         });
         // 判断需要改变当前语言

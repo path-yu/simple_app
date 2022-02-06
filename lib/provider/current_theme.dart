@@ -5,15 +5,15 @@ import '../common/Global.dart';
 
 class CurrentTheme with ChangeNotifier {
   // 当前语言环境
-  Brightness _themeMode = Brightness.light;
+  Brightness themeMode;
 
-  Brightness get value => _themeMode;
-
+  Brightness get value => themeMode;
+  CurrentTheme({this.themeMode = Brightness.light});
   // 是否为夜间模式
-  bool get isNightMode => _themeMode == Brightness.dark ? true : false;
+  bool get isNightMode => themeMode == Brightness.dark ? true : false;
 
   changeMode(Brightness mode) async {
-    _themeMode = mode;
+    themeMode = mode;
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool(ConstantKey.isNightMode, isNightMode);
     notifyListeners();
@@ -23,7 +23,7 @@ class CurrentTheme with ChangeNotifier {
   void initNightMode({bool? isNightMode}) async {
     if (isNightMode != null) {
       if (isNightMode) {
-        _themeMode = Brightness.dark;
+        themeMode = Brightness.dark;
         notifyListeners();
       }
     }
