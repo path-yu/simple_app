@@ -10,14 +10,12 @@ class TodoList extends StatefulWidget {
   final String title;
   final Function checkBoxChange;
   final Function deleteToDoListItem;
-  final Function addTodoLitItem;
   const TodoList({
     required Key key,
     required this.listData,
     required this.title,
     required this.checkBoxChange,
     required this.deleteToDoListItem,
-    required this.addTodoLitItem,
   }) : super(key: key);
   @override
   TodoListState createState() => TodoListState();
@@ -108,6 +106,7 @@ class TodoListState extends State<TodoList>
 
   @override
   Widget build(BuildContext context) {
+    print(widget.listData.length);
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setSp(10)),
       child: Column(
