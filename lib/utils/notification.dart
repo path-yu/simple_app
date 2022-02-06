@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:simple_app/generated/l10n.dart';
+import 'package:simple_app/main.dart';
 
 import './requesNoticetPermission.dart';
 
@@ -18,7 +20,9 @@ const InitializationSettings initializationSettings = InitializationSettings(
     iOS: initializationSettingsIOS,
     macOS: initializationSettingsMacOS);
 // 显示通知栏
-Future<void> showNotification(String message, String payload) async {
+Future<void> showNotification(
+    {required String message, String? payload, String? title}) async {
+  title ??= S.of(navigatorKey.currentState!.context).todoNoticeTitle;
   // 判断是否有通知权限
   if (await requesNoticetPermission()) {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
@@ -30,9 +34,8 @@ Future<void> showNotification(String message, String payload) async {
     const NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
 
-    await flutterLocalNotificationsPlugin.show(
-        0, 'plain titl555e', message, platformChannelSpecifics,
-        payload: payload);
+    await flutterLocalNotificationsPlugin
+        .show(0, title, message, platformChannelSpecifics, payload: payload);
   }
 }
 

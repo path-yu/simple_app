@@ -23,6 +23,8 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "addTodo": MessageLookupByLibrary.simpleMessage("add todo"),
+        "addTodoMessage":
+            MessageLookupByLibrary.simpleMessage("You added a new todo!"),
         "calculator": MessageLookupByLibrary.simpleMessage("calculator"),
         "cancel": MessageLookupByLibrary.simpleMessage("cancel"),
         "complete": MessageLookupByLibrary.simpleMessage("have finished"),
@@ -41,7 +43,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "setting": MessageLookupByLibrary.simpleMessage("setting"),
         "switchLanguage":
             MessageLookupByLibrary.simpleMessage("switch language to english"),
+        "todoCompleteMessage": MessageLookupByLibrary.simpleMessage(
+            "Today\'s todo has been completed, please make persistent efforts"),
         "todoList": MessageLookupByLibrary.simpleMessage("todoList"),
+        "todoNoticeTitle":
+            MessageLookupByLibrary.simpleMessage("This is an announcement"),
         "toolKit": MessageLookupByLibrary.simpleMessage("tool kit"),
         "translate": MessageLookupByLibrary.simpleMessage("translate"),
         "underway": MessageLookupByLibrary.simpleMessage("underway"),

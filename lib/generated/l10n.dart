@@ -200,6 +200,36 @@ class S {
     );
   }
 
+  /// `You added a new todo!`
+  String get addTodoMessage {
+    return Intl.message(
+      'You added a new todo!',
+      name: 'addTodoMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This is an announcement`
+  String get todoNoticeTitle {
+    return Intl.message(
+      'This is an announcement',
+      name: 'todoNoticeTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Today's todo has been completed, please make persistent efforts`
+  String get todoCompleteMessage {
+    return Intl.message(
+      'Today\'s todo has been completed, please make persistent efforts',
+      name: 'todoCompleteMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `No notification permission, go to the settings interface to set the permission?`
   String get noNotificationPermission {
     return Intl.message(

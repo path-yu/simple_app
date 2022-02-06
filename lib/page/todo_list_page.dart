@@ -13,6 +13,7 @@ import 'package:simple_app/components/search_bar.dart';
 import 'package:simple_app/components/todoList/todoList.dart';
 import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/provider/current_theme.dart';
+import 'package:simple_app/utils/Notification.dart';
 import 'package:simple_app/utils/index.dart';
 
 import '../utils/showToast.dart';
@@ -76,6 +77,7 @@ class _TodoListPageState extends State<TodoListPage> {
 
   void changeState({bool removeInputVal = false, List? data}) {
     setState(() {
+      setStorageData();
       data ??= todoAllList;
       todoAllList = data!;
     });
@@ -88,10 +90,10 @@ class _TodoListPageState extends State<TodoListPage> {
   // 监听键盘点击了确认按钮
   void addConfrim(String value) {
     if (value.isEmpty) {
-      showToast('不能为空');
+      showToast(S.of(context).notEmpty);
     } else {
       // 向通知栏添加一个消息
-      // showNotification('您添加了一条新todo, 请尽快完成哦');
+      showNotification(message: S.of(context).addTodoMessage);
       addTodoLitItem();
     }
   }
@@ -103,10 +105,6 @@ class _TodoListPageState extends State<TodoListPage> {
     var currentTime = formatDate(
         DateTime(now.year, now.month, now.day), [yyyy, '/', mm, '/', dd]);
     todoAllList.add({"value": _inputValue, "done": false, 'time': currentTime});
-    // localStorage.setString('todoList', json.encode(todoAllList));
-    _prefs.then((pres) {
-      pres.setString(ConstantKey.todoListKey, json.encode(todoAllList));
-    });
     changeState(removeInputVal: true, data: todoAllList);
     _underWayTodoListKey.currentState?.addItem();
   }
@@ -114,7 +112,6 @@ class _TodoListPageState extends State<TodoListPage> {
   // 删除todo
   void deleteToDoListItem(target) {
     todoAllList.remove(target);
-    setStorageData();
     changeState();
   }
 
@@ -122,6 +119,33 @@ class _TodoListPageState extends State<TodoListPage> {
     _prefs.then((pres) {
       pres.setString(ConstantKey.todoListKey, json.encode(todoAllList));
     });
+  }
+
+  // 点击切换 todo 状态触发
+  void checkBoxChange(bool value, Map target, bool done) async {
+    int index = todoAllList.indexOf(target);
+    // 如果是done false 说明当前点击的是正在进行的todo项, 则将其删除,并将其添加到已经完成中 反之类似
+    if (done == false) {
+      int removeIndex = underwayList.indexOf(target);
+      _underWayTodoListKey.currentState!.animatedRemoveItem(removeIndex);
+      await Future.delayed(const Duration(milliseconds: 350), () {
+        changeState();
+        _completeToDoListKey.currentState?.addItem();
+      });
+    } else {
+      int removeIndex = completeToDoList.indexOf(target);
+      _completeToDoListKey.currentState?.animatedRemoveItem(removeIndex);
+      await Future.delayed(const Duration(milliseconds: 350), () {
+        changeState();
+        _underWayTodoListKey.currentState?.addItem();
+      });
+    }
+    todoAllList[index]['done'] = value;
+
+    // 如果underwayList 为空则 任务全部完成, 则向通知栏添加一条消息
+    if (underwayList.isEmpty) {
+      showNotification(message: S.of(context).todoCompleteMessage);
+    }
   }
 
   @override
@@ -162,14 +186,14 @@ class _TodoListPageState extends State<TodoListPage> {
                     key: _underWayTodoListKey,
                     listData: underwayList,
                     title: S.of(context).underway,
-                    checkBoxChange: () {},
+                    checkBoxChange: checkBoxChange,
                     deleteToDoListItem: deleteToDoListItem,
                   ),
                   TodoList(
                     key: _completeToDoListKey,
                     listData: completeToDoList,
                     title: S.of(context).complete,
-                    checkBoxChange: () {},
+                    checkBoxChange: checkBoxChange,
                     deleteToDoListItem: deleteToDoListItem,
                   )
                 ],

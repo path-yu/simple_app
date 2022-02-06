@@ -23,6 +23,7 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "addTodo": MessageLookupByLibrary.simpleMessage("添加代办事项"),
+        "addTodoMessage": MessageLookupByLibrary.simpleMessage("您添加了一条新todo!"),
         "calculator": MessageLookupByLibrary.simpleMessage("计算器"),
         "cancel": MessageLookupByLibrary.simpleMessage("取消"),
         "complete": MessageLookupByLibrary.simpleMessage("已经完成"),
@@ -39,7 +40,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "note": MessageLookupByLibrary.simpleMessage("便签"),
         "setting": MessageLookupByLibrary.simpleMessage("设置"),
         "switchLanguage": MessageLookupByLibrary.simpleMessage("切换语言为英语"),
+        "todoCompleteMessage":
+            MessageLookupByLibrary.simpleMessage("今日的todo已经完成, 请再接再厉"),
         "todoList": MessageLookupByLibrary.simpleMessage("待办事项列表"),
+        "todoNoticeTitle": MessageLookupByLibrary.simpleMessage("这是一条通知"),
         "toolKit": MessageLookupByLibrary.simpleMessage("工具箱"),
         "translate": MessageLookupByLibrary.simpleMessage("翻译"),
         "underway": MessageLookupByLibrary.simpleMessage("正在进行"),

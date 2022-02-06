@@ -24,7 +24,7 @@ class CurrentLocale with ChangeNotifier {
       notifyListeners();
       // 异步发起通知
       Future.delayed(const Duration(seconds: 2), () {
-        showNotification('todo', '/todo_list');
+        showNotification(message: 'todo', payload: '/todo_list');
       });
     }
   }
