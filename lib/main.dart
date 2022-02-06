@@ -38,10 +38,9 @@ class _MyAppState extends State<MyApp> {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   late String? strLocale;
-
-  bool isInit = false;
   @override
   void initState() {
+    super.initState();
     // 读取持久化数据
     _prefs.then((prefs) {
       strLocale = prefs.getString(ConstantKey.localeKey);
@@ -53,10 +52,6 @@ class _MyAppState extends State<MyApp> {
         nightMode.initNightMode(isNightMode: isNightMode);
       }
     });
-    setState(() {
-      isInit = true;
-    });
-    super.initState();
   }
 
   @override

@@ -1,3 +1,4 @@
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import "package:flutter/cupertino.dart";
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -22,11 +23,31 @@ class _TabsState extends State<Tabs> {
   //
   int currentIndex = 0;
   late Widget currentPage;
-
+  DateTime? _lastQuitTime;
   @override
   void initState() {
     currentPage = tabsList[currentIndex];
     super.initState();
+    BackButtonInterceptor.add(myInterceptor, name: '/', context: context);
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    if (info.ifRouteChanged(context)) {
+      return false;
+    }
+    if (_lastQuitTime == null ||
+        DateTime.now().difference(_lastQuitTime!).inSeconds > 1) {
+      _lastQuitTime = DateTime.now();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    BackButtonInterceptor.remove(myInterceptor);
   }
 
   @override
