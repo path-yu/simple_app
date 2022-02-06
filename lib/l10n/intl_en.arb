@@ -14,5 +14,9 @@
   "delete": "delete",
   "confirm": "confirm",
   "addTodo": "add todo",
-  "noNotificationPermission": "No notification permission, go to the settings interface to set the permission?"
+  "noNotificationPermission": "No notification permission, go to the settings interface to set the permission?",
+  "underway": "underway",
+  "deleteTodoMessage": "Are you sure to delete the current todo",
+  "complete": "have finished",
+  "notEmpty": "can not be empty"
 }

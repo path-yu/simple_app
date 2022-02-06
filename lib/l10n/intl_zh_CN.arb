@@ -14,5 +14,9 @@
   "delete": "删除",
   "confirm": "确认",
   "addTodo": "添加代办事项",
-  "noNotificationPermission": "没有通知权限, 前往设置界面设置权限?"
+  "noNotificationPermission": "没有通知权限, 前往设置界面设置权限?",
+  "underway": "正在进行",
+  "deleteTodoMessage": "确定删除当前代办事项吗?",
+  "complete": "已经完成",
+  "notEmpty": "不能为空!"
 }

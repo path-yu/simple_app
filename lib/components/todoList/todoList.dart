@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import 'package:simple_app/generated/l10n.dart';
+import 'package:simple_app/provider/current_theme.dart';
 import 'package:simple_app/utils/showDialog.dart';
 
 import 'buildToDoListTitle.dart';
@@ -51,7 +54,8 @@ class TodoListState extends State<TodoList>
 
   void handleRemveItem(index) async {
     // 弹出对话框并等待其关闭 等获取它的返回值
-    bool? delete = await showConfirmDialog(context, message: '确定删除当前todo吗');
+    bool? delete = await showConfirmDialog(context,
+        message: S.of(context).deleteTodoMessage);
     if (delete != null) {
       removeItem(index);
     }
@@ -70,7 +74,9 @@ class TodoListState extends State<TodoList>
     return SizeTransition(
       sizeFactor: _animation,
       child: Container(
-          color: Colors.white,
+          color: context.watch<CurrentTheme>().isNightMode
+              ? Colors.black12
+              : Colors.white,
           height: ScreenUtil().setHeight(40),
           margin: EdgeInsets.only(top: ScreenUtil().setSp(15)),
           child: Center(
@@ -120,6 +126,7 @@ class TodoListState extends State<TodoList>
             child: AnimatedList(
               shrinkWrap: true,
               key: listkey,
+              physics: const BouncingScrollPhysics(),
               initialItemCount: widget.listData.length,
               itemBuilder: (BuildContext context, int index,
                   Animation<double> animation) {

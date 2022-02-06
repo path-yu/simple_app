@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:simple_app/common/Color.dart';
 
 class SearchBar extends StatefulWidget {
   final TextEditingController _todoController;
@@ -47,8 +48,9 @@ class _SearchBarState extends State<SearchBar> {
           // 设置右边图标
           suffixIcon: IconButton(
               icon: const Icon(Icons.clear),
-              iconSize: ScreenUtil().setSp(15),
+              iconSize: ScreenUtil().setSp(18),
               highlightColor: Colors.white,
+              color: themeColor,
               onPressed: () => widget._todoController.text = ""),
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),

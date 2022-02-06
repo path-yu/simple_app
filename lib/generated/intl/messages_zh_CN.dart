@@ -25,19 +25,24 @@ class MessageLookup extends MessageLookupByLibrary {
         "addTodo": MessageLookupByLibrary.simpleMessage("添加代办事项"),
         "calculator": MessageLookupByLibrary.simpleMessage("计算器"),
         "cancel": MessageLookupByLibrary.simpleMessage("取消"),
+        "complete": MessageLookupByLibrary.simpleMessage("已经完成"),
         "confirm": MessageLookupByLibrary.simpleMessage("确认"),
         "delete": MessageLookupByLibrary.simpleMessage("删除"),
+        "deleteTodoMessage":
+            MessageLookupByLibrary.simpleMessage("确定删除当前代办事项吗?"),
         "dialogDeleteMessage": MessageLookupByLibrary.simpleMessage("你确定要删除吗"),
         "hint": MessageLookupByLibrary.simpleMessage("提示"),
         "nightMode": MessageLookupByLibrary.simpleMessage("夜间模式"),
         "noNotificationPermission":
             MessageLookupByLibrary.simpleMessage("没有通知权限, 前往设置界面设置权限?"),
+        "notEmpty": MessageLookupByLibrary.simpleMessage("不能为空!"),
         "note": MessageLookupByLibrary.simpleMessage("便签"),
         "setting": MessageLookupByLibrary.simpleMessage("设置"),
         "switchLanguage": MessageLookupByLibrary.simpleMessage("切换语言为英语"),
         "todoList": MessageLookupByLibrary.simpleMessage("待办事项列表"),
         "toolKit": MessageLookupByLibrary.simpleMessage("工具箱"),
         "translate": MessageLookupByLibrary.simpleMessage("翻译"),
+        "underway": MessageLookupByLibrary.simpleMessage("正在进行"),
         "weatherQuery": MessageLookupByLibrary.simpleMessage("天气查询")
       };
 }

@@ -209,6 +209,46 @@ class S {
       args: [],
     );
   }
+
+  /// `underway`
+  String get underway {
+    return Intl.message(
+      'underway',
+      name: 'underway',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure to delete the current todo`
+  String get deleteTodoMessage {
+    return Intl.message(
+      'Are you sure to delete the current todo',
+      name: 'deleteTodoMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `have finished`
+  String get complete {
+    return Intl.message(
+      'have finished',
+      name: 'complete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `can not be empty`
+  String get notEmpty {
+    return Intl.message(
+      'can not be empty',
+      name: 'notEmpty',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

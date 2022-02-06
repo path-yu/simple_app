@@ -25,14 +25,18 @@ class MessageLookup extends MessageLookupByLibrary {
         "addTodo": MessageLookupByLibrary.simpleMessage("add todo"),
         "calculator": MessageLookupByLibrary.simpleMessage("calculator"),
         "cancel": MessageLookupByLibrary.simpleMessage("cancel"),
+        "complete": MessageLookupByLibrary.simpleMessage("have finished"),
         "confirm": MessageLookupByLibrary.simpleMessage("confirm"),
         "delete": MessageLookupByLibrary.simpleMessage("delete"),
+        "deleteTodoMessage": MessageLookupByLibrary.simpleMessage(
+            "Are you sure to delete the current todo"),
         "dialogDeleteMessage": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to delete"),
         "hint": MessageLookupByLibrary.simpleMessage("hint"),
         "nightMode": MessageLookupByLibrary.simpleMessage("night mode"),
         "noNotificationPermission": MessageLookupByLibrary.simpleMessage(
             "No notification permission, go to the settings interface to set the permission?"),
+        "notEmpty": MessageLookupByLibrary.simpleMessage("can not be empty"),
         "note": MessageLookupByLibrary.simpleMessage("note"),
         "setting": MessageLookupByLibrary.simpleMessage("setting"),
         "switchLanguage":
@@ -40,6 +44,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "todoList": MessageLookupByLibrary.simpleMessage("todoList"),
         "toolKit": MessageLookupByLibrary.simpleMessage("tool kit"),
         "translate": MessageLookupByLibrary.simpleMessage("translate"),
+        "underway": MessageLookupByLibrary.simpleMessage("underway"),
         "weatherQuery": MessageLookupByLibrary.simpleMessage("weather query")
       };
 }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:date_format/date_format.dart' hide S;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_app/common/Color.dart';
 import 'package:simple_app/common/Global.dart';
@@ -11,6 +12,7 @@ import 'package:simple_app/components/base/loading.dart';
 import 'package:simple_app/components/search_bar.dart';
 import 'package:simple_app/components/todoList/todoList.dart';
 import 'package:simple_app/generated/l10n.dart';
+import 'package:simple_app/provider/current_theme.dart';
 import 'package:simple_app/utils/index.dart';
 
 import '../utils/showToast.dart';
@@ -61,7 +63,7 @@ class _TodoListPageState extends State<TodoListPage> {
 
   void init() async {
     var data = await getLocalStorageData(ConstantKey.todoListKey);
-    await Future.delayed(const Duration(microseconds: 300));
+    await Future.delayed(const Duration(milliseconds: 300));
     setState(() {
       loading = false;
     });
@@ -72,9 +74,10 @@ class _TodoListPageState extends State<TodoListPage> {
     }
   }
 
-  void changeState({bool removeInputVal = false, required List data}) {
+  void changeState({bool removeInputVal = false, List? data}) {
     setState(() {
-      todoAllList = data;
+      data ??= todoAllList;
+      todoAllList = data!;
     });
     if (removeInputVal) {
       // 清空输入框文本
@@ -93,6 +96,7 @@ class _TodoListPageState extends State<TodoListPage> {
     }
   }
 
+  // 添加todo
   void addTodoLitItem() {
     DateTime now = DateTime.now();
     // 储存当前时间并格式化
@@ -107,20 +111,34 @@ class _TodoListPageState extends State<TodoListPage> {
     _underWayTodoListKey.currentState?.addItem();
   }
 
+  // 删除todo
+  void deleteToDoListItem(target) {
+    todoAllList.remove(target);
+    setStorageData();
+    changeState();
+  }
+
+  void setStorageData() {
+    _prefs.then((pres) {
+      pres.setString(ConstantKey.todoListKey, json.encode(todoAllList));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildBaseAppBar(S.of(context).toolKit),
+      appBar: buildBaseAppBar(S.of(context).todoList),
       resizeToAvoidBottomInset: false, //输入框抵住键盘 内容不随键盘滚动
       body: loading
           ? const Loading()
-          : Container(
-              color: appBackgroundColor,
+          : SizedBox(
               height: double.infinity,
               child: Column(
                 children: [
                   Container(
-                    color: const Color(0xffEDEDED),
+                    color: context.watch<CurrentTheme>().isNightMode
+                        ? Theme.of(context).cardTheme.color
+                        : appBackgroundColor,
                     padding: EdgeInsets.all(ScreenUtil().setSp(10)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -132,7 +150,10 @@ class _TodoListPageState extends State<TodoListPage> {
                           addConfrim,
                           TextInputAction.go,
                           S.of(context).addTodo,
-                          prefixIcon: const Icon(Icons.add),
+                          prefixIcon: const Icon(
+                            Icons.add,
+                            color: themeColor,
+                          ),
                         )))
                       ],
                     ),
@@ -140,16 +161,16 @@ class _TodoListPageState extends State<TodoListPage> {
                   TodoList(
                     key: _underWayTodoListKey,
                     listData: underwayList,
-                    title: '正在进行',
+                    title: S.of(context).underway,
                     checkBoxChange: () {},
-                    deleteToDoListItem: () {},
+                    deleteToDoListItem: deleteToDoListItem,
                   ),
                   TodoList(
                     key: _completeToDoListKey,
                     listData: completeToDoList,
-                    title: '已经完成',
+                    title: S.of(context).complete,
                     checkBoxChange: () {},
-                    deleteToDoListItem: () {},
+                    deleteToDoListItem: deleteToDoListItem,
                   )
                 ],
               ),
