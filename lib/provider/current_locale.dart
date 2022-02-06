@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simple_app/utils/notification.dart';
 
 import '../common/Global.dart';
 
@@ -19,7 +20,12 @@ class CurrentLocale with ChangeNotifier {
   void initLocale({Locale? nativeLocale = _defaultLocale}) async {
     if (nativeLocale != null) {
       _locale = nativeLocale;
+      // 开启通知
       notifyListeners();
+      // 异步发起通知
+      Future.delayed(const Duration(seconds: 2), () {
+        showNotification('todo', '/todo_list');
+      });
     }
   }
 

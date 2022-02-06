@@ -61,13 +61,11 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    showNotification('今天的todo还未完成哦,请记得按时完成哦');
-    print(isInit);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: routes,
-      title: 'Flutter_ScreenUtil',
+      title: 'simple_app',
       // 国际化
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
