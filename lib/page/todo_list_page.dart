@@ -5,6 +5,7 @@ import 'package:simple_app/components/base/buildBaseAppBar.dart';
 import 'package:simple_app/components/search_bar.dart';
 import 'package:simple_app/components/todoList/todoList.dart';
 import 'package:simple_app/generated/l10n.dart';
+import 'package:simple_app/utils/index.dart';
 
 import '../utils/showDialog.dart';
 import '../utils/showToast.dart';
@@ -24,6 +25,35 @@ class _TodoListPageState extends State<TodoListPage> {
       GlobalKey<TodoListState>();
   final GlobalKey<TodoListState> _completeToDoListKey =
       GlobalKey<TodoListState>();
+
+  // 输入框输入值
+  String _inputValue = "";
+  // 正在进行的任务列表
+  List underwayList = [];
+  //全部的任务列表
+  List todoAllList = [];
+  // 已经完成的任务列表
+  List completeToDoList = [];
+  // 是否正在加载数据
+  bool loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    getLocalStorageData('43').then((value) {
+      print(value);
+    });
+    //监听输入变化
+    _todoController.addListener(() {
+      filedOnChange(_todoController.text);
+    });
+  }
+
+  // 监听输入值值变化
+  void filedOnChange(String value) {
+    _inputValue = value;
+  }
+
   // 监听键盘点击了确认按钮
   void addConfrim(String value) {
     showConfirmDialog(context);
@@ -66,14 +96,14 @@ class _TodoListPageState extends State<TodoListPage> {
             ),
             TodoList(
                 key: _underWayTodoListKey,
-                listData: const [],
+                listData: underwayList,
                 title: '正在进行',
                 checkBoxChange: () {},
                 deleteToDoListItem: () {},
                 addTodoLitItem: () {}),
             TodoList(
                 key: _completeToDoListKey,
-                listData: const [],
+                listData: completeToDoList,
                 title: '已经完成',
                 checkBoxChange: () {},
                 deleteToDoListItem: () {},
