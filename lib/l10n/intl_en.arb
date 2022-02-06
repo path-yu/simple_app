@@ -22,5 +22,6 @@
   "deleteTodoMessage": "Are you sure to delete the current todo?",
   "complete": "have finished",
   "notEmpty": "can not be empty",
-  "tryAgainExitApp": "Press again to exit the App"
+  "tryAgainExitApp": "Press again to exit the App",
+  "noDevelopment": "No development"
 }

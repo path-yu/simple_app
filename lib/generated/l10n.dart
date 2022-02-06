@@ -289,6 +289,16 @@ class S {
       args: [],
     );
   }
+
+  /// `No development`
+  String get noDevelopment {
+    return Intl.message(
+      'No development',
+      name: 'noDevelopment',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

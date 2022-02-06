@@ -34,6 +34,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "dialogDeleteMessage": MessageLookupByLibrary.simpleMessage("你确定要删除吗?"),
         "hint": MessageLookupByLibrary.simpleMessage("提示"),
         "nightMode": MessageLookupByLibrary.simpleMessage("夜间模式"),
+        "noDevelopment": MessageLookupByLibrary.simpleMessage("暂未开发"),
         "noNotificationPermission":
             MessageLookupByLibrary.simpleMessage("没有通知权限, 前往设置界面设置权限?"),
         "notEmpty": MessageLookupByLibrary.simpleMessage("不能为空!"),

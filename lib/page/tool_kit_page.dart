@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/page/note_page.dart';
 import 'package:simple_app/page/todo_list_page.dart';
+import 'package:simple_app/provider/current_theme.dart';
 
 import '../components/base/buildBaseAppBar.dart';
 import '../utils/showToast.dart';
@@ -16,18 +18,9 @@ class ToolKitPage extends StatefulWidget {
 }
 
 class _ToolKitPageState extends State<ToolKitPage> {
-  final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
-    onPrimary: Colors.black87,
-    primary: const Color.fromRGBO(248, 248, 248, 1.0),
-    minimumSize: const Size(88, 36),
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(Radius.circular(20)),
-    ),
-  );
   void toRouterPage(Map map) {
     if (map['RouterPath'].isEmpty) {
-      showToast('暂未开发');
+      showToast(S.of(context).noDevelopment);
     } else {
       Navigator.push(
           context, CupertinoPageRoute(builder: (context) => map['comp']));
@@ -51,6 +44,17 @@ class _ToolKitPageState extends State<ToolKitPage> {
         "comp": const TodoListPage()
       },
     ];
+    final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
+      onPrimary: Colors.black38,
+      primary: context.watch<CurrentTheme>().isNightMode
+          ? const Color.fromRGBO(48, 48, 48, 0.5)
+          : const Color.fromRGBO(248, 248, 248, 1.0),
+      minimumSize: const Size(88, 36),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+      ),
+    );
     return Scaffold(
         appBar: buildBaseAppBar(S.of(context).toolKit),
         body: Container(
@@ -68,7 +72,9 @@ class _ToolKitPageState extends State<ToolKitPage> {
                   if (routerPath.isEmpty) {
                     buttonTextColor = Colors.grey;
                   } else {
-                    buttonTextColor = Colors.black;
+                    buttonTextColor = context.watch<CurrentTheme>().isNightMode
+                        ? Colors.white
+                        : Colors.black;
                   }
                   return SizedBox(
                     width: ScreenUtil().setWidth(150),

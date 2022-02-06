@@ -22,5 +22,6 @@
   "deleteTodoMessage": "确定删除当前代办事项吗?",
   "complete": "已经完成",
   "notEmpty": "不能为空!",
-  "tryAgainExitApp": "再按一次退出App"
+  "tryAgainExitApp": "再按一次退出App",
+  "noDevelopment":"暂未开发"
 }

@@ -59,6 +59,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    init();
   }
 
   @override
@@ -80,6 +81,7 @@ class _MyAppState extends State<MyApp> {
         Locale('en', 'US'), // English
         Locale('zh', 'CN'), // 中文
       ],
+      // darkTheme: ThemeData(primaryColor: Colors.red),
       // 保存全局navigatorkey
       navigatorKey: navigatorKey,
       // 当前语言

@@ -4,6 +4,6 @@ import 'package:simple_app/page/todo_list_page.dart';
 
 final routes = {
   '/': (context) => const Tabs(),
-  'todo_list': (context) => const TodoListPage(),
+  '/todo_list_page': (context) => const TodoListPage(),
   '/note': (context) => const NotePage()
 };

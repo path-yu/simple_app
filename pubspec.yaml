@@ -19,6 +19,7 @@ dependencies:
   flutter_native_splash: ^2.0.1+1
   cupertino_icons: ^1.0.2
   back_button_interceptor: ^5.0.2
+  device_info_plus: ^3.2.1
   flutter_localizations:
     sdk: flutter
 

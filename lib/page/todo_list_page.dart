@@ -93,7 +93,8 @@ class _TodoListPageState extends State<TodoListPage> {
       showToast(S.of(context).notEmpty);
     } else {
       // 向通知栏添加一个消息
-      showNotification(message: S.of(context).addTodoMessage);
+      showNotification(
+          message: S.of(context).addTodoMessage, payload: '/todo_list_page');
       addTodoLitItem();
     }
   }
@@ -144,7 +145,9 @@ class _TodoListPageState extends State<TodoListPage> {
 
     // 如果underwayList 为空则 任务全部完成, 则向通知栏添加一条消息
     if (underwayList.isEmpty) {
-      showNotification(message: S.of(context).todoCompleteMessage);
+      showNotification(
+          message: S.of(context).todoCompleteMessage,
+          payload: '/todo_list_page');
     }
   }
 

@@ -42,7 +42,9 @@ Future<void> showNotification(
 // 点击通知栏触发的事件 跳转到todoListpage 页面
 void selectNotification(String? payload) async {
   debugPrint('notification payload: $payload');
-  // navigatorKey.currentState?.pushNamed(payload!);
+  if (payload != null) {
+    navigatorKey.currentState?.pushNamed(payload);
+  }
 }
 
 //  初始化本地通知插件
