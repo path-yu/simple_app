@@ -2,6 +2,7 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 import "package:flutter/cupertino.dart";
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:simple_app/common/color.dart';
 import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/page/setting_page.dart';
 import 'package:simple_app/page/tool_kit_page.dart';
