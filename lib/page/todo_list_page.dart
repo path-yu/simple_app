@@ -15,8 +15,9 @@ import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/provider/current_theme.dart';
 import 'package:simple_app/utils/Notification.dart';
 import 'package:simple_app/utils/index.dart';
+import 'package:simple_app/utils/show_toast.dart';
 
-import '../utils/show_toast.dart';
+
 
 class TodoListPage extends StatefulWidget {
   const TodoListPage({Key? key}) : super(key: key);

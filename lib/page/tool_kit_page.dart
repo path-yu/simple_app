@@ -2,13 +2,14 @@ import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:simple_app/components/base/build_base_app_bar.dart';
 import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/page/note_page.dart';
 import 'package:simple_app/page/todo_list_page.dart';
 import 'package:simple_app/provider/current_theme.dart';
+import 'package:simple_app/utils/show_toast.dart';
 
-import '../components/base/build_base_app_bar.dart';
-import '../utils/show_toast.dart';
+
 
 class ToolKitPage extends StatefulWidget {
   const ToolKitPage({Key? key}) : super(key: key);

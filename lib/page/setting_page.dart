@@ -4,9 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:simple_app/components/base/base_text.dart';
 import 'package:simple_app/components/base/build_base_app_bar.dart';
 import 'package:simple_app/generated/l10n.dart';
+import 'package:simple_app/provider/current_locale.dart';
 import 'package:simple_app/provider/current_theme.dart';
 
-import '../provider/current_locale.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);

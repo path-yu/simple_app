@@ -1,8 +1,9 @@
 import 'package:permission_handler/permission_handler.dart';
 import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/main.dart';
+import 'package:simple_app/utils/show_dialog.dart';
 
-import 'show_dialog.dart';
+
 
 // 获取app 是否具有通知权限 如果没有则弹出对话框 跳转到设置界面
 Future requesNoticetPermission() async {
