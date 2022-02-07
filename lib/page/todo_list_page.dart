@@ -17,8 +17,6 @@ import 'package:simple_app/utils/Notification.dart';
 import 'package:simple_app/utils/index.dart';
 import 'package:simple_app/utils/show_toast.dart';
 
-
-
 class TodoListPage extends StatefulWidget {
   const TodoListPage({Key? key}) : super(key: key);
 
@@ -137,7 +135,7 @@ class _TodoListPageState extends State<TodoListPage> {
     } else {
       int removeIndex = completeToDoList.indexOf(target);
       _completeToDoListKey.currentState?.animatedRemoveItem(removeIndex);
-      await Future.delayed(const Duration(milliseconds: 200), () {
+      await Future.delayed(const Duration(milliseconds: 350), () {
         changeState();
         _underWayTodoListKey.currentState?.addItem();
       });
