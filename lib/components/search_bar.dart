@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:simple_app/common/Color.dart';
+import 'package:simple_app/common/color.dart';
 
 class SearchBar extends StatefulWidget {
   final TextEditingController _todoController;

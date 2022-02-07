@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../common/Global.dart';
+import '../common/globa.dart';
 
 class CurrentTheme with ChangeNotifier {
   // 当前语言环境

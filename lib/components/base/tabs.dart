@@ -3,9 +3,9 @@ import "package:flutter/cupertino.dart";
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:simple_app/generated/l10n.dart';
-import 'package:simple_app/utils/showToast.dart';
+import 'package:simple_app/utils/show_toast.dart';
 
-import '../../common/Color.dart';
+import '../../common/color.dart';
 import '../../page/setting_page.dart';
 import '../../page/tool_kit_page.dart';
 

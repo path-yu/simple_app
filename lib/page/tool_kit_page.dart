@@ -7,8 +7,8 @@ import 'package:simple_app/page/note_page.dart';
 import 'package:simple_app/page/todo_list_page.dart';
 import 'package:simple_app/provider/current_theme.dart';
 
-import '../components/base/buildBaseAppBar.dart';
-import '../utils/showToast.dart';
+import '../components/base/build_base_app_bar.dart';
+import '../utils/show_toast.dart';
 
 class ToolKitPage extends StatefulWidget {
   const ToolKitPage({Key? key}) : super(key: key);

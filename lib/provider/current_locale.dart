@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_app/utils/notification.dart';
 
-import '../common/Global.dart';
+import '../common/globa.dart';
 
 const _defaultLocale = Locale('en', 'US');
 void main(List<String> args) {}

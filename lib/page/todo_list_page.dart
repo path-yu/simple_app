@@ -5,18 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simple_app/common/Color.dart';
-import 'package:simple_app/common/Global.dart';
-import 'package:simple_app/components/base/buildBaseAppBar.dart';
+import 'package:simple_app/common/color.dart';
+import 'package:simple_app/common/globa.dart';
+import 'package:simple_app/components/base/build_base_app_bar.dart';
 import 'package:simple_app/components/base/loading.dart';
 import 'package:simple_app/components/search_bar.dart';
-import 'package:simple_app/components/todoList/todoList.dart';
+import 'package:simple_app/components/todoList/todo_list.dart';
 import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/provider/current_theme.dart';
 import 'package:simple_app/utils/Notification.dart';
 import 'package:simple_app/utils/index.dart';
 
-import '../utils/showToast.dart';
+import '../utils/show_toast.dart';
 
 class TodoListPage extends StatefulWidget {
   const TodoListPage({Key? key}) : super(key: key);

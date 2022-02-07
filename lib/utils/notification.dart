@@ -4,7 +4,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/main.dart';
 
-import './requesNoticetPermission.dart';
+import 'request_notice_permission.dart';
 
 void init() async {}
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
