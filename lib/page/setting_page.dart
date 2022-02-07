@@ -1,9 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:simple_app/components/base/baseText.dart';
-import 'package:simple_app/components/base/buildBaseAppBar.dart';
+import 'package:simple_app/components/base/base_text.dart';
+import 'package:simple_app/components/base/build_base_app_bar.dart';
 import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/provider/current_theme.dart';
 

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simple_app/common/Color.dart';
-import 'package:simple_app/common/Global.dart';
+import 'package:simple_app/common/color.dart';
+import 'package:simple_app/common/globa.dart';
 import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/provider/current_locale.dart';
 import 'package:simple_app/provider/current_theme.dart';
@@ -103,6 +103,7 @@ class _MyAppState extends State<MyApp> {
             locale?.setLocale(const Locale('en', 'US'));
           }
         });
+        return null;
         // 判断需要改变当前语言
       },
     );
