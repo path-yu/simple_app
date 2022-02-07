@@ -5,8 +5,6 @@ import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/main.dart';
 
 import 'request_notice_permission.dart';
-
-void init() async {}
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 const AndroidInitializationSettings initializationSettingsAndroid =

@@ -21,8 +21,8 @@ void main(List<String> args) {
   // 读取持久化数据
   _prefs.then((prefs) async {
     strLocale = prefs.getString(ConstantKey.localeKey);
-
     bool? isNightMode = prefs.getBool(ConstantKey.isNightMode);
+    // 优先读取持久化数据
     if (strLocale != null) {
       locale = CurrentLocale(locale: strLocaleToLocale(strLocale!));
     } else {
@@ -41,6 +41,7 @@ void main(List<String> args) {
       ],
       child: const MyApp(),
     ));
+    // 初始化本地通知插件
     await flutterLocalNotificationsPluginInit();
   });
 }
@@ -59,7 +60,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    init();
   }
 
   @override
