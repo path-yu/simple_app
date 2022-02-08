@@ -81,18 +81,17 @@ class _MyAppState extends State<MyApp> {
         Locale('en', 'US'), // English
         Locale('zh', 'CN'), // 中文
       ],
-      // darkTheme: ThemeData(primaryColor: Colors.red),
       // 保存全局navigatorkey
       navigatorKey: navigatorKey,
       // 当前语言
       locale: context.watch<CurrentLocale>().value,
       // // 当系统请求“暗模式”时使用时, 使用暗模式
-      // darkTheme: ThemeData.dark(),
       theme: ThemeData(
-          primarySwatch: themeColor,
-          brightness: context.watch<CurrentTheme>().isNightMode
-              ? Brightness.dark
-              : Brightness.light),
+        primarySwatch: themeColor,
+        brightness: context.watch<CurrentTheme>().isNightMode
+            ? Brightness.dark
+            : Brightness.light,
+      ),
       localeResolutionCallback: (deviceLocale, supportedLocales) {
         _prefs.then((prefs) {
           strLocale = prefs.getString(ConstantKey.localeKey);
@@ -104,7 +103,6 @@ class _MyAppState extends State<MyApp> {
           }
         });
         return null;
-        // 判断需要改变当前语言
       },
     );
   }

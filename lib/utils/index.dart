@@ -4,13 +4,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
-// ignore: prefer_typing_uninitialized_variables
-var prefsinstance;
+SharedPreferences? prefsinstance;
 // 获取数据持久化存储对象的数据
 Future<dynamic> getLocalStorageData(key) async {
   // 初始化数据持久化存储对象
   prefsinstance ??= await _prefs.then((value) => value);
-  String? value = prefsinstance.getString(key);
+  String? value = prefsinstance?.getString(key);
   value ??= "[]";
   //将string 转为json
   return json.decode(value);
