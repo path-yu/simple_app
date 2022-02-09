@@ -39,6 +39,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("没有通知权限, 前往设置界面设置权限?"),
         "notEmpty": MessageLookupByLibrary.simpleMessage("不能为空!"),
         "note": MessageLookupByLibrary.simpleMessage("便签"),
+        "searchNote": MessageLookupByLibrary.simpleMessage("搜索便签"),
         "setting": MessageLookupByLibrary.simpleMessage("设置"),
         "switchLanguage": MessageLookupByLibrary.simpleMessage("切换语言为英语"),
         "todoCompleteMessage":

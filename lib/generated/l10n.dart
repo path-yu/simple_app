@@ -299,6 +299,16 @@ class S {
       args: [],
     );
   }
+
+  /// `search Note`
+  String get searchNote {
+    return Intl.message(
+      'search Note',
+      name: 'searchNote',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

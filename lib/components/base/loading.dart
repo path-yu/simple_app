@@ -8,8 +8,8 @@ class Loading extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
-        width: ScreenUtil().setWidth(30),
-        height: ScreenUtil().setHeight(30),
+        width: ScreenUtil().setWidth(45),
+        height: ScreenUtil().setHeight(45),
         child: // 模糊进度条(会执行一个旋转动画)
             const CupertinoActivityIndicator(
           color: Colors.blue,

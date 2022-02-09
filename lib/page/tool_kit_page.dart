@@ -2,14 +2,13 @@ import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:simple_app/common/color.dart';
 import 'package:simple_app/components/base/build_base_app_bar.dart';
 import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/page/note_page.dart';
 import 'package:simple_app/page/todo_list_page.dart';
 import 'package:simple_app/provider/current_theme.dart';
 import 'package:simple_app/utils/show_toast.dart';
-
-
 
 class ToolKitPage extends StatefulWidget {
   const ToolKitPage({Key? key}) : super(key: key);
@@ -48,7 +47,7 @@ class _ToolKitPageState extends State<ToolKitPage> {
     final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
       onPrimary: Colors.black38,
       primary: context.watch<CurrentTheme>().isNightMode
-          ? const Color.fromRGBO(48, 48, 48, 0.5)
+          ? easyDarkColor
           : const Color.fromRGBO(248, 248, 248, 1.0),
       minimumSize: const Size(88, 36),
       padding: const EdgeInsets.symmetric(horizontal: 16),

@@ -23,5 +23,6 @@
   "complete": "have finished",
   "notEmpty": "can not be empty",
   "tryAgainExitApp": "Press again to exit the App",
-  "noDevelopment": "No development"
+  "noDevelopment": "No development",
+  "searchNote":"search Note"
 }

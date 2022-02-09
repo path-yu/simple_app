@@ -7,3 +7,5 @@ const MaterialColor themeColor = Colors.blue;
 const Color appBackgroundColor = Color(0xfff7f7f7);
 // 搜索框灰色背景颜色
 const Color searchBarFillColor = Color(0xffEDEDED);
+
+const easyDarkColor = Color.fromRGBO(48, 48, 48, 0.3);

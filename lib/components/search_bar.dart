@@ -51,9 +51,10 @@ class SearchBarState extends State<SearchBar> {
           prefixIcon: widget.prefixIcon,
           // 设置右边图标
           suffixIcon: IconButton(
+              enableFeedback: false,
               icon: const Icon(Icons.clear),
               iconSize: ScreenUtil().setSp(18),
-              highlightColor: Colors.white,
+              splashColor: Colors.transparent,
               color: themeColor,
               onPressed: () {
                 widget._todoController.text = "";

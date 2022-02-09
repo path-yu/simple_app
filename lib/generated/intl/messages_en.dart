@@ -41,6 +41,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "No notification permission, go to the settings interface to set the permission?"),
         "notEmpty": MessageLookupByLibrary.simpleMessage("can not be empty"),
         "note": MessageLookupByLibrary.simpleMessage("note"),
+        "searchNote": MessageLookupByLibrary.simpleMessage("search Note"),
         "setting": MessageLookupByLibrary.simpleMessage("setting"),
         "switchLanguage":
             MessageLookupByLibrary.simpleMessage("switch language to english"),
