@@ -83,6 +83,7 @@ class _MyAppState extends State<MyApp> {
         Locale('en', 'US'), // English
         Locale('zh', 'CN'), // 中文
       ],
+      // 设置视觉密度：适应平台密度
       // 保存全局navigatorkey
       navigatorKey: navigatorKey,
       // 当前语言
@@ -90,6 +91,7 @@ class _MyAppState extends State<MyApp> {
       // // 当系统请求“暗模式”时使用时, 使用暗模式
       theme: ThemeData(
         primarySwatch: themeColor,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
         brightness: context.watch<CurrentTheme>().isNightMode
             ? Brightness.dark
             : Brightness.light,
