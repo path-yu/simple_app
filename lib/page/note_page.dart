@@ -1,3 +1,4 @@
+import 'package:date_format/date_format.dart' hide S;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:simple_app/common/color.dart';
@@ -24,7 +25,7 @@ class _NotePageState extends State<NotePage> {
   //滚动监听器
   final ScrollController _scrollController = ScrollController(); //listview的控制器
   // 所有的标签数据
-  List<Note> noteList = [Note(id: 34, title: '43', time: 11000)];
+  List<Note> noteList = [];
   // 数据是否正在加载
   bool isLoading = false;
   // t提示文字
@@ -32,15 +33,38 @@ class _NotePageState extends State<NotePage> {
   @override
   void initState() {
     super.initState();
-    DBProvider().findAll().then((value) {
-      print(value);
-    });
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         print('滑动到了最底部');
         _getMore();
       }
+    });
+    getData(DBProvider().findAll);
+  }
+
+  //从数据库中读取数据
+  Future getData(Function action,
+      [String title = "", bool isPullRefresh = false]) async {
+    if (isPullRefresh == false) {
+      setState(() {
+        isLoading = true;
+      });
+    }
+    List<Note> result;
+    if (title.isNotEmpty) {
+      result = await action(title);
+      if (result.isEmpty) {
+        setState(() {
+          messageText = '很遗憾,没有搜索到数据!';
+        });
+      }
+    } else {
+      result = await action();
+    }
+    setState(() {
+      noteList = result;
+      isLoading = false;
     });
   }
 
@@ -51,14 +75,63 @@ class _NotePageState extends State<NotePage> {
 
   // 加载更多
   _getMore() {}
-  toCreateOrEditorNotePage() {}
-  void addConfrim(String value) {}
+  void addConfirm(String value) {}
+  void handleLongPress() {
+    print('长按');
+  }
+
+  // 跳转到新建便签 页面
+  void toCreateOrEditorNotePage({int? id, int? time}) {
+    if (id != null) {
+      // 打开新页面 并等待返回结果
+      Navigator.pushNamed(context, '/create_note_or_editor_page', arguments: {
+        'appbarTitle': S.of(context).editorNote,
+        'isEditor': true,
+        "id": id,
+        'time': time
+      }).then((value) {
+        // 然后返回了数据则更新页面
+        if (value != null) {
+          getData(DBProvider().findAll);
+        }
+      });
+    } else {
+      Navigator.pushNamed(context, '/create_note_or_editor_page', arguments: {
+        'appbarTitle': S.of(context).createNote,
+        'isEditor': false
+      }).then((value) {
+        getData(DBProvider().findAll);
+      });
+    }
+  }
 
   Widget noteItemBuild(BuildContext context, int index) {
+    Note target = noteList[index];
+    var date = DateTime.fromMicrosecondsSinceEpoch(target.time);
+    final title = target.title == null
+        ? const SizedBox(
+            height: 0,
+          )
+        : Text(
+            '${target.title}',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          );
+    // 动态计算高度
+    var currentTime = formatDate(
+        DateTime(
+          date.year,
+          date.month,
+          date.day,
+        ),
+        [yyyy, '年', mm, '月', dd, '日']);
     return InkWell(
-      onTap: () {
-        print('34');
-      },
+      onTap: () => toCreateOrEditorNotePage(
+          id: target.id, time: target.time),
+      onLongPress: handleLongPress,
       child: SizedBox(
         height: ScreenUtil().setHeight(100),
         child: DecoratedBox(
@@ -71,17 +144,10 @@ class _NotePageState extends State<NotePage> {
             child: Padding(
               padding: EdgeInsets.all(ScreenUtil().setSp(10)),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'target.title',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  title,
                   const Text(
                     'content',
                     overflow: TextOverflow.ellipsis,
@@ -89,7 +155,7 @@ class _NotePageState extends State<NotePage> {
                     style: TextStyle(color: Color(0xff636363)),
                   ),
                   Text(
-                    'currentTime',
+                    currentTime,
                     style: TextStyle(
                         fontSize: ScreenUtil().setSp(12),
                         color: const Color(0xff969696)),
@@ -131,11 +197,11 @@ class _NotePageState extends State<NotePage> {
           : Expanded(
               child: MasonryGridView.count(
                 crossAxisCount: 2,
-                mainAxisSpacing: 4,
-                crossAxisSpacing: 4,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
                 physics: const BouncingScrollPhysics(),
                 controller: _scrollController,
-                itemCount: 20,
+                itemCount: noteList.length,
                 itemBuilder: noteItemBuild,
               ),
             );
@@ -154,7 +220,7 @@ class _NotePageState extends State<NotePage> {
               Center(
                 child: SearchBar(
                   _noteController,
-                  addConfrim,
+                  addConfirm,
                   TextInputAction.search,
                   S.of(context).searchNote,
                   fillColor: searchBarFillColor,

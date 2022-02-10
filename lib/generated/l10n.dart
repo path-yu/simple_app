@@ -50,10 +50,10 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  /// `tool kit`
+  /// `Tool kit`
   String get toolKit {
     return Intl.message(
-      'tool kit',
+      'Tool kit',
       name: 'toolKit',
       desc: '',
       args: [],
@@ -80,10 +80,10 @@ class S {
     );
   }
 
-  /// `weather query`
+  /// `Weather query`
   String get weatherQuery {
     return Intl.message(
-      'weather query',
+      'Weather query',
       name: 'weatherQuery',
       desc: '',
       args: [],
@@ -110,30 +110,30 @@ class S {
     );
   }
 
-  /// `todoList`
+  /// `Todo list`
   String get todoList {
     return Intl.message(
-      'todoList',
+      'Todo list',
       name: 'todoList',
       desc: '',
       args: [],
     );
   }
 
-  /// `night mode`
+  /// `Night mode`
   String get nightMode {
     return Intl.message(
-      'night mode',
+      'Night mode',
       name: 'nightMode',
       desc: '',
       args: [],
     );
   }
 
-  /// `switch language to english`
+  /// `Switch language to english`
   String get switchLanguage {
     return Intl.message(
-      'switch language to english',
+      'Switch language to english',
       name: 'switchLanguage',
       desc: '',
       args: [],
@@ -190,10 +190,10 @@ class S {
     );
   }
 
-  /// `add todo`
+  /// `Add todo`
   String get addTodo {
     return Intl.message(
-      'add todo',
+      'Add todo',
       name: 'addTodo',
       desc: '',
       args: [],
@@ -260,20 +260,20 @@ class S {
     );
   }
 
-  /// `have finished`
+  /// `Have finished`
   String get complete {
     return Intl.message(
-      'have finished',
+      'Have finished',
       name: 'complete',
       desc: '',
       args: [],
     );
   }
 
-  /// `can not be empty`
+  /// `Can not be empty`
   String get notEmpty {
     return Intl.message(
-      'can not be empty',
+      'Can not be empty',
       name: 'notEmpty',
       desc: '',
       args: [],
@@ -300,11 +300,31 @@ class S {
     );
   }
 
-  /// `search Note`
+  /// `Search note`
   String get searchNote {
     return Intl.message(
-      'search Note',
+      'Search note',
       name: 'searchNote',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Editor note`
+  String get editorNote {
+    return Intl.message(
+      'Editor note',
+      name: 'editorNote',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create note`
+  String get createNote {
+    return Intl.message(
+      'Create note',
+      name: 'createNote',
       desc: '',
       args: [],
     );

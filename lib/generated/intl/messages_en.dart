@@ -22,39 +22,41 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-        "addTodo": MessageLookupByLibrary.simpleMessage("add todo"),
+        "addTodo": MessageLookupByLibrary.simpleMessage("Add todo"),
         "addTodoMessage":
             MessageLookupByLibrary.simpleMessage("You added a new todo!"),
         "calculator": MessageLookupByLibrary.simpleMessage("calculator"),
         "cancel": MessageLookupByLibrary.simpleMessage("cancel"),
-        "complete": MessageLookupByLibrary.simpleMessage("have finished"),
+        "complete": MessageLookupByLibrary.simpleMessage("Have finished"),
         "confirm": MessageLookupByLibrary.simpleMessage("confirm"),
+        "createNote": MessageLookupByLibrary.simpleMessage("Create note"),
         "delete": MessageLookupByLibrary.simpleMessage("delete"),
         "deleteTodoMessage": MessageLookupByLibrary.simpleMessage(
             "Are you sure to delete the current todo?"),
         "dialogDeleteMessage": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to delete?"),
+        "editorNote": MessageLookupByLibrary.simpleMessage("Editor note"),
         "hint": MessageLookupByLibrary.simpleMessage("hint"),
-        "nightMode": MessageLookupByLibrary.simpleMessage("night mode"),
+        "nightMode": MessageLookupByLibrary.simpleMessage("Night mode"),
         "noDevelopment": MessageLookupByLibrary.simpleMessage("No development"),
         "noNotificationPermission": MessageLookupByLibrary.simpleMessage(
             "No notification permission, go to the settings interface to set the permission?"),
-        "notEmpty": MessageLookupByLibrary.simpleMessage("can not be empty"),
+        "notEmpty": MessageLookupByLibrary.simpleMessage("Can not be empty"),
         "note": MessageLookupByLibrary.simpleMessage("note"),
-        "searchNote": MessageLookupByLibrary.simpleMessage("search Note"),
+        "searchNote": MessageLookupByLibrary.simpleMessage("Search note"),
         "setting": MessageLookupByLibrary.simpleMessage("setting"),
         "switchLanguage":
-            MessageLookupByLibrary.simpleMessage("switch language to english"),
+            MessageLookupByLibrary.simpleMessage("Switch language to english"),
         "todoCompleteMessage": MessageLookupByLibrary.simpleMessage(
             "Today\'s todo has been completed, please make persistent efforts."),
-        "todoList": MessageLookupByLibrary.simpleMessage("todoList"),
+        "todoList": MessageLookupByLibrary.simpleMessage("Todo list"),
         "todoNoticeTitle":
             MessageLookupByLibrary.simpleMessage("This is an announcement."),
-        "toolKit": MessageLookupByLibrary.simpleMessage("tool kit"),
+        "toolKit": MessageLookupByLibrary.simpleMessage("Tool kit"),
         "translate": MessageLookupByLibrary.simpleMessage("translate"),
         "tryAgainExitApp":
             MessageLookupByLibrary.simpleMessage("Press again to exit the App"),
         "underway": MessageLookupByLibrary.simpleMessage("underway"),
-        "weatherQuery": MessageLookupByLibrary.simpleMessage("weather query")
+        "weatherQuery": MessageLookupByLibrary.simpleMessage("Weather query")
       };
 }

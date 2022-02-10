@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
@@ -5,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_app/common/color.dart';
 import 'package:simple_app/common/globa.dart';
 import 'package:simple_app/generated/l10n.dart';
+import 'package:simple_app/page/note_editor_page.dart';
 import 'package:simple_app/provider/current_locale.dart';
 import 'package:simple_app/provider/current_theme.dart';
 import 'package:simple_app/router.dart';
@@ -103,6 +105,15 @@ class _MyAppState extends State<MyApp> {
           }
         });
         return null;
+      },
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          case '/create_note_or_editor_page':
+            return CupertinoPageRoute(
+                builder: (context) => const NoteEditorPage());
+          default:
+            return null;
+        }
       },
     );
   }

@@ -28,10 +28,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "cancel": MessageLookupByLibrary.simpleMessage("取消"),
         "complete": MessageLookupByLibrary.simpleMessage("已经完成"),
         "confirm": MessageLookupByLibrary.simpleMessage("确认"),
+        "createNote": MessageLookupByLibrary.simpleMessage("新建便签"),
         "delete": MessageLookupByLibrary.simpleMessage("删除"),
         "deleteTodoMessage":
             MessageLookupByLibrary.simpleMessage("确定删除当前代办事项吗?"),
         "dialogDeleteMessage": MessageLookupByLibrary.simpleMessage("你确定要删除吗?"),
+        "editorNote": MessageLookupByLibrary.simpleMessage("编辑便签"),
         "hint": MessageLookupByLibrary.simpleMessage("提示"),
         "nightMode": MessageLookupByLibrary.simpleMessage("夜间模式"),
         "noDevelopment": MessageLookupByLibrary.simpleMessage("暂未开发"),

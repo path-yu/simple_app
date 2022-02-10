@@ -24,5 +24,7 @@
   "notEmpty": "不能为空!",
   "tryAgainExitApp": "再按一次退出App",
   "noDevelopment":"暂未开发",
-  "searchNote":"搜索便签"
+  "searchNote":"搜索便签",
+  "editorNote":"编辑便签",
+  "createNote":"新建便签"
 }
