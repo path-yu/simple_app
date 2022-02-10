@@ -20,7 +20,7 @@ class NoteEditorPage extends StatefulWidget {
 class _NoteEditorPageState extends State<NoteEditorPage>
     with WidgetsBindingObserver {
   /// Allows to control the editor and the document.
-  final ZefyrController _zefyrController = ZefyrController();
+   ZefyrController? _zefyrController;
 
   /// Zefyr editor like any other input field requires a focus node.
   final FocusNode _focusNode = FocusNode();
@@ -107,7 +107,7 @@ class _NoteEditorPageState extends State<NoteEditorPage>
 
   _saveDocument() async {
     // 读取便签内容
-    final contents = jsonEncode(_zefyrController.document);
+    final contents = jsonEncode(_zefyrController?.document);
     // contents 默认为[{"insert":"\n"}] 长度17的字符串
     if (title!.isEmpty || contents.length == 17 ) {
       return showToast(S.of(context).titleAndNoteNotNullMessage);
@@ -138,7 +138,15 @@ class _NoteEditorPageState extends State<NoteEditorPage>
       }
     }
   }
-
+   Future<dynamic> _loadData() async {
+    // 加载写入的文本内容
+    final document = await _loadDocument(isEditor: isEditor);
+    _zefyrController =  ZefyrController(document);
+    setState(() {
+      isLoading = false;
+    });
+    return true;
+  }
   @override
   void didChangeMetrics() {
     super.didChangeMetrics();
@@ -198,9 +206,9 @@ class _NoteEditorPageState extends State<NoteEditorPage>
                 Navigator.pop(context, isNeedUpdate);
               })),
       body: FutureBuilder(
-        future: null,
+        future: _loadData(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          return isLoading
+          return _zefyrController == null
               ? const Loading()
               : Column(
                   children: [
@@ -218,13 +226,13 @@ class _NoteEditorPageState extends State<NoteEditorPage>
                         child: ZefyrEditor(
                       padding: EdgeInsets.fromLTRB(ScreenUtil().setSp(16), 0,
                           ScreenUtil().setSp(16), ScreenUtil().setSp(16)),
-                      controller: _zefyrController,
+                      controller: _zefyrController!,
                       focusNode: _focusNode,
                           autofocus: true,
                     )),
                     Visibility(
                       visible: visible,
-                      child: ZefyrToolbar.basic(controller: _zefyrController),
+                      child: ZefyrToolbar.basic(controller: _zefyrController!),
                     )
                   ],
                 );

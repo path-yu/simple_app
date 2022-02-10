@@ -147,20 +147,11 @@ class _NotePageState extends State<NotePage> {
         context.watch<CurrentLocale>().languageIsEnglishMode
             ? [yyyy, '-', mm, '-', dd]
             : [yyyy, '年', mm, '月', dd, '日']);
-    // 动态计算高度
-    double? height;
-    if (content.length > 15) {
-      height = ScreenUtil().setHeight(120);
-    } else if (content.length > 25) {
-      height = ScreenUtil().setHeight(140);
-    } else {
-      ScreenUtil().setHeight(100);
-    }
     return InkWell(
       onTap: () => toCreateOrEditorNotePage(id: target.id, time: target.time),
       onLongPress: handleLongPress,
       child: SizedBox(
-        height: height,
+        // height: height,
         child: DecoratedBox(
             decoration: BoxDecoration(
                 border: Border.all(color: Colors.white12, width: 1),
@@ -175,12 +166,14 @@ class _NotePageState extends State<NotePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   title,
+                  SizedBox(height: ScreenUtil().setHeight(5),),
                   Text(
                     content,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 3,
                     style: const TextStyle(color: Color(0xff636363)),
                   ),
+                  SizedBox(height: ScreenUtil().setHeight(5),),
                   Text(
                     currentTime,
                     style: TextStyle(
