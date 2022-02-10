@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:date_format/date_format.dart' hide S;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,6 +12,7 @@ import 'package:simple_app/model/note.dart';
 import 'package:simple_app/generated/l10n.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
+import 'package:simple_app/provider/current_locale.dart';
 import 'package:simple_app/provider/current_theme.dart';
 
 class NotePage extends StatefulWidget {
@@ -22,14 +25,18 @@ class NotePage extends StatefulWidget {
 class _NotePageState extends State<NotePage> {
   //定义一个controller
   final TextEditingController _noteController = TextEditingController();
+
   //滚动监听器
   final ScrollController _scrollController = ScrollController(); //listview的控制器
   // 所有的标签数据
   List<Note> noteList = [];
+
   // 数据是否正在加载
   bool isLoading = false;
+
   // t提示文字
-  String messageText = "你还未添加添加便签,请点击按钮添加便签吧!";
+  String? messageText;
+
   @override
   void initState() {
     super.initState();
@@ -56,7 +63,7 @@ class _NotePageState extends State<NotePage> {
       result = await action(title);
       if (result.isEmpty) {
         setState(() {
-          messageText = '很遗憾,没有搜索到数据!';
+          messageText = S.of(context).notSearchNoteMessage;
         });
       }
     } else {
@@ -75,9 +82,18 @@ class _NotePageState extends State<NotePage> {
 
   // 加载更多
   _getMore() {}
+
   void addConfirm(String value) {}
+
   void handleLongPress() {
     print('长按');
+  }
+
+  // 返回便签内容数据
+  String getNoteContent(target) {
+    String content = json.decode(target.content)[0]['insert'];
+    content = content.replaceAll('\n', '');
+    return content;
   }
 
   // 跳转到新建便签 页面
@@ -108,6 +124,7 @@ class _NotePageState extends State<NotePage> {
   Widget noteItemBuild(BuildContext context, int index) {
     Note target = noteList[index];
     var date = DateTime.fromMicrosecondsSinceEpoch(target.time);
+    String content = getNoteContent(target);
     final title = target.title == null
         ? const SizedBox(
             height: 0,
@@ -120,20 +137,30 @@ class _NotePageState extends State<NotePage> {
               fontWeight: FontWeight.bold,
             ),
           );
-    // 动态计算高度
-    var currentTime = formatDate(
+
+    String currentTime = formatDate(
         DateTime(
           date.year,
           date.month,
           date.day,
         ),
-        [yyyy, '年', mm, '月', dd, '日']);
+        context.watch<CurrentLocale>().languageIsEnglishMode
+            ? [yyyy, '-', mm, '-', dd]
+            : [yyyy, '年', mm, '月', dd, '日']);
+    // 动态计算高度
+    double? height;
+    if (content.length > 15) {
+      height = ScreenUtil().setHeight(120);
+    } else if (content.length > 25) {
+      height = ScreenUtil().setHeight(140);
+    } else {
+      ScreenUtil().setHeight(100);
+    }
     return InkWell(
-      onTap: () => toCreateOrEditorNotePage(
-          id: target.id, time: target.time),
+      onTap: () => toCreateOrEditorNotePage(id: target.id, time: target.time),
       onLongPress: handleLongPress,
       child: SizedBox(
-        height: ScreenUtil().setHeight(100),
+        height: height,
         child: DecoratedBox(
             decoration: BoxDecoration(
                 border: Border.all(color: Colors.white12, width: 1),
@@ -144,15 +171,15 @@ class _NotePageState extends State<NotePage> {
             child: Padding(
               padding: EdgeInsets.all(ScreenUtil().setSp(10)),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   title,
-                  const Text(
-                    'content',
+                  Text(
+                    content,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 3,
-                    style: TextStyle(color: Color(0xff636363)),
+                    style: const TextStyle(color: Color(0xff636363)),
                   ),
                   Text(
                     currentTime,
@@ -168,6 +195,7 @@ class _NotePageState extends State<NotePage> {
   }
 
   Widget buildNoteListCard() {
+    messageText ??= S.of(context).notNoteMessage;
     if (isLoading) {
       return const Loading();
     } else {
@@ -182,7 +210,7 @@ class _NotePageState extends State<NotePage> {
                 itemBuilder: (BuildContext context, int index) {
                   if (index == 0) {
                     return Center(
-                      child: Text(messageText,
+                      child: Text(messageText!,
                           style: const TextStyle(color: Colors.grey)),
                     );
                   } else {
@@ -199,10 +227,11 @@ class _NotePageState extends State<NotePage> {
                 crossAxisCount: 2,
                 mainAxisSpacing: 10,
                 crossAxisSpacing: 10,
-                physics: const BouncingScrollPhysics(),
+                physics: const AlwaysScrollableScrollPhysics(),
                 controller: _scrollController,
                 itemCount: noteList.length,
                 itemBuilder: noteItemBuild,
+                shrinkWrap: true,
               ),
             );
     }

@@ -26,5 +26,13 @@
   "noDevelopment":"暂未开发",
   "searchNote":"搜索便签",
   "editorNote":"编辑便签",
-  "createNote":"新建便签"
+  "createNote":"新建便签",
+  "title": "标题",
+  "notNoteMessage": "你还未添加添加便签,请点击按钮添加便签吧!",
+  "notSearchNoteMessage": "很遗憾,没有搜索到数据!",
+  "titleAndNoteNotNullMessage": "标题或内容不能为空",
+  "updateSuccess": "更新成功",
+  "updateFail": "更新失败",
+  "saveSuccess": "保存成功",
+  "saveFail": "保存失败"
 }

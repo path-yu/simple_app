@@ -329,6 +329,86 @@ class S {
       args: [],
     );
   }
+
+  /// `title`
+  String get title {
+    return Intl.message(
+      'title',
+      name: 'title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You haven't added a note yet. Please click the button to add a note!`
+  String get notNoteMessage {
+    return Intl.message(
+      'You haven\'t added a note yet. Please click the button to add a note!',
+      name: 'notNoteMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unfortunately, no data was found!`
+  String get notSearchNoteMessage {
+    return Intl.message(
+      'Unfortunately, no data was found!',
+      name: 'notSearchNoteMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Title or content cannot be empty`
+  String get titleAndNoteNotNullMessage {
+    return Intl.message(
+      'Title or content cannot be empty',
+      name: 'titleAndNoteNotNullMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Update successful`
+  String get updateSuccess {
+    return Intl.message(
+      'Update successful',
+      name: 'updateSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Update failed`
+  String get updateFail {
+    return Intl.message(
+      'Update failed',
+      name: 'updateFail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saved successfully`
+  String get saveSuccess {
+    return Intl.message(
+      'Saved successfully',
+      name: 'saveSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saved failed`
+  String get saveFail {
+    return Intl.message(
+      'Saved failed',
+      name: 'saveFail',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

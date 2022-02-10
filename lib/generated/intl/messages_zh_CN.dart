@@ -40,10 +40,19 @@ class MessageLookup extends MessageLookupByLibrary {
         "noNotificationPermission":
             MessageLookupByLibrary.simpleMessage("没有通知权限, 前往设置界面设置权限?"),
         "notEmpty": MessageLookupByLibrary.simpleMessage("不能为空!"),
+        "notNoteMessage":
+            MessageLookupByLibrary.simpleMessage("你还未添加添加便签,请点击按钮添加便签吧!"),
+        "notSearchNoteMessage":
+            MessageLookupByLibrary.simpleMessage("很遗憾,没有搜索到数据!"),
         "note": MessageLookupByLibrary.simpleMessage("便签"),
+        "saveFail": MessageLookupByLibrary.simpleMessage("保存失败"),
+        "saveSuccess": MessageLookupByLibrary.simpleMessage("保存成功"),
         "searchNote": MessageLookupByLibrary.simpleMessage("搜索便签"),
         "setting": MessageLookupByLibrary.simpleMessage("设置"),
         "switchLanguage": MessageLookupByLibrary.simpleMessage("切换语言为英语"),
+        "title": MessageLookupByLibrary.simpleMessage("标题"),
+        "titleAndNoteNotNullMessage":
+            MessageLookupByLibrary.simpleMessage("标题或内容不能为空"),
         "todoCompleteMessage":
             MessageLookupByLibrary.simpleMessage("今日的todo已经完成, 请再接再厉!"),
         "todoList": MessageLookupByLibrary.simpleMessage("待办事项列表"),
@@ -52,6 +61,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "translate": MessageLookupByLibrary.simpleMessage("翻译"),
         "tryAgainExitApp": MessageLookupByLibrary.simpleMessage("再按一次退出App"),
         "underway": MessageLookupByLibrary.simpleMessage("正在进行"),
+        "updateFail": MessageLookupByLibrary.simpleMessage("更新失败"),
+        "updateSuccess": MessageLookupByLibrary.simpleMessage("更新成功"),
         "weatherQuery": MessageLookupByLibrary.simpleMessage("天气查询")
       };
 }

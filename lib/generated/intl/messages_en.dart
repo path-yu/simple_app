@@ -42,11 +42,21 @@ class MessageLookup extends MessageLookupByLibrary {
         "noNotificationPermission": MessageLookupByLibrary.simpleMessage(
             "No notification permission, go to the settings interface to set the permission?"),
         "notEmpty": MessageLookupByLibrary.simpleMessage("Can not be empty"),
+        "notNoteMessage": MessageLookupByLibrary.simpleMessage(
+            "You haven\'t added a note yet. Please click the button to add a note!"),
+        "notSearchNoteMessage": MessageLookupByLibrary.simpleMessage(
+            "Unfortunately, no data was found!"),
         "note": MessageLookupByLibrary.simpleMessage("note"),
+        "saveFail": MessageLookupByLibrary.simpleMessage("Saved failed"),
+        "saveSuccess":
+            MessageLookupByLibrary.simpleMessage("Saved successfully"),
         "searchNote": MessageLookupByLibrary.simpleMessage("Search note"),
         "setting": MessageLookupByLibrary.simpleMessage("setting"),
         "switchLanguage":
             MessageLookupByLibrary.simpleMessage("Switch language to english"),
+        "title": MessageLookupByLibrary.simpleMessage("title"),
+        "titleAndNoteNotNullMessage": MessageLookupByLibrary.simpleMessage(
+            "Title or content cannot be empty"),
         "todoCompleteMessage": MessageLookupByLibrary.simpleMessage(
             "Today\'s todo has been completed, please make persistent efforts."),
         "todoList": MessageLookupByLibrary.simpleMessage("Todo list"),
@@ -57,6 +67,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "tryAgainExitApp":
             MessageLookupByLibrary.simpleMessage("Press again to exit the App"),
         "underway": MessageLookupByLibrary.simpleMessage("underway"),
+        "updateFail": MessageLookupByLibrary.simpleMessage("Update failed"),
+        "updateSuccess":
+            MessageLookupByLibrary.simpleMessage("Update successful"),
         "weatherQuery": MessageLookupByLibrary.simpleMessage("Weather query")
       };
 }
