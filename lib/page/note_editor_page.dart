@@ -19,13 +19,13 @@ class NoteEditorPage extends StatefulWidget {
 
 class _NoteEditorPageState extends State<NoteEditorPage>
     with WidgetsBindingObserver {
-  /// Allows to control the editor and the document.
-   ZefyrController? _zefyrController;
+  /// 允许控制编辑器和文档。
+  ZefyrController? _zefyrController;
 
-  /// Zefyr editor like any other input field requires a focus node.
+  // Zefyr editor和其他任何输入字段一样，需要焦点节点。
   final FocusNode _focusNode = FocusNode();
 
-  //定义一个controller
+  //定义一个标题输入controller
   final TextEditingController _titleController = TextEditingController();
 
   //导航栏标题文字
@@ -54,7 +54,10 @@ class _NoteEditorPageState extends State<NoteEditorPage>
 
   initData() async {
     // 获取路由参数
-    Map args = ModalRoute.of(context)?.settings.arguments as Map;
+    Map args = ModalRoute
+        .of(context)
+        ?.settings
+        .arguments as Map;
     if (args['isEditor']) {
       isEditor = true;
       appbarTitle = args['appbarTitle'];
@@ -78,16 +81,7 @@ class _NoteEditorPageState extends State<NoteEditorPage>
     title = value;
   }
 
-  @override
-  void initState() {
-    super.initState();
-    /// 初始化
-    WidgetsBinding.instance?.addObserver(this);
-    //监听输入变化
-    _titleController.addListener(() => titleChange(_titleController.text));
-    // 自动聚焦
-    // _focusNode.
-  }
+
 
   //  读取便签内容
   Future<NotusDocument> _loadDocument({required bool isEditor}) async {
@@ -100,7 +94,8 @@ class _NoteEditorPageState extends State<NoteEditorPage>
       return NotusDocument.fromDelta(deltaData);
     } else {
       // 返回默认值
-      final delta = Delta()..insert('\n');
+      final delta = Delta()
+        ..insert('\n');
       return NotusDocument.fromDelta(delta);
     }
   }
@@ -109,8 +104,10 @@ class _NoteEditorPageState extends State<NoteEditorPage>
     // 读取便签内容
     final contents = jsonEncode(_zefyrController?.document);
     // contents 默认为[{"insert":"\n"}] 长度17的字符串
-    if (title!.isEmpty || contents.length == 17 ) {
-      return showToast(S.of(context).titleAndNoteNotNullMessage);
+    if (title!.isEmpty || contents.length == 17) {
+      return showToast(S
+          .of(context)
+          .titleAndNoteNotNullMessage);
     }
     // 如果isEditor 则 更新数据 否者写入数据
     if (isEditor) {
@@ -119,41 +116,56 @@ class _NoteEditorPageState extends State<NoteEditorPage>
       int res = await DBProvider().update(note);
       if (res > 0) {
         isNeedUpdate = true;
-        showToast(S.of(context).updateSuccess);
+        showToast(S
+            .of(context)
+            .updateSuccess);
       } else {
-        showToast(S.of(context).updateFail);
+        showToast(S
+            .of(context)
+            .updateFail);
       }
     } else {
       // 写入文本内容
       Note note = Note(
           title: title,
           content: contents,
-          time: DateTime.now().microsecondsSinceEpoch);
+          time: DateTime
+              .now()
+              .microsecondsSinceEpoch);
       int res = await DBProvider().saveData(note);
       if (res > 0) {
         isNeedUpdate = true;
-        showToast(S.of(context).saveSuccess);
+        showToast(S
+            .of(context)
+            .saveSuccess);
       } else {
-        showToast(S.of(context).saveFail);
+        showToast(S
+            .of(context)
+            .saveFail);
       }
     }
   }
-   Future<dynamic> _loadData() async {
-    // 加载写入的文本内容
+
+  // 加载需要编辑写入的文本内容
+  _loadData() async {
     final document = await _loadDocument(isEditor: isEditor);
-    _zefyrController =  ZefyrController(document);
-    setState(() {
-      isLoading = false;
-    });
-    return true;
+    if (_zefyrController == null) {
+      setState(() => _zefyrController = ZefyrController(document));
+    }
   }
+
+  //应用尺寸改变时回调，例如旋转
   @override
   void didChangeMetrics() {
     super.didChangeMetrics();
+    // 添加渲染结束的回调，只会被调用一次
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       bool? _visible;
       // 键盘收回
-      if (MediaQuery.of(context).viewInsets.bottom == 0) {
+      if (MediaQuery
+          .of(context)
+          .viewInsets
+          .bottom == 0) {
         _visible = false;
       } else {
         // 键盘弹出
@@ -168,21 +180,30 @@ class _NoteEditorPageState extends State<NoteEditorPage>
     super.dispose();
     WidgetsBinding.instance?.removeObserver(this);
   }
+  @override
+  void initState() {
+    super.initState();
 
+    /// 监听页面生命周期 ,添加观察者
+    WidgetsBinding.instance?.addObserver(this);
+    //监听输入变化
+    _titleController.addListener(() => titleChange(_titleController.text));
+  }
   @override
   Widget build(BuildContext context) {
     initData();
     // 判断是否显示删除按钮
     final removeIcon = isEditor
         ? Builder(
-            builder: (context) => IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: _deleteDocument,
-                ))
+        builder: (context) =>
+            IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: _deleteDocument,
+            ))
         : const SizedBox(height: 0.0, width: 0.0);
     // 计算显示保存按钮还是更新按钮
     final saveOrUpdateIcon =
-        isEditor ? Icons.update_rounded : Icons.save_rounded;
+    isEditor ? Icons.update_rounded : Icons.save_rounded;
     return Scaffold(
       appBar: AppBar(
           title: Text(
@@ -192,10 +213,11 @@ class _NoteEditorPageState extends State<NoteEditorPage>
           toolbarHeight: ScreenUtil().setSp(55),
           actions: [
             Builder(
-              builder: (context) => IconButton(
-                icon: Icon(saveOrUpdateIcon),
-                onPressed: _saveDocument,
-              ),
+              builder: (context) =>
+                  IconButton(
+                    icon: Icon(saveOrUpdateIcon),
+                    onPressed: _saveDocument,
+                  ),
             ),
             removeIcon
           ],
@@ -211,31 +233,33 @@ class _NoteEditorPageState extends State<NoteEditorPage>
           return _zefyrController == null
               ? const Loading()
               : Column(
-                  children: [
-                    TextField(
-                        controller: _titleController,
-                        decoration: InputDecoration(
-                            hintText: S.of(context).title,
-                            border: InputBorder.none,
-                            hintStyle: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey),
-                            contentPadding:
-                                EdgeInsets.all(ScreenUtil().setSp(16)))),
-                    Expanded(
-                        child: ZefyrEditor(
-                      padding: EdgeInsets.fromLTRB(ScreenUtil().setSp(16), 0,
-                          ScreenUtil().setSp(16), ScreenUtil().setSp(16)),
-                      controller: _zefyrController!,
-                      focusNode: _focusNode,
-                          autofocus: true,
-                    )),
-                    Visibility(
-                      visible: visible,
-                      child: ZefyrToolbar.basic(controller: _zefyrController!),
-                    )
-                  ],
-                );
+            children: [
+              TextField(
+                  controller: _titleController,
+                  decoration: InputDecoration(
+                      hintText: S
+                          .of(context)
+                          .title,
+                      border: InputBorder.none,
+                      hintStyle: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey),
+                      contentPadding:
+                      EdgeInsets.all(ScreenUtil().setSp(16)))),
+              Expanded(
+                  child: ZefyrEditor(
+                    padding: EdgeInsets.fromLTRB(ScreenUtil().setSp(16), 0,
+                        ScreenUtil().setSp(16), ScreenUtil().setSp(16)),
+                    controller: _zefyrController!,
+                    focusNode: _focusNode,
+                    autofocus: true,
+                  )),
+              Visibility(
+                visible: visible,
+                child: ZefyrToolbar.basic(controller: _zefyrController!),
+              )
+            ],
+          );
         },
       ),
     );
