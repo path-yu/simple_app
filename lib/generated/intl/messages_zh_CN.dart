@@ -22,6 +22,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "NoteNotNullMessage": MessageLookupByLibrary.simpleMessage("内容不能为空!"),
         "addTodo": MessageLookupByLibrary.simpleMessage("添加代办事项"),
         "addTodoMessage": MessageLookupByLibrary.simpleMessage("您添加了一条新todo!"),
         "calculator": MessageLookupByLibrary.simpleMessage("计算器"),
@@ -35,6 +36,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "dialogDeleteMessage": MessageLookupByLibrary.simpleMessage("你确定要删除吗?"),
         "editorNote": MessageLookupByLibrary.simpleMessage("编辑便签"),
         "hint": MessageLookupByLibrary.simpleMessage("提示"),
+        "item": MessageLookupByLibrary.simpleMessage("项"),
         "nightMode": MessageLookupByLibrary.simpleMessage("夜间模式"),
         "noDevelopment": MessageLookupByLibrary.simpleMessage("暂未开发"),
         "noNotificationPermission":
@@ -49,11 +51,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "saveFail": MessageLookupByLibrary.simpleMessage("保存失败"),
         "saveSuccess": MessageLookupByLibrary.simpleMessage("保存成功"),
         "searchNote": MessageLookupByLibrary.simpleMessage("搜索便签"),
+        "selected": MessageLookupByLibrary.simpleMessage("已选择"),
         "setting": MessageLookupByLibrary.simpleMessage("设置"),
         "switchLanguage": MessageLookupByLibrary.simpleMessage("切换语言为英语"),
         "title": MessageLookupByLibrary.simpleMessage("标题"),
-        "titleAndNoteNotNullMessage":
-            MessageLookupByLibrary.simpleMessage("标题或内容不能为空"),
         "todoCompleteMessage":
             MessageLookupByLibrary.simpleMessage("今日的todo已经完成, 请再接再厉!"),
         "todoList": MessageLookupByLibrary.simpleMessage("待办事项列表"),

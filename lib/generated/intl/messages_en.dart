@@ -22,6 +22,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "NoteNotNullMessage":
+            MessageLookupByLibrary.simpleMessage("content cannot be empty!"),
         "addTodo": MessageLookupByLibrary.simpleMessage("Add todo"),
         "addTodoMessage":
             MessageLookupByLibrary.simpleMessage("You added a new todo!"),
@@ -37,6 +39,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Are you sure you want to delete?"),
         "editorNote": MessageLookupByLibrary.simpleMessage("Editor note"),
         "hint": MessageLookupByLibrary.simpleMessage("hint"),
+        "item": MessageLookupByLibrary.simpleMessage("item"),
         "nightMode": MessageLookupByLibrary.simpleMessage("Night mode"),
         "noDevelopment": MessageLookupByLibrary.simpleMessage("No development"),
         "noNotificationPermission": MessageLookupByLibrary.simpleMessage(
@@ -53,12 +56,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "saveSuccess":
             MessageLookupByLibrary.simpleMessage("Saved successfully"),
         "searchNote": MessageLookupByLibrary.simpleMessage("Search note"),
+        "selected": MessageLookupByLibrary.simpleMessage("Selected"),
         "setting": MessageLookupByLibrary.simpleMessage("setting"),
         "switchLanguage":
             MessageLookupByLibrary.simpleMessage("Switch language to english"),
         "title": MessageLookupByLibrary.simpleMessage("title"),
-        "titleAndNoteNotNullMessage": MessageLookupByLibrary.simpleMessage(
-            "Title or content cannot be empty"),
         "todoCompleteMessage": MessageLookupByLibrary.simpleMessage(
             "Today\'s todo has been completed, please make persistent efforts."),
         "todoList": MessageLookupByLibrary.simpleMessage("Todo list"),

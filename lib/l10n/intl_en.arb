@@ -30,10 +30,12 @@
   "title": "title",
   "notNoteMessage": "You haven't added a note yet. Please click the button to add a note!",
   "notSearchNoteMessage": "Unfortunately, no data was found!",
-  "titleAndNoteNotNullMessage": "Title or content cannot be empty",
+  "NoteNotNullMessage": "content cannot be empty!",
   "updateSuccess": "Update successful",
   "updateFail": "Update failed",
   "saveSuccess": "Saved successfully",
   "saveFail": "Saved failed",
-  "placeSearchContent": "Please enter the search content!"
+  "placeSearchContent": "Please enter the search content!",
+  "selected": "Selected",
+  "item": "item"
 }

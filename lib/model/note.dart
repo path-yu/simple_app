@@ -2,10 +2,11 @@
 class Note {
   int? id;
   String? title;
-  late var content;
+  late String content;
   late int time;
 
-  Note({this.id, this.title, this.content, required this.time});
+  Note({this.id, this.title,  required this.content, required this.time});
+
   //将json 序列化为model对象
   Note.fromJson(Map<String, dynamic> json) {
     id = json['id'];

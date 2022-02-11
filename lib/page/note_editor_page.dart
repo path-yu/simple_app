@@ -105,15 +105,15 @@ class _NoteEditorPageState extends State<NoteEditorPage>
     // 读取便签内容
     final contents = jsonEncode(_zefyrController?.document);
     // contents 默认为[{"insert":"\n"}] 长度17的字符串
-    if (title!.isEmpty || contents.length == 17) {
+    if (contents.length == 17) {
       return showToast(S
           .of(context)
-          .titleAndNoteNotNullMessage);
+          .NoteNotNullMessage);
     }
     // 如果isEditor 则 更新数据 否者写入数据
     if (isEditor) {
       // 写入文本内容
-      Note note = Note(title: title, content: contents, id: id, time: time!);
+      Note note = Note(title: title!, content: contents, id: id, time: time!);
       int res = await DBProvider().update(note);
       if (res > 0) {
         isNeedUpdate = true;
@@ -128,7 +128,7 @@ class _NoteEditorPageState extends State<NoteEditorPage>
     } else {
       // 写入文本内容
       Note note = Note(
-          title: title,
+          title: title!,
           content: contents,
           time: DateTime
               .now()

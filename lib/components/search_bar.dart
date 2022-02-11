@@ -4,13 +4,13 @@ import 'package:simple_app/common/color.dart';
 
 class SearchBar extends StatefulWidget {
   final TextEditingController _todoController;
-  final void Function(String) addConfrim;
+  final void Function(String) addConfirm;
   final TextInputAction textInputAction;
   final String placeHolder;
   final Color fillColor;
   final Icon prefixIcon;
   final int inputWidth;
-  const SearchBar(this._todoController, this.addConfrim, this.textInputAction,
+  const SearchBar(this._todoController, this.addConfirm, this.textInputAction,
       this.placeHolder,
       {Key? key,
       required this.prefixIcon,
@@ -23,7 +23,7 @@ class SearchBar extends StatefulWidget {
 }
 
 class SearchBarState extends State<SearchBar> {
-  final FocusNode textFieldFouceNode = FocusNode();
+  final FocusNode textFieldFocusNode = FocusNode();
   @override
   void initState() {
     super.initState();
@@ -38,8 +38,8 @@ class SearchBarState extends State<SearchBar> {
       child: TextField(
         controller: widget._todoController,
         textInputAction: widget.textInputAction,
-        onSubmitted: widget.addConfrim,
-        focusNode: textFieldFouceNode,
+        onSubmitted: widget.addConfirm,
+        focusNode: textFieldFocusNode,
         style:
             TextStyle(color: Colors.black87, fontSize: ScreenUtil().setSp(15)),
         decoration: InputDecoration(
@@ -58,7 +58,7 @@ class SearchBarState extends State<SearchBar> {
               color: themeColor,
               onPressed: () {
                 widget._todoController.text = "";
-                textFieldFouceNode.unfocus();
+                textFieldFocusNode.unfocus();
               }),
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),

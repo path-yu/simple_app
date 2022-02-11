@@ -4,6 +4,7 @@ import 'package:date_format/date_format.dart' hide S;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:simple_app/common/color.dart';
+import 'package:simple_app/components/base/base_animated_opacity.dart';
 import 'package:simple_app/components/base/build_base_app_bar.dart';
 import 'package:simple_app/components/base/loading.dart';
 import 'package:simple_app/components/search_bar.dart';
@@ -30,7 +31,7 @@ class _NotePageState extends State<NotePage> {
   //滚动监听器
   final ScrollController _scrollController = ScrollController(); //listview的控制器
   // 所有的标签数据
-  List<Note> noteList = [];
+  List<NewNote> noteList = [];
 
   // 数据是否正在加载
   bool isLoading = false;
@@ -38,16 +39,22 @@ class _NotePageState extends State<NotePage> {
   // t提示文字
   String? messageText;
 
+  // 是否进行了长按
+  bool isShowCheckBox = false;
+
+  // 当前所有选择的下标
+  List<int> selectIndexList = [];
+
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        print('滑动到了最底部');
-        _getMore();
-      }
-    });
+    // _scrollController.addListener(() {
+    //   if (_scrollController.position.pixels ==
+    //       _scrollController.position.maxScrollExtent) {
+    //     print('滑动到了最底部');
+    //     _getMore();
+    //   }
+    // });
     getData(DBProvider().findAll);
   }
 
@@ -70,11 +77,16 @@ class _NotePageState extends State<NotePage> {
     } else {
       result = await action();
     }
+    List<NewNote> list = [];
+    for (var item in result) {
+      list.add(NewNote(item.id!, item.title, item.content, item.time, false));
+    }
     setState(() {
-      noteList = result;
+      noteList = list;
       isLoading = false;
     });
   }
+
   /// 下拉刷新,必须异步async不然会报错
   Future _pullRefresh() async {
     await getData(DBProvider().findAll, "", true);
@@ -82,21 +94,14 @@ class _NotePageState extends State<NotePage> {
     return null;
   }
 
-  // 加载更多
-  _getMore() {}
-
   // 开始搜索
-   handleSearch(String value) {
+  handleSearch(String value) {
     if (value.isEmpty) {
       return showToast(S.of(context).placeSearchContent);
     } else {
       getData(DBProvider().findTitleNoteList, value);
       return null;
     }
-  }
-
-  void handleLongPress() {
-    print('长按');
   }
 
   // 返回便签内容数据
@@ -131,8 +136,66 @@ class _NotePageState extends State<NotePage> {
     }
   }
 
+  // 长按选择
+  void handLongPress(int index, BuildContext context) {
+    if (isShowCheckBox) return;
+    setState(() {
+      isShowCheckBox = true;
+      noteList[index].isSelect = true;
+      selectIndexList.add(index);
+    });
+    Scaffold.of(context).showBottomSheet<void>(
+      (BuildContext context) {
+        return Container(
+          height: ScreenUtil().setHeight(100),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: const <Widget>[
+                Text('BottomSheet'),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  // 选择checkbox回调
+  void handleChangeCheckBox(bool value, int index) {
+    setState(() {
+      noteList[index].isSelect = value;
+      if (value) {
+        selectIndexList.add(index);
+      } else {
+        selectIndexList.remove(index);
+      }
+    });
+  }
+
+  Future<bool> handleWillPop() async {
+    if (isShowCheckBox) {
+      setState(() {
+        isShowCheckBox = false;
+      });
+      return false;
+    }
+    return true;
+  }
+
+  showAppBarTitle() {
+    return isShowCheckBox
+        ? S.of(context).selected +
+            ' ' +
+            selectIndexList.length.toString() +
+            " " +
+            S.of(context).item
+        : S.of(context).note;
+  }
+
   Widget noteItemBuild(BuildContext context, int index) {
-    Note target = noteList[index];
+    NewNote target = noteList[index];
     var date = DateTime.fromMicrosecondsSinceEpoch(target.time);
     String content = getNoteContent(target);
     final title = target.title == null
@@ -157,43 +220,56 @@ class _NotePageState extends State<NotePage> {
         context.watch<CurrentLocale>().languageIsEnglishMode
             ? [yyyy, '-', mm, '-', dd]
             : [yyyy, '年', mm, '月', dd, '日']);
+    var padding = ScreenUtil().setSp(20);
     return InkWell(
       onTap: () => toCreateOrEditorNotePage(id: target.id, time: target.time),
-      onLongPress: handleLongPress,
-      child: SizedBox(
-        // height: height,
-        child: DecoratedBox(
-            decoration: BoxDecoration(
-                border: Border.all(color: Colors.white12, width: 1),
-                color: context.watch<CurrentTheme>().isNightMode
-                    ? easyDarkColor
-                    : Colors.white,
-                borderRadius: BorderRadius.circular(ScreenUtil().setSp(10))),
-            child: Padding(
-              padding: EdgeInsets.all(ScreenUtil().setSp(10)),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  title,
-                  SizedBox(height: ScreenUtil().setHeight(5),),
-                  Text(
-                    content,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 3,
-                    style: const TextStyle(color: Color(0xff636363)),
-                  ),
-                  SizedBox(height: ScreenUtil().setHeight(5),),
-                  Text(
-                    currentTime,
-                    style: TextStyle(
-                        fontSize: ScreenUtil().setSp(12),
-                        color: const Color(0xff969696)),
-                  )
-                ],
-              ),
-            )),
-      ),
+      onLongPress: () => handLongPress(index, context),
+      child: DecoratedBox(
+          decoration: BoxDecoration(
+              border: Border.all(color: Colors.white12, width: 1),
+              color: context.watch<CurrentTheme>().isNightMode
+                  ? easyDarkColor
+                  : Colors.white,
+              borderRadius: BorderRadius.circular(ScreenUtil().setSp(10))),
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(padding, padding, padding, 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                title,
+                SizedBox(
+                  height: ScreenUtil().setHeight(15),
+                ),
+                Text(
+                  content,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 3,
+                  style: const TextStyle(color: Color(0xff636363)),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      currentTime,
+                      style: TextStyle(
+                          fontSize: ScreenUtil().setSp(12),
+                          color: const Color(0xff969696)),
+                    ),
+                    baseAnimatedOpacity(
+                        value: isShowCheckBox,
+                        child: Checkbox(
+                            shape: const CircleBorder(),
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
+                            value: target.isSelect,
+                            onChanged: (value) =>
+                                handleChangeCheckBox(value!, index)))
+                  ],
+                ),
+              ],
+            ),
+          )),
     );
   }
 
@@ -243,40 +319,61 @@ class _NotePageState extends State<NotePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildBaseAppBar(S.of(context).note),
-      body: Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
-        child: RefreshIndicator(
-          child: Column(
-            children: [
-              Center(
-                child: SearchBar(
-                  _noteController,
-                  handleSearch,
-                  TextInputAction.search,
-                  S.of(context).searchNote,
-                  fillColor: searchBarFillColor,
-                  prefixIcon: Icon(
-                    Icons.search,
-                    size: ScreenUtil().setSp(15),
-                    color: themeColor,
+      appBar: buildBaseAppBar(showAppBarTitle(), action: [
+        baseAnimatedOpacity(
+            value: isShowCheckBox,
+            child: IconButton(
+                onPressed: () {}, icon: const Icon(Icons.menu_open_sharp)))
+      ]),
+      body: WillPopScope(
+        // 判断是否添加对应的回调 如果需要拦截则添加 不需要则 为null ,避免拦截ios下的 右滑返回
+        onWillPop: isShowCheckBox ? handleWillPop : null,
+        child: Container(
+          padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
+          child: RefreshIndicator(
+            child: Column(
+              children: [
+                Center(
+                  child: SearchBar(
+                    _noteController,
+                    handleSearch,
+                    TextInputAction.search,
+                    S.of(context).searchNote,
+                    fillColor: searchBarFillColor,
+                    prefixIcon: Icon(
+                      Icons.search,
+                      size: ScreenUtil().setSp(15),
+                      color: themeColor,
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: ScreenUtil().setHeight(20),
-              ),
-              buildNoteListCard(),
-            ],
+                SizedBox(
+                  height: ScreenUtil().setHeight(20),
+                ),
+                buildNoteListCard(),
+              ],
+            ),
+            onRefresh: _pullRefresh,
+            color: const Color(0xFF4483f6),
           ),
-          onRefresh: _pullRefresh,
-          color: const Color(0xFF4483f6),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => toCreateOrEditorNotePage(),
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: baseAnimatedOpacity(
+          value: !isShowCheckBox,
+          child: FloatingActionButton(
+            onPressed: () => toCreateOrEditorNotePage(),
+            child: const Icon(Icons.add),
+          )),
     );
   }
+}
+
+class NewNote {
+  int id;
+  String? title;
+  String content;
+  bool isSelect;
+  int time;
+
+  NewNote(this.id, this.title, this.content, this.time, this.isSelect);
 }

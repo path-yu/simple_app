@@ -55,9 +55,9 @@ class TodoListState extends State<TodoList>
     listkey.currentState?.insertItem(_index, duration: _kDuration);
   }
 
-  void handleRemveItem(index) async {
+  void handleRemoveItem(index) async {
     // 失去焦点
-    widget.searchBarKey.currentState!.textFieldFouceNode.unfocus();
+    widget.searchBarKey.currentState!.textFieldFocusNode.unfocus();
     // 弹出对话框并等待其关闭 等获取它的返回值
     bool? delete = await showConfirmDialog(context,
         message: S.of(context).deleteTodoMessage);
@@ -108,7 +108,7 @@ class TodoListState extends State<TodoList>
                     child: IconButton(
                       icon: const Icon(Icons.clear),
                       iconSize: ScreenUtil().setSp(20),
-                      onPressed: () => handleRemveItem(index),
+                      onPressed: () => handleRemoveItem(index),
                     ),
                   ),
                 ]),

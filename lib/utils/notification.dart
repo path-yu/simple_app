@@ -22,7 +22,7 @@ Future<void> showNotification(
     {required String message, String? payload, String? title}) async {
   title ??= S.of(navigatorKey.currentState!.context).todoNoticeTitle;
   // 判断是否有通知权限
-  if (await requesNoticetPermission()) {
+  if (await requestNoticePermission()) {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails('your channel id', 'your channel name',
             channelDescription: 'your channel description',
@@ -37,7 +37,7 @@ Future<void> showNotification(
   }
 }
 
-// 点击通知栏触发的事件 跳转到todoListpage 页面
+// 点击通知栏触发的事件 跳转到todoListPage 页面
 void selectNotification(String? payload) async {
   debugPrint('notification payload: $payload');
   if (payload != null) {

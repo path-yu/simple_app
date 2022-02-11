@@ -360,11 +360,11 @@ class S {
     );
   }
 
-  /// `Title or content cannot be empty`
-  String get titleAndNoteNotNullMessage {
+  /// `content cannot be empty!`
+  String get NoteNotNullMessage {
     return Intl.message(
-      'Title or content cannot be empty',
-      name: 'titleAndNoteNotNullMessage',
+      'content cannot be empty!',
+      name: 'NoteNotNullMessage',
       desc: '',
       args: [],
     );
@@ -415,6 +415,26 @@ class S {
     return Intl.message(
       'Please enter the search content!',
       name: 'placeSearchContent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Selected`
+  String get selected {
+    return Intl.message(
+      'Selected',
+      name: 'selected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `item`
+  String get item {
+    return Intl.message(
+      'item',
+      name: 'item',
       desc: '',
       args: [],
     );

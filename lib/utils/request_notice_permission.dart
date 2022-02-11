@@ -6,7 +6,7 @@ import 'package:simple_app/utils/show_dialog.dart';
 
 
 // 获取app 是否具有通知权限 如果没有则弹出对话框 跳转到设置界面
-Future requesNoticetPermission() async {
+Future requestNoticePermission() async {
   // 判断是否没有通知权限 如果没有则弹出对话框 打开设置界面提示用户添加权限
   if (await Permission.notification.isDenied) {
     // 打开对话框 提示用户是否前往设置界面设置权限
