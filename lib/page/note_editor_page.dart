@@ -150,7 +150,13 @@ class _NoteEditorPageState extends State<NoteEditorPage>
   _loadData() async {
     final document = await _loadDocument(isEditor: isEditor);
     if (_zefyrController == null) {
-      setState(() => _zefyrController = ZefyrController(document));
+      setState((){
+        _zefyrController = ZefyrController(document);
+        // 更新光标光标位置到最后
+        _zefyrController?.updateSelection(TextSelection.fromPosition(TextPosition(
+            affinity: TextAffinity.downstream,
+            offset: document.length)));
+      });
     }
   }
 
