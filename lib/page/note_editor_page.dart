@@ -7,6 +7,7 @@ import 'package:simple_app/components/base/loading.dart';
 import 'package:simple_app/data/index.dart';
 import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/model/note.dart';
+import 'package:simple_app/utils/show_dialog.dart';
 import 'package:simple_app/utils/show_toast.dart';
 import 'package:zefyr/zefyr.dart';
 
@@ -69,7 +70,6 @@ class _NoteEditorPageState extends State<NoteEditorPage>
     }
   }
 
-  void _deleteDocument() {}
 
   // 将json 转为 delta
   Delta getDelta(doc) {
@@ -100,6 +100,7 @@ class _NoteEditorPageState extends State<NoteEditorPage>
     }
   }
 
+  // 保存便签
   _saveDocument() async {
     // 读取便签内容
     final contents = jsonEncode(_zefyrController?.document);
@@ -145,7 +146,22 @@ class _NoteEditorPageState extends State<NoteEditorPage>
       }
     }
   }
-
+  //删除便签
+  void _deleteDocument() async {
+    isNeedUpdate = true;
+    // 弹出对话框判断用户是否真的需要删除
+    var res = await showConfirmDialog(context, message: '确定删除当前便签吗');
+    if (res != null) {
+      int res = await DBProvider().deleteData(id!);
+      if (res > 0) {
+        showToast('删除成功');
+        // 跳转到上一个页面
+        Navigator.pop(context, true);
+      } else {
+        showToast('删除失败');
+      }
+    }
+  }
   // 加载需要编辑写入的文本内容
   _loadData() async {
     final document = await _loadDocument(isEditor: isEditor);
