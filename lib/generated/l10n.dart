@@ -409,6 +409,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Please enter the search content!`
+  String get placeSearchContent {
+    return Intl.message(
+      'Please enter the search content!',
+      name: 'placeSearchContent',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

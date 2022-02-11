@@ -14,6 +14,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_app/provider/current_locale.dart';
 import 'package:simple_app/provider/current_theme.dart';
+import 'package:simple_app/utils/show_toast.dart';
 
 class NotePage extends StatefulWidget {
   const NotePage({Key? key}) : super(key: key);
@@ -74,16 +75,25 @@ class _NotePageState extends State<NotePage> {
       isLoading = false;
     });
   }
-
+  /// 下拉刷新,必须异步async不然会报错
   Future _pullRefresh() async {
-    await Future.delayed(const Duration(seconds: 2));
+    await getData(DBProvider().findAll, "", true);
+    _noteController.text = "";
     return null;
   }
 
   // 加载更多
   _getMore() {}
 
-  void addConfirm(String value) {}
+  // 开始搜索
+   handleSearch(String value) {
+    if (value.isEmpty) {
+      return showToast(S.of(context).placeSearchContent);
+    } else {
+      getData(DBProvider().findTitleNoteList, value);
+      return null;
+    }
+  }
 
   void handleLongPress() {
     print('长按');
@@ -242,7 +252,7 @@ class _NotePageState extends State<NotePage> {
               Center(
                 child: SearchBar(
                   _noteController,
-                  addConfirm,
+                  handleSearch,
                   TextInputAction.search,
                   S.of(context).searchNote,
                   fillColor: searchBarFillColor,

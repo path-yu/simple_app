@@ -34,5 +34,6 @@
   "updateSuccess": "Update successful",
   "updateFail": "Update failed",
   "saveSuccess": "Saved successfully",
-  "saveFail": "Saved failed"
+  "saveFail": "Saved failed",
+  "placeSearchContent": "Please enter the search content!"
 }

@@ -34,5 +34,6 @@
   "updateSuccess": "更新成功",
   "updateFail": "更新失败",
   "saveSuccess": "保存成功",
-  "saveFail": "保存失败"
+  "saveFail": "保存失败",
+  "placeSearchContent": "请输入搜索内容!"
 }
