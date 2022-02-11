@@ -29,8 +29,6 @@ class _NotePageState extends State<NotePage> {
   //定义一个controller
   final TextEditingController _noteController = TextEditingController();
 
-  //滚动监听器
-  final ScrollController _scrollController = ScrollController(); //listview的控制器
   // 所有的标签数据
   List<NewNote> noteList = [];
 
@@ -49,13 +47,6 @@ class _NotePageState extends State<NotePage> {
   @override
   void initState() {
     super.initState();
-    // _scrollController.addListener(() {
-    //   if (_scrollController.position.pixels ==
-    //       _scrollController.position.maxScrollExtent) {
-    //     print('滑动到了最底部');
-    //     _getMore();
-    //   }
-    // });
     getData(DBProvider().findAll);
   }
 
@@ -174,7 +165,8 @@ class _NotePageState extends State<NotePage> {
   void handleDelete() async {
     // 提示是否删除
     if (await showConfirmDialog(context,
-            message: S.of(context).deleteMessage) != null) {
+            message: S.of(context).deleteMessage) !=
+        null) {
       //删除数据
       int result = await DBProvider().deleteByIds(selectIndexList);
       if (result > 0) {
@@ -191,7 +183,6 @@ class _NotePageState extends State<NotePage> {
       setState(() => resetData());
       Navigator.pop(context);
     }
-
   }
 
   // 重置数据
@@ -249,6 +240,7 @@ class _NotePageState extends State<NotePage> {
     Navigator.pop(context);
   }
 
+  // 返回导航栏标签文字
   showAppBarTitle() {
     return isShowCheckBox
         ? S.of(context).selected +
@@ -263,7 +255,7 @@ class _NotePageState extends State<NotePage> {
     NewNote target = noteList[index];
     var date = DateTime.fromMicrosecondsSinceEpoch(target.time);
     String content = getNoteContent(target);
-    final title = target.title == null
+    final title = target.title!.isEmpty
         ? const SizedBox(
             height: 0,
           )
@@ -289,52 +281,55 @@ class _NotePageState extends State<NotePage> {
     return InkWell(
       onTap: () => toCreateOrEditorNotePage(id: target.id, time: target.time),
       onLongPress: () => handLongPress(index, context),
-      child: DecoratedBox(
-          decoration: BoxDecoration(
-              border: Border.all(color: Colors.white12, width: 1),
-              color: context.watch<CurrentTheme>().isNightMode
-                  ? easyDarkColor
-                  : Colors.white,
-              borderRadius: BorderRadius.circular(ScreenUtil().setSp(10))),
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(padding, padding, padding, 0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                title,
-                SizedBox(
-                  height: ScreenUtil().setHeight(15),
-                ),
-                Text(
-                  content,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 3,
-                  style: const TextStyle(color: Color(0xff636363)),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      currentTime,
-                      style: TextStyle(
-                          fontSize: ScreenUtil().setSp(12),
-                          color: const Color(0xff969696)),
-                    ),
-                    baseAnimatedOpacity(
-                        value: isShowCheckBox,
-                        child: Checkbox(
-                            shape: const CircleBorder(),
-                            materialTapTargetSize:
-                                MaterialTapTargetSize.shrinkWrap,
-                            value: target.isSelect,
-                            onChanged: (value) =>
-                                handleChangeCheckBox(value!, index)))
-                  ],
-                ),
-              ],
-            ),
-          )),
+      child: AnimatedContainer(
+        duration:const Duration(seconds: 1),
+        child: DecoratedBox(
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.white12, width: 1),
+                color: context.watch<CurrentTheme>().isNightMode
+                    ? easyDarkColor
+                    : Colors.white,
+                borderRadius: BorderRadius.circular(ScreenUtil().setSp(10))),
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(padding, padding, padding, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  title,
+                  SizedBox(
+                    height: ScreenUtil().setHeight(target.title!.isEmpty ? 0 : 15),
+                  ),
+                  Text(
+                    content,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 3,
+                    style: const TextStyle(color: Color(0xff636363)),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        currentTime,
+                        style: TextStyle(
+                            fontSize: ScreenUtil().setSp(12),
+                            color: const Color(0xff969696)),
+                      ),
+                      baseAnimatedOpacity(
+                          value: isShowCheckBox,
+                          child: Checkbox(
+                              shape: const CircleBorder(),
+                              materialTapTargetSize:
+                                  MaterialTapTargetSize.shrinkWrap,
+                              value: target.isSelect,
+                              onChanged: (value) =>
+                                  handleChangeCheckBox(value!, index)))
+                    ],
+                  ),
+                ],
+              ),
+            )),
+      ),
     );
   }
 
@@ -373,7 +368,6 @@ class _NotePageState extends State<NotePage> {
                 mainAxisSpacing: 10,
                 crossAxisSpacing: 10,
                 physics: const AlwaysScrollableScrollPhysics(),
-                controller: _scrollController,
                 itemCount: noteList.length,
                 itemBuilder: noteItemBuild,
                 shrinkWrap: true,
