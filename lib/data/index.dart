@@ -89,7 +89,11 @@ class DBProvider {
     var _db = await db;
     return await _db!.delete('NoteList', where: 'id = ?', whereArgs: [id]);
   }
-
+  // 根据 note id 批量删除数据
+  Future<int> deleteByIds(List<int> ids) async {
+    var _db = await db;
+    return await _db!.delete('NoteList', where: 'id = ?', whereArgs: ids);
+  }
   //  根据标题 模糊查询
   Future<List<Note>> findTitleNoteList(String title) async {
     var _db = await db;

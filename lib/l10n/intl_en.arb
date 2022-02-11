@@ -37,5 +37,7 @@
   "saveFail": "Saved failed",
   "placeSearchContent": "Please enter the search content!",
   "selected": "Selected",
-  "item": "item"
+  "item": "item",
+  "deleteSuccess": "Deleted successfully!",
+  "deleteFail": "Delete failed!"
 }

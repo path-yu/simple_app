@@ -37,5 +37,7 @@
   "saveFail": "保存失败",
   "placeSearchContent": "请输入搜索内容!",
   "selected": "已选择",
-  "item": "项"
+  "item": "项",
+  "deleteSuccess": "删除成功!",
+  "deleteFail": "删除失败"
 }

@@ -31,6 +31,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "confirm": MessageLookupByLibrary.simpleMessage("确认"),
         "createNote": MessageLookupByLibrary.simpleMessage("新建便签"),
         "delete": MessageLookupByLibrary.simpleMessage("删除"),
+        "deleteFail": MessageLookupByLibrary.simpleMessage("删除失败"),
+        "deleteSuccess": MessageLookupByLibrary.simpleMessage("删除成功!"),
         "deleteTodoMessage":
             MessageLookupByLibrary.simpleMessage("确定删除当前代办事项吗?"),
         "dialogDeleteMessage": MessageLookupByLibrary.simpleMessage("你确定要删除吗?"),

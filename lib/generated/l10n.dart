@@ -439,6 +439,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Deleted successfully!`
+  String get deleteSuccess {
+    return Intl.message(
+      'Deleted successfully!',
+      name: 'deleteSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete failed!`
+  String get deleteFail {
+    return Intl.message(
+      'Delete failed!',
+      name: 'deleteFail',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

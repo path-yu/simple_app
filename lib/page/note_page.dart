@@ -36,11 +36,13 @@ class _NotePageState extends State<NotePage> {
   // 数据是否正在加载
   bool isLoading = false;
 
-  // t提示文字
+  // 提示文字
   String? messageText;
 
   // 是否进行了长按
   bool isShowCheckBox = false;
+
+
 
   // 当前所有选择的下标
   List<int> selectIndexList = [];
@@ -113,6 +115,10 @@ class _NotePageState extends State<NotePage> {
 
   // 跳转到新建便签 页面
   void toCreateOrEditorNotePage({int? id, int? time}) {
+    // 如果开启了长按选择则不进行跳转
+    if (isShowCheckBox) {
+      return;
+    }
     if (id != null) {
       // 打开新页面 并等待返回结果
       Navigator.pushNamed(context, '/create_note_or_editor_page', arguments: {
@@ -142,7 +148,7 @@ class _NotePageState extends State<NotePage> {
     setState(() {
       isShowCheckBox = true;
       noteList[index].isSelect = true;
-      selectIndexList.add(index);
+      selectIndexList.add(noteList[index].id);
     });
     Scaffold.of(context).showBottomSheet<void>(
       (BuildContext context) {
@@ -153,9 +159,7 @@ class _NotePageState extends State<NotePage> {
               : Colors.white60,
           child: Center(
             child: InkWell(
-              onTap: () {
-                print('3');
-              },
+              onTap: handleDelete,
               child: Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -167,27 +171,76 @@ class _NotePageState extends State<NotePage> {
     );
   }
 
+  // 点击底部删除按钮
+  void handleDelete()async {
+    //删除数据
+    int result = await  DBProvider().deleteByIds(selectIndexList);
+    if(result > 0){
+      showToast(S.of(context).deleteSuccess);
+      setState(() {
+       for (int id in selectIndexList) {
+         noteList.removeWhere((item) => item.id == id);
+       }});
+    }else{
+      showToast(S.of(context).deleteFail);
+    }
+    //关闭底部弹出
+    setState(() =>  resetData());
+    Navigator.pop(context);
+  }
+
+  // 重置数据
+  void resetData() {
+    isShowCheckBox = false;
+    selectIndexList.clear();
+    for (NewNote note in noteList) {
+      note.isSelect = false;
+    }
+  }
+
   // 选择checkbox回调
   void handleChangeCheckBox(bool value, int index) {
     setState(() {
       noteList[index].isSelect = value;
       if (value) {
-        selectIndexList.add(index);
+        selectIndexList.add(noteList[index].id);
       } else {
-        selectIndexList.remove(index);
+        selectIndexList.remove(noteList[index].id);
       }
     });
   }
 
+  // 点击菜单全选 or 取消 全选
+  void handleSelectMenu() {
+    // 判断是否全选
+    bool isSelectAll = noteList.every((note) => note.isSelect == true);
+    selectIndexList.clear();
+    setState(() {
+      for (NewNote note in noteList) {
+        if (!isSelectAll) {
+          note.isSelect = true;
+          selectIndexList.add(note.id);
+        } else {
+          note.isSelect = false;
+          selectIndexList.remove(note.id);
+        }
+      }
+    });
+  }
+  // 拦截返回回调
   Future<bool> handleWillPop() async {
     if (isShowCheckBox) {
-      setState(() {
-        isShowCheckBox = false;
-      });
+      setState(() => resetData());
       Navigator.pop(context);
       return false;
     }
     return true;
+  }
+
+  // 编辑 关闭按钮
+  void handleClose() {
+    setState(() => resetData());
+    Navigator.pop(context);
   }
 
   showAppBarTitle() {
@@ -325,12 +378,19 @@ class _NotePageState extends State<NotePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildBaseAppBar(showAppBarTitle(), action: [
-        baseAnimatedOpacity(
-            value: isShowCheckBox,
-            child: IconButton(
-                onPressed: () {}, icon: const Icon(Icons.menu_open_sharp)))
-      ]),
+      appBar: buildBaseAppBar(showAppBarTitle(),
+          action: [
+            baseAnimatedOpacity(
+                value: isShowCheckBox,
+                child: IconButton(
+                    onPressed: handleSelectMenu,
+                    icon: const Icon(Icons.menu_open_sharp)))
+          ],
+          leading: isShowCheckBox
+              ? IconButton(
+                  onPressed: handleClose, icon: const Icon(Icons.close))
+              : IconButton(
+                  onPressed: () => Navigator.pop(context), icon: const Icon(Icons.arrow_back))),
       body: WillPopScope(
         // 判断是否添加对应的回调 如果需要拦截则添加 不需要则 为null ,避免拦截ios下的 右滑返回
         onWillPop: isShowCheckBox ? handleWillPop : null,
