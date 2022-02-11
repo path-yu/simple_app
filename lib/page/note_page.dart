@@ -15,6 +15,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_app/provider/current_locale.dart';
 import 'package:simple_app/provider/current_theme.dart';
+import 'package:simple_app/utils/show_dialog.dart';
 import 'package:simple_app/utils/show_toast.dart';
 
 class NotePage extends StatefulWidget {
@@ -41,8 +42,6 @@ class _NotePageState extends State<NotePage> {
 
   // 是否进行了长按
   bool isShowCheckBox = false;
-
-
 
   // 当前所有选择的下标
   List<int> selectIndexList = [];
@@ -172,21 +171,27 @@ class _NotePageState extends State<NotePage> {
   }
 
   // 点击底部删除按钮
-  void handleDelete()async {
-    //删除数据
-    int result = await  DBProvider().deleteByIds(selectIndexList);
-    if(result > 0){
-      showToast(S.of(context).deleteSuccess);
-      setState(() {
-       for (int id in selectIndexList) {
-         noteList.removeWhere((item) => item.id == id);
-       }});
-    }else{
-      showToast(S.of(context).deleteFail);
+  void handleDelete() async {
+    // 提示是否删除
+    if (await showConfirmDialog(context,
+            message: S.of(context).deleteMessage) != null) {
+      //删除数据
+      int result = await DBProvider().deleteByIds(selectIndexList);
+      if (result > 0) {
+        showToast(S.of(context).deleteSuccess);
+        setState(() {
+          for (int id in selectIndexList) {
+            noteList.removeWhere((item) => item.id == id);
+          }
+        });
+      } else {
+        showToast(S.of(context).deleteFail);
+      }
+      //关闭底部弹出
+      setState(() => resetData());
+      Navigator.pop(context);
     }
-    //关闭底部弹出
-    setState(() =>  resetData());
-    Navigator.pop(context);
+
   }
 
   // 重置数据
@@ -227,6 +232,7 @@ class _NotePageState extends State<NotePage> {
       }
     });
   }
+
   // 拦截返回回调
   Future<bool> handleWillPop() async {
     if (isShowCheckBox) {
@@ -349,6 +355,7 @@ class _NotePageState extends State<NotePage> {
                   if (index == 0) {
                     return Center(
                       child: Text(messageText!,
+                          textAlign: TextAlign.center,
                           style: const TextStyle(color: Colors.grey)),
                     );
                   } else {
@@ -390,7 +397,8 @@ class _NotePageState extends State<NotePage> {
               ? IconButton(
                   onPressed: handleClose, icon: const Icon(Icons.close))
               : IconButton(
-                  onPressed: () => Navigator.pop(context), icon: const Icon(Icons.arrow_back))),
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(Icons.arrow_back))),
       body: WillPopScope(
         // 判断是否添加对应的回调 如果需要拦截则添加 不需要则 为null ,避免拦截ios下的 右滑返回
         onWillPop: isShowCheckBox ? handleWillPop : null,

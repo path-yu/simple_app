@@ -39,5 +39,6 @@
   "selected": "Selected",
   "item": "item",
   "deleteSuccess": "Deleted successfully!",
-  "deleteFail": "Delete failed!"
+  "deleteFail": "Delete failed!",
+  "deleteMessage": "Are you sure you want to delete?"
 }

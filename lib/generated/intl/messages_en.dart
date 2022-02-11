@@ -34,6 +34,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "createNote": MessageLookupByLibrary.simpleMessage("Create note"),
         "delete": MessageLookupByLibrary.simpleMessage("delete"),
         "deleteFail": MessageLookupByLibrary.simpleMessage("Delete failed!"),
+        "deleteMessage": MessageLookupByLibrary.simpleMessage(
+            "Are you sure you want to delete?"),
         "deleteSuccess":
             MessageLookupByLibrary.simpleMessage("Deleted successfully!"),
         "deleteTodoMessage": MessageLookupByLibrary.simpleMessage(

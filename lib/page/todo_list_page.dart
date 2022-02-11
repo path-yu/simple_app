@@ -87,7 +87,7 @@ class _TodoListPageState extends State<TodoListPage> {
   }
 
   // 监听键盘点击了确认按钮
-  void addConfrim(String value) {
+  void addConfirm(String value) {
     if (value.isEmpty) {
       showToast(S.of(context).notEmpty);
     } else {
@@ -173,7 +173,7 @@ class _TodoListPageState extends State<TodoListPage> {
                             child: Center(
                                 child: SearchBar(
                           _todoController,
-                          addConfrim,
+                          addConfirm,
                           TextInputAction.go,
                           S.of(context).addTodo,
                           key: _searchBarKey,

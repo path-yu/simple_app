@@ -459,6 +459,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Are you sure you want to delete?`
+  String get deleteMessage {
+    return Intl.message(
+      'Are you sure you want to delete?',
+      name: 'deleteMessage',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
