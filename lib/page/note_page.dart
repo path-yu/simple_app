@@ -147,14 +147,19 @@ class _NotePageState extends State<NotePage> {
     Scaffold.of(context).showBottomSheet<void>(
       (BuildContext context) {
         return Container(
-          height: ScreenUtil().setHeight(100),
+          height: ScreenUtil().setHeight(60),
+          color: context.watch<CurrentTheme>().isNightMode
+              ? Colors.black12
+              : Colors.white60,
           child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: const <Widget>[
-                Text('BottomSheet'),
-              ],
+            child: InkWell(
+              onTap: () {
+                print('3');
+              },
+              child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [Icon(Icons.delete), Text('删除')]),
             ),
           ),
         );
@@ -179,6 +184,7 @@ class _NotePageState extends State<NotePage> {
       setState(() {
         isShowCheckBox = false;
       });
+      Navigator.pop(context);
       return false;
     }
     return true;
