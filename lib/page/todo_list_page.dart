@@ -6,7 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_app/common/color.dart';
-import 'package:simple_app/common/globa.dart';
+import 'package:simple_app/common/global.dart';
 import 'package:simple_app/components/base/build_base_app_bar.dart';
 import 'package:simple_app/components/base/loading.dart';
 import 'package:simple_app/components/search_bar.dart';

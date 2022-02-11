@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simple_app/common/globa.dart';
+import 'package:simple_app/common/global.dart';
 
 
 
