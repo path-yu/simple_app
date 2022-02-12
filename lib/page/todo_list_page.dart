@@ -115,7 +115,7 @@ class _TodoListPageState extends State<TodoListPage> {
         DateTime(now.year, now.month, now.day), [yyyy, '/', mm, '/', dd]);
     todoAllList.add({
       "value": _inputValue,
-      "id":DateTime.now().millisecondsSinceEpoch,
+      "id": DateTime.now().millisecondsSinceEpoch,
       "done": false,
       'time': currentTime,
       "isTop": false, //是否置顶
@@ -152,7 +152,6 @@ class _TodoListPageState extends State<TodoListPage> {
       });
     } else {
       int removeIndex = completeToDoList.indexOf(target);
-
       _completeToDoListKey.currentState?.animatedRemoveItem(removeIndex);
       await Future.delayed(const Duration(milliseconds: 350), () {
         changeState();
@@ -160,7 +159,6 @@ class _TodoListPageState extends State<TodoListPage> {
       });
     }
     todoAllList[index]['done'] = value;
-    updateTodoIndex(index, done);
     // 如果underwayList 为空则 任务全部完成, 则向通知栏添加一条消息
     if (underwayList.isEmpty) {
       showNotification(
@@ -169,32 +167,35 @@ class _TodoListPageState extends State<TodoListPage> {
     }
   }
 
-  //点击checkBox 更新todo项,对应的oldTopIndex和 newTopIndex
-  void updateTodoIndex(int index, bool done) {
-    if (done == false) {
-      // 如果长度为0 则 设置下标为0
-      todoAllList[index]['newTopIndex'] =
-          completeToDoList.isEmpty ? 0 : completeToDoList.length + 1;
-      todoAllList[index]['oldTopIndex'] = null;
-      todoAllList[index]['isTop'] = false;
-    } else {
-      todoAllList[index]['newTopIndex'] =
-          underwayList.isEmpty ? 0 : underwayList.length + 1;
-      todoAllList[index]['oldTopIndex'] = null;
-      todoAllList[index]['isTop'] = false;
-    }
-  }
-
   // 更新置顶状态
-  void updateTodoTopping(Map oldTarget, Map newTarget, bool isTopping) {
-    int oldIndex = todoAllList.indexWhere((element) => element['id'] == oldTarget['id']);
-    int newIndex = todoAllList.indexOf(newTarget);
-    if(newIndex != oldIndex){
+  void updateTodoTopping(Map oldTarget, Map newTarget, bool isTopping,
+      {required int newTopIndex, required int oldTopIndex}) {
+    int oldIndex =
+        todoAllList.indexWhere((element) => element['id'] == oldTarget['id']);
+
+    int newIndex =
+        todoAllList.indexWhere((element) => element['id'] == newTarget['id']);
+    // 如果为第一项 则只更新置顶状态
+    if (oldTopIndex == 0 && newTopIndex == 0) {
+      todoAllList[oldIndex]['oldTopIndex'] = 0;
+      todoAllList[newIndex]['newTopIndex'] = 0;
+      todoAllList[oldIndex]['isTop'] = isTopping;
+    } else {
+      // 交互数据
       var temp = todoAllList[oldIndex];
       todoAllList[oldIndex] = todoAllList[newIndex];
       todoAllList[newIndex] = temp;
-    }else{
-      todoAllList[oldIndex]['isTop'] = isTopping;
+      // 交互下标
+      todoAllList[oldIndex]['oldTopIndex'] = oldTopIndex;
+      todoAllList[oldIndex]['newTopIndex'] = newTopIndex;
+      todoAllList[newIndex]['oldTopIndex'] = newTopIndex;
+      todoAllList[newIndex]['newTopIndex'] = oldTopIndex;
+      // 置顶 则 更新 新数据 否者 更新老数据
+      if (isTopping) {
+        todoAllList[newIndex]['isTop'] = isTopping;
+      } else {
+        todoAllList[oldIndex]['isTop'] = isTopping;
+      }
     }
     changeState();
   }

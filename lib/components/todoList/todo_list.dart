@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_app/components/search_bar.dart';
 import 'package:simple_app/components/todoList/build_todo_list_title.dart';
 import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/provider/current_theme.dart';
 import 'package:simple_app/utils/show_dialog.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 class TodoList extends StatefulWidget {
   // 接受父组件传递的listdata
@@ -16,15 +16,15 @@ class TodoList extends StatefulWidget {
   final Function deleteToDoListItem;
   final GlobalKey<SearchBarState> searchBarKey;
   final Function updateTodoTopping;
-  const TodoList({
-    required Key key,
-    required this.listData,
-    required this.title,
-    required this.checkBoxChange,
-    required this.deleteToDoListItem,
-    required this.searchBarKey,
-    required this.updateTodoTopping
-  }) : super(key: key);
+  const TodoList(
+      {required Key key,
+      required this.listData,
+      required this.title,
+      required this.checkBoxChange,
+      required this.deleteToDoListItem,
+      required this.searchBarKey,
+      required this.updateTodoTopping})
+      : super(key: key);
 
   @override
   TodoListState createState() => TodoListState();
@@ -82,7 +82,7 @@ class TodoListState extends State<TodoList>
     setState(() {
       myList[index]['done'] = value;
     });
-    Future.delayed(const Duration(milliseconds: 250), () {
+    Future.delayed(const Duration(milliseconds: 100), () {
       myList[index]['done'] = !value;
       widget.checkBoxChange(value, target, done);
     });
@@ -96,11 +96,10 @@ class TodoListState extends State<TodoList>
     bool? isTopping;
     // 取消置顶
     if (target['isTop']) {
-
       // 如果oldTopIndex 不为null,则获取当前todo的oldTopIndex, 否则获取当前索引下标
-      if(target['oldTopIndex'] != null){
+      if (target['oldTopIndex'] != null) {
         newIndex = target['oldTopIndex'];
-      }else{
+      } else {
         newIndex = index;
       }
       oldIndex = target['newTopIndex'];
@@ -109,32 +108,39 @@ class TodoListState extends State<TodoList>
       // 置顶
       isTopping = true;
       // 找到最后一个置顶的数据
-      int resultIndex = myList.lastIndexWhere((element) => element['isTop'] == true);
+      int resultIndex =
+          myList.lastIndexWhere((element) => element['isTop'] == true);
       if (resultIndex != -1) {
-        if(resultIndex == 0){
+        // 如果为第一项置顶
+        if (resultIndex == 0 && index == 0) {
           newIndex = 0;
           oldIndex = 0;
-        }else{
-          //如果当前指定的元素为最后一个,则返回最后一个置顶下标, 否则置顶下标 + 1
-          newIndex = resultIndex ==  myList.length - 1 ? resultIndex : resultIndex + 1;
-          oldIndex = index;
         }
+        //如果当前指定的元素为最后一个,则返回最后一个置顶下标, 否则置顶下标 + 1
+        newIndex =
+            resultIndex == myList.length - 1 ? resultIndex : resultIndex + 1;
+        oldIndex = target['oldIndex'] ?? index;
       } else {
-        // 第一次置顶
         // 如果为第一个置顶 则不需要交换
         if (index == 0) {
           newIndex = 0;
           oldIndex = 0;
         } else {
-          oldIndex = index;
-          newIndex = 0;
+          // 如果当前 前后两次下标相等, 说明不是第一次置顶,
+          if (target['oldTopIndex'] != null &&
+              target['newTopIndex'] != null &&
+              target['oldTopIndex'] == target['newTopIndex']) {
+            oldIndex = target['oldTopIndex'];
+            newIndex = 0;
+          } else {
+            oldIndex = target['oldTopIndex'] ?? index;
+            newIndex = target['newTopIndex'] ?? 0;
+          }
         }
-
       }
     }
-    // print(oldIndex);
-    // print(newIndex);
-    widget.updateTodoTopping(myList[oldIndex!],myList[newIndex!],isTopping);
+    widget.updateTodoTopping(myList[oldIndex!], myList[newIndex!], isTopping,
+        newTopIndex: newIndex, oldTopIndex: oldIndex);
   }
 
   @override
@@ -159,8 +165,12 @@ class TodoListState extends State<TodoList>
       sizeFactor: _animation,
       child: Container(
           color: context.watch<CurrentTheme>().isNightMode
-              ? isTop ? const Color.fromRGBO(26, 26, 26,1) : Colors.black12
-              :  isTop ? const Color.fromRGBO(244, 244, 244,1) : Colors.white,
+              ? isTop
+                  ? const Color.fromRGBO(26, 26, 26, 1)
+                  : Colors.black12
+              : isTop
+                  ? const Color.fromRGBO(244, 244, 244, 1)
+                  : Colors.white,
           child: Center(
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -226,7 +236,7 @@ class TodoListState extends State<TodoList>
                   ),
                   endActionPane: ActionPane(
                     motion: const DrawerMotion(),
-                    extentRatio:isTop ? 0.6 : 0.5,
+                    extentRatio: isTop ? 0.6 : 0.5,
                     children: [
                       SlidableAction(
                         spacing: 1,
@@ -249,7 +259,6 @@ class TodoListState extends State<TodoList>
                             ? S.of(context).cancelTopping
                             : S.of(context).topping,
                       ),
-
                     ],
                   ),
                 );

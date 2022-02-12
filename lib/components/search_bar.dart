@@ -31,7 +31,6 @@ class SearchBarState extends State<SearchBar> {
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
   }
 
