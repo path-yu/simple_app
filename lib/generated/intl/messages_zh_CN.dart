@@ -27,6 +27,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "addTodoMessage": MessageLookupByLibrary.simpleMessage("您添加了一条新todo!"),
         "calculator": MessageLookupByLibrary.simpleMessage("计算器"),
         "cancel": MessageLookupByLibrary.simpleMessage("取消"),
+        "cancelTopping": MessageLookupByLibrary.simpleMessage("取消置顶"),
         "complete": MessageLookupByLibrary.simpleMessage("已经完成"),
         "confirm": MessageLookupByLibrary.simpleMessage("确认"),
         "createNote": MessageLookupByLibrary.simpleMessage("新建便签"),

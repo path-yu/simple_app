@@ -29,6 +29,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("You added a new todo!"),
         "calculator": MessageLookupByLibrary.simpleMessage("calculator"),
         "cancel": MessageLookupByLibrary.simpleMessage("cancel"),
+        "cancelTopping": MessageLookupByLibrary.simpleMessage("Cancel topping"),
         "complete": MessageLookupByLibrary.simpleMessage("Have finished"),
         "confirm": MessageLookupByLibrary.simpleMessage("confirm"),
         "createNote": MessageLookupByLibrary.simpleMessage("Create note"),

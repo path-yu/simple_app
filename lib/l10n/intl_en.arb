@@ -41,5 +41,6 @@
   "deleteSuccess": "Deleted successfully!",
   "deleteFail": "Delete failed!",
   "deleteMessage": "Are you sure you want to delete?",
-  "topping": "topping"
+  "topping": "topping",
+  "cancelTopping": "Cancel topping"
 }

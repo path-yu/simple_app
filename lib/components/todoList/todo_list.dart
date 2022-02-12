@@ -15,7 +15,7 @@ class TodoList extends StatefulWidget {
   final Function checkBoxChange;
   final Function deleteToDoListItem;
   final GlobalKey<SearchBarState> searchBarKey;
-
+  final Function updateTodoTopping;
   const TodoList({
     required Key key,
     required this.listData,
@@ -23,6 +23,7 @@ class TodoList extends StatefulWidget {
     required this.checkBoxChange,
     required this.deleteToDoListItem,
     required this.searchBarKey,
+    required this.updateTodoTopping
   }) : super(key: key);
 
   @override
@@ -38,6 +39,9 @@ class TodoListState extends State<TodoList>
 
   // 拷贝父组件数据
   List myList = [];
+
+  // 滑动菜单key
+  Key slidAbleKey = const ValueKey(0);
 
   void removeItem(_index) {
     animatedRemoveItem(_index);
@@ -78,13 +82,46 @@ class TodoListState extends State<TodoList>
     setState(() {
       myList[index]['done'] = value;
     });
-    Future.delayed(const Duration(milliseconds: 200), () {
+    Future.delayed(const Duration(milliseconds: 250), () {
       myList[index]['done'] = !value;
       widget.checkBoxChange(value, target, done);
     });
   }
 
-  void handleTopping(int index) {}
+  // 置顶 or 取消置顶
+  void handleTopping(int index, Map target) {
+    // 是否置顶? 原位置, 新位置, 置顶数 ?
+    int? oldIndex;
+    int? newIndex;
+    bool? isTopping;
+    // 取消置顶
+    if (target['isTop']) {
+      newIndex = target['oldTopIndex'];
+      oldIndex = target['newTopIndex'];
+      isTopping = false;
+    } else {
+      // 置顶
+      isTopping = true;
+      // 找到最后一个置顶的数据
+      int resultIndex = myList.lastIndexWhere((element) => element['isTop'] == true);
+      if (resultIndex != -1) {
+        //如果当前指定的元素为最后一个,则返回最后一个置顶下标, 否则置顶下标 + 1
+        newIndex = resultIndex == myList.length - 1 ? resultIndex : resultIndex + 1;
+        oldIndex = index;
+      } else {
+        // 第一次置顶
+        // 如果为第一个置顶 则不需要交换
+        if (index == 0) {
+          newIndex = 0;
+          oldIndex = 0;
+        } else {
+          oldIndex = index;
+          newIndex = 0;
+        }
+      }
+    }
+    widget.updateTodoTopping(myList[oldIndex!],myList[newIndex!],isTopping);
+  }
 
   @override
   void initState() {
@@ -103,12 +140,13 @@ class TodoListState extends State<TodoList>
     String value = target['value'].toString();
     bool done = target['done'];
     String time = target['time'];
+    bool isTop = target['isTop'];
     return SizeTransition(
       sizeFactor: _animation,
       child: Container(
           color: context.watch<CurrentTheme>().isNightMode
-              ? Colors.black12
-              : Colors.white,
+              ? isTop ? const Color.fromRGBO(26, 26, 26,1) : Colors.black12
+              :  isTop ? const Color.fromRGBO(244, 244, 244,1) : Colors.white,
           child: Center(
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -160,7 +198,10 @@ class TodoListState extends State<TodoList>
               initialItemCount: widget.listData.length,
               itemBuilder: (BuildContext context, int index,
                   Animation<double> animation) {
+                Map target = myList[index];
+                bool isTop = target['isTop'];
                 return Slidable(
+                  key: const ValueKey(0),
                   child: Column(
                     children: [
                       SizedBox(
@@ -170,10 +211,11 @@ class TodoListState extends State<TodoList>
                     ],
                   ),
                   endActionPane: ActionPane(
-                    motion: const StretchMotion(),
+                    motion: const DrawerMotion(),
+                    extentRatio:isTop ? 0.6 : 0.5,
                     children: [
                       SlidableAction(
-                        autoClose: true,
+                        spacing: 1,
                         // An action can be bigger than the others.
                         flex: 1,
                         onPressed: (BuildContext context) =>
@@ -183,14 +225,17 @@ class TodoListState extends State<TodoList>
                         label: S.of(context).delete,
                       ),
                       SlidableAction(
-                        autoClose: true,
+                        flex: isTop ? 2 : 1,
+                        spacing: 1,
                         onPressed: (BuildContext context) =>
-                            handleTopping(index),
+                            handleTopping(index, target),
                         backgroundColor: const Color(0xFF0392CF),
                         foregroundColor: Colors.white,
-                        // icon: Icons.vertical_align_top,
-                        label: S.of(context).topping,
+                        label: isTop
+                            ? S.of(context).cancelTopping
+                            : S.of(context).topping,
                       ),
+
                     ],
                   ),
                 );

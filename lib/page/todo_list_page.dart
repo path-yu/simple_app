@@ -51,14 +51,16 @@ class _TodoListPageState extends State<TodoListPage> {
     super.initState();
     init();
     //监听输入变化
-    _todoController.addListener(() {
-      filedOnChange(_todoController.text);
-    });
+    _todoController.addListener(filedOnChange);
   }
-
+  @override
+  void dispose() {
+    super.dispose();
+    _todoController.removeListener(filedOnChange);
+  }
   // 监听输入值值变化
-  void filedOnChange(String value) {
-    _inputValue = value;
+  void filedOnChange() {
+    _inputValue = _todoController.text;
   }
 
   void init() async {
@@ -104,7 +106,14 @@ class _TodoListPageState extends State<TodoListPage> {
     // 储存当前时间并格式化
     var currentTime = formatDate(
         DateTime(now.year, now.month, now.day), [yyyy, '/', mm, '/', dd]);
-    todoAllList.add({"value": _inputValue, "done": false, 'time': currentTime});
+    todoAllList.add({
+      "value": _inputValue,
+      "done": false,
+      'time': currentTime,
+      "isTop":false,//是否置顶
+      "oldTopIndex":null,// 置顶前的位置
+      "newTopIndex":null,// 置顶后的位置
+    });
     changeState(removeInputVal: true, data: todoAllList);
     _underWayTodoListKey.currentState?.addItem();
   }
@@ -150,6 +159,18 @@ class _TodoListPageState extends State<TodoListPage> {
     }
   }
 
+  // 更新置顶状态
+  void updateTodoTopping(Map oldTarget,Map newTarget,bool isTopping){
+    int oldIndex = todoAllList.indexOf(oldTarget);
+    int newIndex = todoAllList.indexOf(newTarget);
+    todoAllList[oldIndex]['isTop'] = isTopping;
+    todoAllList[oldIndex]['oldTopIndex'] = oldIndex;
+    todoAllList[oldIndex]['newTopIndex'] = newIndex;
+    var temp = todoAllList[oldIndex];
+    todoAllList[oldIndex] = todoAllList[newIndex];
+    todoAllList[newIndex] = temp;
+    changeState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -192,6 +213,7 @@ class _TodoListPageState extends State<TodoListPage> {
                     checkBoxChange: checkBoxChange,
                     deleteToDoListItem: deleteToDoListItem,
                     searchBarKey: _searchBarKey,
+                    updateTodoTopping: updateTodoTopping,
                   ),
                   TodoList(
                     key: _completeToDoListKey,
@@ -200,6 +222,7 @@ class _TodoListPageState extends State<TodoListPage> {
                     checkBoxChange: checkBoxChange,
                     deleteToDoListItem: deleteToDoListItem,
                     searchBarKey: _searchBarKey,
+                    updateTodoTopping: updateTodoTopping,
                   )
                 ],
               ),

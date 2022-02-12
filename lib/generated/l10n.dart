@@ -479,6 +479,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Cancel topping`
+  String get cancelTopping {
+    return Intl.message(
+      'Cancel topping',
+      name: 'cancelTopping',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
