@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:date_format/date_format.dart' hide S;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:simple_app/common/color.dart';
@@ -15,7 +16,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_app/provider/current_locale.dart';
 import 'package:simple_app/provider/current_theme.dart';
-import 'package:simple_app/utils/show_dialog.dart';
+import 'package:simple_app/utils/index.dart';
 import 'package:simple_app/utils/show_toast.dart';
 
 class NotePage extends StatefulWidget {
@@ -140,6 +141,7 @@ class _NotePageState extends State<NotePage> {
       noteList[index].isSelect = true;
       selectIndexList.add(noteList[index].id);
     });
+    // 弹窗底部菜单
     Scaffold.of(context).showBottomSheet<void>(
       (BuildContext context) {
         return Container(
@@ -153,7 +155,10 @@ class _NotePageState extends State<NotePage> {
               child: Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [Icon(Icons.delete), Text('删除')]),
+                  children: [
+                    const Icon(Icons.delete),
+                    Text(S.of(context).delete)
+                  ]),
             ),
           ),
         );
@@ -163,10 +168,7 @@ class _NotePageState extends State<NotePage> {
 
   // 点击底部删除按钮
   void handleDelete() async {
-    // 提示是否删除
-    if (await showConfirmDialog(context,
-            message: S.of(context).deleteMessage) !=
-        null) {
+    showBaseCupertinoModalPopup(context, () async {
       //删除数据
       int result = await DBProvider().deleteByIds(selectIndexList);
       if (result > 0) {
@@ -182,7 +184,7 @@ class _NotePageState extends State<NotePage> {
       //关闭底部弹出
       setState(() => resetData());
       Navigator.pop(context);
-    }
+    });
   }
 
   // 重置数据
@@ -282,7 +284,7 @@ class _NotePageState extends State<NotePage> {
       onTap: () => toCreateOrEditorNotePage(id: target.id, time: target.time),
       onLongPress: () => handLongPress(index, context),
       child: AnimatedContainer(
-        duration:const Duration(seconds: 1),
+        duration: const Duration(seconds: 1),
         child: DecoratedBox(
             decoration: BoxDecoration(
                 border: Border.all(color: Colors.white12, width: 1),
@@ -298,7 +300,8 @@ class _NotePageState extends State<NotePage> {
                 children: [
                   title,
                   SizedBox(
-                    height: ScreenUtil().setHeight(target.title!.isEmpty ? 0 : 15),
+                    height:
+                        ScreenUtil().setHeight(target.title!.isEmpty ? 0 : 15),
                   ),
                   Text(
                     content,
