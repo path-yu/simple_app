@@ -96,7 +96,12 @@ class TodoListState extends State<TodoList>
     bool? isTopping;
     // 取消置顶
     if (target['isTop']) {
-      newIndex = target['oldTopIndex'];
+      // 如果oldTopIndex 不为null,则获取当前todo的oldTopIndex, 否则获取当前索引下标
+      if(target['oldTopIndex'] != null){
+        newIndex = target['oldTopIndex'];
+      }else{
+        newIndex = index;
+      }
       oldIndex = target['newTopIndex'];
       isTopping = false;
     } else {
@@ -120,6 +125,8 @@ class TodoListState extends State<TodoList>
         }
       }
     }
+    print(oldIndex);
+    print(newIndex);
     widget.updateTodoTopping(myList[oldIndex!],myList[newIndex!],isTopping);
   }
 

@@ -130,13 +130,14 @@ class _TodoListPageState extends State<TodoListPage> {
     });
   }
 
-  // 点击切换 todo 状态触发
+  // 点击切换 todo状态触发
   void checkBoxChange(bool value, Map target, bool done) async {
     int index = todoAllList.indexOf(target);
     // 如果是done false 说明当前点击的是正在进行的todo项, 则将其删除,并将其添加到已经完成中 反之类似
     if (done == false) {
       int removeIndex = underwayList.indexOf(target);
       _underWayTodoListKey.currentState!.animatedRemoveItem(removeIndex);
+      todoAllList[index]['done'] = value;
       await Future.delayed(const Duration(milliseconds: 350), () {
         changeState();
         _completeToDoListKey.currentState?.addItem();
@@ -151,11 +152,24 @@ class _TodoListPageState extends State<TodoListPage> {
       });
     }
     todoAllList[index]['done'] = value;
+    updateTodoIndex(index,done);
     // 如果underwayList 为空则 任务全部完成, 则向通知栏添加一条消息
     if (underwayList.isEmpty) {
       showNotification(
           message: S.of(context).todoCompleteMessage,
           payload: '/todo_list_page');
+    }
+  }
+
+  //点击checkBox 更新todo项,对应的oldTopIndex和 newTopIndex
+  void updateTodoIndex(int index,bool done){
+    if(done == false){
+      // 如果长度为0 则 设置下标为0
+      todoAllList[index]['newTopIndex'] = completeToDoList.isEmpty ? 0 :  completeToDoList.length + 1;
+      todoAllList[index]['oldTopIndex'] = null;
+    }else{
+      todoAllList[index]['newTopIndex'] = underwayList.isEmpty ? 0 :  underwayList.length + 1;
+      todoAllList[index]['oldTopIndex'] = null;
     }
   }
 
