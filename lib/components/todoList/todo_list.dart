@@ -96,6 +96,7 @@ class TodoListState extends State<TodoList>
     bool? isTopping;
     // 取消置顶
     if (target['isTop']) {
+
       // 如果oldTopIndex 不为null,则获取当前todo的oldTopIndex, 否则获取当前索引下标
       if(target['oldTopIndex'] != null){
         newIndex = target['oldTopIndex'];
@@ -110,9 +111,14 @@ class TodoListState extends State<TodoList>
       // 找到最后一个置顶的数据
       int resultIndex = myList.lastIndexWhere((element) => element['isTop'] == true);
       if (resultIndex != -1) {
-        //如果当前指定的元素为最后一个,则返回最后一个置顶下标, 否则置顶下标 + 1
-        newIndex = resultIndex == myList.length - 1 ? resultIndex : resultIndex + 1;
-        oldIndex = index;
+        if(resultIndex == 0){
+          newIndex = 0;
+          oldIndex = 0;
+        }else{
+          //如果当前指定的元素为最后一个,则返回最后一个置顶下标, 否则置顶下标 + 1
+          newIndex = resultIndex ==  myList.length - 1 ? resultIndex : resultIndex + 1;
+          oldIndex = index;
+        }
       } else {
         // 第一次置顶
         // 如果为第一个置顶 则不需要交换
@@ -123,10 +129,11 @@ class TodoListState extends State<TodoList>
           oldIndex = index;
           newIndex = 0;
         }
+
       }
     }
-    print(oldIndex);
-    print(newIndex);
+    // print(oldIndex);
+    // print(newIndex);
     widget.updateTodoTopping(myList[oldIndex!],myList[newIndex!],isTopping);
   }
 

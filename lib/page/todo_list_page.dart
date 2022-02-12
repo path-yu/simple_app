@@ -35,14 +35,19 @@ class _TodoListPageState extends State<TodoListPage> {
   final GlobalKey<TodoListState> _completeToDoListKey =
       GlobalKey<TodoListState>();
   final GlobalKey<SearchBarState> _searchBarKey = GlobalKey<SearchBarState>();
+
   // 输入框输入值
   String _inputValue = "";
+
   //全部的任务列表
   List todoAllList = [];
+
   // 正在进行的任务列表
   List get underwayList => filterListData(todoAllList, false);
+
   // 已经完成的任务列表
   List get completeToDoList => filterListData(todoAllList, true);
+
   // 是否正在加载数据
   bool loading = true;
 
@@ -53,11 +58,13 @@ class _TodoListPageState extends State<TodoListPage> {
     //监听输入变化
     _todoController.addListener(filedOnChange);
   }
+
   @override
   void dispose() {
     super.dispose();
     _todoController.removeListener(filedOnChange);
   }
+
   // 监听输入值值变化
   void filedOnChange() {
     _inputValue = _todoController.text;
@@ -108,11 +115,12 @@ class _TodoListPageState extends State<TodoListPage> {
         DateTime(now.year, now.month, now.day), [yyyy, '/', mm, '/', dd]);
     todoAllList.add({
       "value": _inputValue,
+      "id":DateTime.now().millisecondsSinceEpoch,
       "done": false,
       'time': currentTime,
-      "isTop":false,//是否置顶
-      "oldTopIndex":null,// 置顶前的位置
-      "newTopIndex":null,// 置顶后的位置
+      "isTop": false, //是否置顶
+      "oldTopIndex": null, // 置顶前的位置
+      "newTopIndex": null, // 置顶后的位置
     });
     changeState(removeInputVal: true, data: todoAllList);
     _underWayTodoListKey.currentState?.addItem();
@@ -152,7 +160,7 @@ class _TodoListPageState extends State<TodoListPage> {
       });
     }
     todoAllList[index]['done'] = value;
-    updateTodoIndex(index,done);
+    updateTodoIndex(index, done);
     // 如果underwayList 为空则 任务全部完成, 则向通知栏添加一条消息
     if (underwayList.isEmpty) {
       showNotification(
@@ -162,39 +170,45 @@ class _TodoListPageState extends State<TodoListPage> {
   }
 
   //点击checkBox 更新todo项,对应的oldTopIndex和 newTopIndex
-  void updateTodoIndex(int index,bool done){
-    if(done == false){
+  void updateTodoIndex(int index, bool done) {
+    if (done == false) {
       // 如果长度为0 则 设置下标为0
-      todoAllList[index]['newTopIndex'] = completeToDoList.isEmpty ? 0 :  completeToDoList.length + 1;
+      todoAllList[index]['newTopIndex'] =
+          completeToDoList.isEmpty ? 0 : completeToDoList.length + 1;
       todoAllList[index]['oldTopIndex'] = null;
-    }else{
-      todoAllList[index]['newTopIndex'] = underwayList.isEmpty ? 0 :  underwayList.length + 1;
+      todoAllList[index]['isTop'] = false;
+    } else {
+      todoAllList[index]['newTopIndex'] =
+          underwayList.isEmpty ? 0 : underwayList.length + 1;
       todoAllList[index]['oldTopIndex'] = null;
+      todoAllList[index]['isTop'] = false;
     }
   }
 
   // 更新置顶状态
-  void updateTodoTopping(Map oldTarget,Map newTarget,bool isTopping){
-    int oldIndex = todoAllList.indexOf(oldTarget);
+  void updateTodoTopping(Map oldTarget, Map newTarget, bool isTopping) {
+    int oldIndex = todoAllList.indexWhere((element) => element['id'] == oldTarget['id']);
     int newIndex = todoAllList.indexOf(newTarget);
-    todoAllList[oldIndex]['isTop'] = isTopping;
-    todoAllList[oldIndex]['oldTopIndex'] = oldIndex;
-    todoAllList[oldIndex]['newTopIndex'] = newIndex;
-    var temp = todoAllList[oldIndex];
-    todoAllList[oldIndex] = todoAllList[newIndex];
-    todoAllList[newIndex] = temp;
+    if(newIndex != oldIndex){
+      var temp = todoAllList[oldIndex];
+      todoAllList[oldIndex] = todoAllList[newIndex];
+      todoAllList[newIndex] = temp;
+    }else{
+      todoAllList[oldIndex]['isTop'] = isTopping;
+    }
     changeState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildBaseAppBar(S.of(context).todoList),
-      resizeToAvoidBottomInset: false, //输入框抵住键盘 内容不随键盘滚动
-      body: loading
-          ? const Loading()
-          : SizedBox(
-              height: double.infinity,
-              child: Column(
+        appBar: buildBaseAppBar(S.of(context).todoList),
+        resizeToAvoidBottomInset: false, //输入框抵住键盘 内容不随键盘滚动
+        body: loading
+            ? const Loading()
+            : ListView(
+                physics: const BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics()),
                 children: [
                   Container(
                     color: context.watch<CurrentTheme>().isNightMode
@@ -239,8 +253,6 @@ class _TodoListPageState extends State<TodoListPage> {
                     updateTodoTopping: updateTodoTopping,
                   )
                 ],
-              ),
-            ),
-    );
+              ));
   }
 }
