@@ -145,7 +145,6 @@ class _TodoListPageState extends State<TodoListPage> {
     if (done == false) {
       int removeIndex = underwayList.indexOf(target);
       _underWayTodoListKey.currentState!.animatedRemoveItem(removeIndex);
-      todoAllList[index]['done'] = value;
       await Future.delayed(const Duration(milliseconds: 350), () {
         changeState();
         _completeToDoListKey.currentState?.addItem();
@@ -239,7 +238,7 @@ class _TodoListPageState extends State<TodoListPage> {
                                 child: SearchBar(
                           _todoController,
                           addConfirm,
-                          TextInputAction.go,
+                          TextInputAction.done,
                           S.of(context).addTodo,
                           key: _searchBarKey,
                           prefixIcon: const Icon(

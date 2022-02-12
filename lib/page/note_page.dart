@@ -4,16 +4,16 @@ import 'package:date_format/date_format.dart' hide S;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:provider/provider.dart';
 import 'package:simple_app/common/color.dart';
 import 'package:simple_app/components/base/base_animated_opacity.dart';
 import 'package:simple_app/components/base/build_base_app_bar.dart';
 import 'package:simple_app/components/base/loading.dart';
 import 'package:simple_app/components/search_bar.dart';
 import 'package:simple_app/data/index.dart';
-import 'package:simple_app/model/note.dart';
 import 'package:simple_app/generated/l10n.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:provider/provider.dart';
+import 'package:simple_app/model/note.dart';
 import 'package:simple_app/provider/current_locale.dart';
 import 'package:simple_app/provider/current_theme.dart';
 import 'package:simple_app/utils/index.dart';
@@ -347,7 +347,8 @@ class _NotePageState extends State<NotePage> {
               height: ScreenUtil().setSp(20),
               child: ListView.builder(
                 itemCount: 15,
-                physics: const BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics()),
                 scrollDirection: Axis.vertical,
                 itemBuilder: (BuildContext context, int index) {
                   if (index == 0) {
@@ -370,7 +371,8 @@ class _NotePageState extends State<NotePage> {
                 crossAxisCount: 2,
                 mainAxisSpacing: 10,
                 crossAxisSpacing: 10,
-                physics: const AlwaysScrollableScrollPhysics(),
+                physics: const BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics()),
                 itemCount: noteList.length,
                 itemBuilder: noteItemBuild,
                 shrinkWrap: true,
