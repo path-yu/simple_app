@@ -6,7 +6,7 @@ import 'package:simple_app/components/todoList/build_todo_list_title.dart';
 import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/provider/current_theme.dart';
 import 'package:simple_app/utils/show_dialog.dart';
-
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class TodoList extends StatefulWidget {
   // 接受父组件传递的listdata
@@ -15,6 +15,7 @@ class TodoList extends StatefulWidget {
   final Function checkBoxChange;
   final Function deleteToDoListItem;
   final GlobalKey<SearchBarState> searchBarKey;
+
   const TodoList({
     required Key key,
     required this.listData,
@@ -23,6 +24,7 @@ class TodoList extends StatefulWidget {
     required this.deleteToDoListItem,
     required this.searchBarKey,
   }) : super(key: key);
+
   @override
   TodoListState createState() => TodoListState();
 }
@@ -33,6 +35,11 @@ class TodoListState extends State<TodoList>
 
   // The default insert/remove animation duration.
   final Duration _kDuration = const Duration(milliseconds: 300);
+
+
+  // 拷贝父组件数据
+  List myList = [];
+
   void removeItem(_index) {
     animatedRemoveItem(_index);
     // 因为删除动画需要时间300 毫秒 所以需要等待300ms后
@@ -67,13 +74,30 @@ class TodoListState extends State<TodoList>
     }
   }
 
+  void handleCheckBoxChange(bool value, Map target, bool done,int index) {
+    // 先更新todo done自身状态, 在调用父级方法更新列表数据
+    setState(() {
+      myList[index]['done'] = value;
+    });
+    Future.delayed(const Duration(milliseconds: 200),(){
+      myList[index]['done'] = !value;
+      widget.checkBoxChange(value, target, done);
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    setState(() => myList = widget.listData);
   }
 
+  @override
+  void didUpdateWidget(covariant TodoList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    setState(() => myList = widget.listData);
+  }
   Widget _buildItem(Animation<double> _animation, int index) {
-    Map target = widget.listData[index];
+    Map target = myList[index];
     String value = target['value'].toString();
     bool done = target['done'];
     String time = target['time'];
@@ -83,8 +107,7 @@ class TodoListState extends State<TodoList>
           color: context.watch<CurrentTheme>().isNightMode
               ? Colors.black12
               : Colors.white,
-          height: ScreenUtil().setHeight(40),
-          margin: EdgeInsets.only(top: ScreenUtil().setSp(15)),
+          margin: EdgeInsets.only(top: ScreenUtil().setSp(10)),
           child: Center(
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -93,8 +116,9 @@ class TodoListState extends State<TodoList>
                     children: [
                       Checkbox(
                           value: done,
+                          shape: const CircleBorder(),
                           onChanged: (value) =>
-                              widget.checkBoxChange(value, target, done)),
+                              handleCheckBoxChange(value!, target, done,index)),
                       Text(value),
                     ],
                   ),
@@ -118,6 +142,7 @@ class TodoListState extends State<TodoList>
 
   @override
   Widget build(BuildContext context) {
+    print("build");
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setSp(10)),
       child: Column(

@@ -134,6 +134,7 @@ class _TodoListPageState extends State<TodoListPage> {
       });
     } else {
       int removeIndex = completeToDoList.indexOf(target);
+
       _completeToDoListKey.currentState?.animatedRemoveItem(removeIndex);
       await Future.delayed(const Duration(milliseconds: 350), () {
         changeState();
@@ -141,7 +142,6 @@ class _TodoListPageState extends State<TodoListPage> {
       });
     }
     todoAllList[index]['done'] = value;
-
     // 如果underwayList 为空则 任务全部完成, 则向通知栏添加一条消息
     if (underwayList.isEmpty) {
       showNotification(
