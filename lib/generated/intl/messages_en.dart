@@ -72,6 +72,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "todoNoticeTitle":
             MessageLookupByLibrary.simpleMessage("This is an announcement."),
         "toolKit": MessageLookupByLibrary.simpleMessage("Tool kit"),
+        "topping": MessageLookupByLibrary.simpleMessage("topping"),
         "translate": MessageLookupByLibrary.simpleMessage("translate"),
         "tryAgainExitApp":
             MessageLookupByLibrary.simpleMessage("Press again to exit the App"),

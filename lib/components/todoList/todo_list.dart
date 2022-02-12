@@ -36,7 +36,6 @@ class TodoListState extends State<TodoList>
   // The default insert/remove animation duration.
   final Duration _kDuration = const Duration(milliseconds: 300);
 
-
   // 拷贝父组件数据
   List myList = [];
 
@@ -74,16 +73,18 @@ class TodoListState extends State<TodoList>
     }
   }
 
-  void handleCheckBoxChange(bool value, Map target, bool done,int index) {
+  void handleCheckBoxChange(bool value, Map target, bool done, int index) {
     // 先更新todo done自身状态, 在调用父级方法更新列表数据
     setState(() {
       myList[index]['done'] = value;
     });
-    Future.delayed(const Duration(milliseconds: 200),(){
+    Future.delayed(const Duration(milliseconds: 200), () {
       myList[index]['done'] = !value;
       widget.checkBoxChange(value, target, done);
     });
   }
+
+  void handleTopping(int index) {}
 
   @override
   void initState() {
@@ -96,6 +97,7 @@ class TodoListState extends State<TodoList>
     super.didUpdateWidget(oldWidget);
     setState(() => myList = widget.listData);
   }
+
   Widget _buildItem(Animation<double> _animation, int index) {
     Map target = myList[index];
     String value = target['value'].toString();
@@ -107,7 +109,6 @@ class TodoListState extends State<TodoList>
           color: context.watch<CurrentTheme>().isNightMode
               ? Colors.black12
               : Colors.white,
-          margin: EdgeInsets.only(top: ScreenUtil().setSp(10)),
           child: Center(
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -117,24 +118,24 @@ class TodoListState extends State<TodoList>
                       Checkbox(
                           value: done,
                           shape: const CircleBorder(),
-                          onChanged: (value) =>
-                              handleCheckBoxChange(value!, target, done,index)),
+                          onChanged: (value) => handleCheckBoxChange(
+                              value!, target, done, index)),
                       Text(value),
                     ],
                   ),
                   Expanded(
-                      child: Text(
-                    time,
-                    textAlign: TextAlign.center,
+                      child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        time,
+                        textAlign: TextAlign.right,
+                      ),
+                      SizedBox(
+                        width: ScreenUtil().setWidth(30),
+                      )
+                    ],
                   )),
-                  SizedBox(
-                    height: ScreenUtil().setHeight(40),
-                    child: IconButton(
-                      icon: const Icon(Icons.clear),
-                      iconSize: ScreenUtil().setSp(20),
-                      onPressed: () => handleRemoveItem(index),
-                    ),
-                  ),
                 ]),
           )),
     );
@@ -142,7 +143,6 @@ class TodoListState extends State<TodoList>
 
   @override
   Widget build(BuildContext context) {
-    print("build");
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setSp(10)),
       child: Column(
@@ -160,7 +160,40 @@ class TodoListState extends State<TodoList>
               initialItemCount: widget.listData.length,
               itemBuilder: (BuildContext context, int index,
                   Animation<double> animation) {
-                return _buildItem(animation, index);
+                return Slidable(
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: ScreenUtil().setHeight(5),
+                      ),
+                      _buildItem(animation, index)
+                    ],
+                  ),
+                  endActionPane: ActionPane(
+                    motion: const StretchMotion(),
+                    children: [
+                      SlidableAction(
+                        autoClose: true,
+                        // An action can be bigger than the others.
+                        flex: 1,
+                        onPressed: (BuildContext context) =>
+                            handleRemoveItem(index),
+                        backgroundColor: const Color(0xFF7BC043),
+                        foregroundColor: Colors.white,
+                        label: S.of(context).delete,
+                      ),
+                      SlidableAction(
+                        autoClose: true,
+                        onPressed: (BuildContext context) =>
+                            handleTopping(index),
+                        backgroundColor: const Color(0xFF0392CF),
+                        foregroundColor: Colors.white,
+                        // icon: Icons.vertical_align_top,
+                        label: S.of(context).topping,
+                      ),
+                    ],
+                  ),
+                );
               },
             ),
           )

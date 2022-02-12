@@ -63,6 +63,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "todoList": MessageLookupByLibrary.simpleMessage("待办事项列表"),
         "todoNoticeTitle": MessageLookupByLibrary.simpleMessage("这是一条通知"),
         "toolKit": MessageLookupByLibrary.simpleMessage("工具箱"),
+        "topping": MessageLookupByLibrary.simpleMessage("置顶"),
         "translate": MessageLookupByLibrary.simpleMessage("翻译"),
         "tryAgainExitApp": MessageLookupByLibrary.simpleMessage("再按一次退出App"),
         "underway": MessageLookupByLibrary.simpleMessage("正在进行"),

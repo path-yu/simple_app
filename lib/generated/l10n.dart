@@ -469,6 +469,16 @@ class S {
       args: [],
     );
   }
+
+  /// `topping`
+  String get topping {
+    return Intl.message(
+      'topping',
+      name: 'topping',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

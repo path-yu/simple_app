@@ -40,5 +40,6 @@
   "item": "项",
   "deleteSuccess": "删除成功!",
   "deleteFail": "删除失败",
-  "deleteMessage": "你确定要删除吗?"
+  "deleteMessage": "你确定要删除吗?",
+  "topping": "置顶"
 }
