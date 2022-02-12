@@ -159,11 +159,26 @@ class _TodoListPageState extends State<TodoListPage> {
       });
     }
     todoAllList[index]['done'] = value;
+    updateTodoIndex(index, done);
     // 如果underwayList 为空则 任务全部完成, 则向通知栏添加一条消息
     if (underwayList.isEmpty) {
       showNotification(
           message: S.of(context).todoCompleteMessage,
           payload: '/todo_list_page');
+    }
+  }
+
+  //点击checkBox 更新todo项,对应的oldTopIndex和 newTopIndex
+  void updateTodoIndex(int index, bool done) {
+    if (done == false) {
+      // 如果长度为0 则 设置下标为0
+      todoAllList[index]['newTopIndex'] = completeToDoList.isEmpty ? 0 : null;
+      todoAllList[index]['oldTopIndex'] = null;
+      todoAllList[index]['isTop'] = false;
+    } else {
+      todoAllList[index]['newTopIndex'] = underwayList.isEmpty ? 0 : null;
+      todoAllList[index]['oldTopIndex'] = null;
+      todoAllList[index]['isTop'] = false;
     }
   }
 
