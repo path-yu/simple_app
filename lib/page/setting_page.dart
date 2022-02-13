@@ -7,7 +7,6 @@ import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/provider/current_locale.dart';
 import 'package:simple_app/provider/current_theme.dart';
 
-
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
 
@@ -38,7 +37,9 @@ class _SettingPageState extends State<SettingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildBaseAppBar(S.of(context).setting),
-      body: Column(
+      body: ListView(
+        physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics()),
         children: [
           SwitchListTile(
             title: Row(

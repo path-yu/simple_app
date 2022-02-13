@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:simple_app/common/color.dart';
 import 'package:simple_app/components/base/build_base_app_bar.dart';
 import 'package:simple_app/generated/l10n.dart';
+import 'package:simple_app/page/calculator.dart';
 import 'package:simple_app/page/note_page.dart';
 import 'package:simple_app/page/todo_list_page.dart';
 import 'package:simple_app/provider/current_theme.dart';
@@ -37,7 +38,11 @@ class _ToolKitPageState extends State<ToolKitPage> {
         "label": S.of(context).note,
         "comp": const NotePage()
       },
-      {"RouterPath": '', "label": S.of(context).calculator},
+      {
+        "RouterPath": 'calculator',
+        "label": S.of(context).calculator,
+        "comp": const CalculatorPage()
+      },
       {
         "RouterPath": '/todo_list_page',
         "label": S.of(context).todoList,
