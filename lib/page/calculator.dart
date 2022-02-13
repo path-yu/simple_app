@@ -31,24 +31,84 @@ class _CalculatorPageState extends State<CalculatorPage> {
     '±',
     '％',
     '÷',
-    '7',
-    '8',
-    '9',
+    7,
+    8,
+    9,
     '×',
-    '4',
-    '5',
-    '6',
+    4,
+    5,
+    6,
     '-',
-    '1',
-    '2',
-    '3',
+    1,
+    2,
+    3,
     '+',
     '0',
     '.',
     '='
   ];
+  // 运算表达式
+  String expression = '';
+  // 运算结果
+  String answerResult = '0';
+  // 是否点击计算;
+  bool isClickEqual = false;
 
-  void handleOperator() {}
+  List numList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  List operatrorSymbolList = ['％', '-', '+', '×', '÷'];
+  void handleOperator(dynamic operator) {
+    String? answer;
+    // 如果为数字
+    if (operator is int) {
+      handleClickNum(operator);
+    } else {
+      // 点击归零
+      if (operator == 'AC') {
+        expression = '0';
+      }
+      if (operatrorSymbolList.contains(operator)) {
+        handleOperatroSymbolClick(operator);
+      }
+    }
+    setState(() {
+      if (answer != null) {
+        answerResult = answer;
+      }
+    });
+  }
+
+  void calcExpression() {
+    //todo
+  }
+
+  // 点击操作运算符
+  void handleOperatroSymbolClick(String operator) {
+    if (expression.isNotEmpty) {
+      String lastExpression = expression[expression.length - 1];
+      // 判断表达式前一位是否为数字而且不为运算符
+      if (numList.contains(lastExpression) &&
+          !operatrorSymbolList.contains(lastExpression)) {
+        setState(() {
+          expression += operator;
+        });
+      }
+    }
+  }
+
+  // 点击数字
+  void handleClickNum(int num) {
+    setState(() {
+      expression += num.toString();
+    });
+    if (expression.isNotEmpty) {
+      // 最后一位数为数字
+      if (numList.contains(expression[expression.length - 1])) {
+        // 计算结果
+        calcExpression();
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,18 +125,20 @@ class _CalculatorPageState extends State<CalculatorPage> {
                 children: [
                   // answer
                   Text(
-                    '6',
+                    answerResult,
                     style: TextStyle(fontSize: ScreenUtil().setSp(48)),
                     textAlign: TextAlign.right,
                   ),
                   // 运算表达式
-                  Text(
-                    '1x6',
-                    style: TextStyle(
-                        color: const Color(0xff666666),
-                        fontSize: ScreenUtil().setSp(30)),
-                    textAlign: TextAlign.right,
-                  ),
+                  Visibility(
+                      visible: expression.isNotEmpty,
+                      child: Text(
+                        expression,
+                        style: TextStyle(
+                            color: const Color(0xff666666),
+                            fontSize: ScreenUtil().setSp(30)),
+                        textAlign: TextAlign.right,
+                      ))
                 ],
               ),
               SizedBox(
@@ -88,7 +150,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
                     children: operatorList.map((e) {
                       if (e == '0') {}
                       return ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () => handleOperator(e),
                           style: ElevatedButton.styleFrom(
                               minimumSize: e == '0'
                                   ? const Size(160, 75)
@@ -100,7 +162,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
                                     )
                                   : const CircleBorder(),
                               primary: primary),
-                          child: Text(e,
+                          child: Text(e is int ? e.toString() : e,
                               style: TextStyle(
                                   color: textColor,
                                   fontWeight: FontWeight.bold,
