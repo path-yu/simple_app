@@ -58,49 +58,46 @@ class _ToolKitPageState extends State<ToolKitPage> {
     );
     return Scaffold(
         appBar: buildBaseAppBar(S.of(context).toolKit),
-        body: Container(
-          // color: Colors.blue.shade300,
-          child: ListView(
-            physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics()),
-            children: toolList.map((e) {
-              Color buttonTextColor;
-              String routerPath = e['RouterPath'];
-              if (routerPath.isEmpty) {
-                buttonTextColor = Colors.grey;
-              } else {
-                buttonTextColor = context.watch<CurrentTheme>().isNightMode
-                    ? Colors.white
-                    : Colors.black;
-              }
-              return Container(
-                height: ScreenUtil().setHeight(50),
-                margin: EdgeInsets.only(top: ScreenUtil().setHeight(35)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: ScreenUtil().setWidth(250),
-                      child: ElevatedButton(
-                          // color: const Color.fromRGBO(248, 248, 248, 1.0),
-                          // shape: RoundedRectangleBorder(
-                          //     borderRadius: BorderRadius.circular(20.0)),
-                          onPressed: () => toRouterPage(e),
-                          style: raisedButtonStyle,
-                          child: Center(
-                            child: Text(
-                              "${e['label']}",
-                              style: TextStyle(
-                                  fontSize: ScreenUtil().setSp(14),
-                                  color: buttonTextColor),
-                            ),
-                          )),
-                    )
-                  ],
-                ),
-              );
-            }).toList(),
-          ),
+        body: ListView(
+          physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics()),
+          children: toolList.map((e) {
+            Color buttonTextColor;
+            String routerPath = e['RouterPath'];
+            if (routerPath.isEmpty) {
+              buttonTextColor = Colors.grey;
+            } else {
+              buttonTextColor = context.watch<CurrentTheme>().isNightMode
+                  ? Colors.white
+                  : Colors.black;
+            }
+            return Container(
+              height: ScreenUtil().setHeight(50),
+              margin: EdgeInsets.only(top: ScreenUtil().setHeight(35)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: ScreenUtil().setWidth(250),
+                    child: ElevatedButton(
+                        // color: const Color.fromRGBO(248, 248, 248, 1.0),
+                        // shape: RoundedRectangleBorder(
+                        //     borderRadius: BorderRadius.circular(20.0)),
+                        onPressed: () => toRouterPage(e),
+                        style: raisedButtonStyle,
+                        child: Center(
+                          child: Text(
+                            "${e['label']}",
+                            style: TextStyle(
+                                fontSize: ScreenUtil().setSp(18),
+                                color: buttonTextColor),
+                          ),
+                        )),
+                  )
+                ],
+              ),
+            );
+          }).toList(),
         ));
   }
 }
