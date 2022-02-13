@@ -23,10 +23,10 @@
   "complete": "已经完成",
   "notEmpty": "不能为空!",
   "tryAgainExitApp": "再按一次退出App",
-  "noDevelopment":"暂未开发",
-  "searchNote":"搜索便签",
-  "editorNote":"编辑便签",
-  "createNote":"新建便签",
+  "noDevelopment": "暂未开发",
+  "searchNote": "搜索便签",
+  "editorNote": "编辑便签",
+  "createNote": "新建便签",
   "title": "标题",
   "notNoteMessage": "你还未添加添加便签,请点击按钮添加便签吧!",
   "notSearchNoteMessage": "很遗憾,没有搜索到数据!",
@@ -42,5 +42,6 @@
   "deleteFail": "删除失败",
   "deleteMessage": "你确定要删除吗?",
   "topping": "置顶",
-  "cancelTopping": "取消置顶"
+  "cancelTopping": "取消置顶",
+  "noSelectNoteMessage": "请选择数据"
 }

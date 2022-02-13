@@ -24,9 +24,9 @@
   "notEmpty": "Can not be empty",
   "tryAgainExitApp": "Press again to exit the App",
   "noDevelopment": "No development",
-  "searchNote":"Search note",
-  "editorNote":"Editor note",
-  "createNote":"Create note",
+  "searchNote": "Search note",
+  "editorNote": "Editor note",
+  "createNote": "Create note",
   "title": "title",
   "notNoteMessage": "You haven't added a note yet. Please click the button to add a note!",
   "notSearchNoteMessage": "Unfortunately, no data was found!",
@@ -42,5 +42,6 @@
   "deleteFail": "Delete failed!",
   "deleteMessage": "Are you sure you want to delete?",
   "topping": "topping",
-  "cancelTopping": "Cancel topping"
+  "cancelTopping": "Cancel topping",
+  "noSelectNoteMessage": "Please select data!"
 }
