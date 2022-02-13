@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-// 主题色
-const MaterialColor themeColor = Colors.blue;
+// 主题色 121,188,154
+const Color themeColor = Color.fromRGBO(121, 188, 157, 1);
 //0xff79BD98
 // app 背景颜色
 const Color appBackgroundColor = Color(0xfff7f7f7);

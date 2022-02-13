@@ -50,6 +50,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "noDevelopment": MessageLookupByLibrary.simpleMessage("No development"),
         "noNotificationPermission": MessageLookupByLibrary.simpleMessage(
             "No notification permission, go to the settings interface to set the permission?"),
+        "noSelectNoteMessage":
+            MessageLookupByLibrary.simpleMessage("Please select data!"),
         "notEmpty": MessageLookupByLibrary.simpleMessage("Can not be empty"),
         "notNoteMessage": MessageLookupByLibrary.simpleMessage(
             "You haven\'t added a note yet. Please click the button to add a note!"),

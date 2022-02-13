@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,6 +48,12 @@ void main(List<String> args) {
     ));
     // 初始化本地通知插件
     await flutterLocalNotificationsPluginInit();
+    if (Platform.isAndroid) {
+      // 以下两行 设置android状态栏为透明的沉浸。写在组件渲染之后，是为了在渲染后进行set赋值，覆盖状态栏，写在渲染之前MaterialApp组件会覆盖掉这个值。
+      SystemUiOverlayStyle systemUiOverlayStyle =
+          const SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+      SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+    }
   });
 }
 
@@ -90,7 +99,7 @@ class _MyAppState extends State<MyApp> {
       locale: context.watch<CurrentLocale>().value,
       // // 当系统请求“暗模式”时使用时, 使用暗模式
       theme: ThemeData(
-        primarySwatch: themeColor,
+        primaryColor: themeColor,
         visualDensity: VisualDensity.adaptivePlatformDensity,
         brightness: context.watch<CurrentTheme>().isNightMode
             ? Brightness.dark

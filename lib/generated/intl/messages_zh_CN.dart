@@ -45,6 +45,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "noDevelopment": MessageLookupByLibrary.simpleMessage("暂未开发"),
         "noNotificationPermission":
             MessageLookupByLibrary.simpleMessage("没有通知权限, 前往设置界面设置权限?"),
+        "noSelectNoteMessage": MessageLookupByLibrary.simpleMessage("请选择数据"),
         "notEmpty": MessageLookupByLibrary.simpleMessage("不能为空!"),
         "notNoteMessage":
             MessageLookupByLibrary.simpleMessage("你还未添加添加便签,请点击按钮添加便签吧!"),

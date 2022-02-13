@@ -169,6 +169,9 @@ class _NotePageState extends State<NotePage> {
   // 点击底部删除按钮
   void handleDelete() async {
     showBaseCupertinoModalPopup(context, () async {
+      if (selectIndexList.isEmpty) {
+        return showToast(S.of(context).noSelectNoteMessage);
+      }
       //删除数据
       int result = await DBProvider().deleteByIds(selectIndexList);
       if (result > 0) {

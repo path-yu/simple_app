@@ -49,53 +49,58 @@ class _ToolKitPageState extends State<ToolKitPage> {
       primary: context.watch<CurrentTheme>().isNightMode
           ? easyDarkColor
           : const Color.fromRGBO(248, 248, 248, 1.0),
-      minimumSize: const Size(88, 36),
+      // minimumSize: const Size(88, 36),
       padding: const EdgeInsets.symmetric(horizontal: 16),
+      maximumSize: const Size(100, 100),
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(20)),
+        borderRadius: BorderRadius.all(Radius.circular(30)),
       ),
     );
     return Scaffold(
         appBar: buildBaseAppBar(S.of(context).toolKit),
         body: Container(
-            margin: EdgeInsets.only(top: ScreenUtil().setSp(20)),
-            child: SizedBox(
-              width: double.infinity,
-              child: Wrap(
-                spacing: ScreenUtil().setSp(10),
-                runSpacing: ScreenUtil().setSp(10),
-                alignment: WrapAlignment.spaceAround, //沿主轴方向居中
-                runAlignment: WrapAlignment.spaceAround,
-                children: toolList.map((e) {
-                  Color buttonTextColor;
-                  String routerPath = e['RouterPath'];
-                  if (routerPath.isEmpty) {
-                    buttonTextColor = Colors.grey;
-                  } else {
-                    buttonTextColor = context.watch<CurrentTheme>().isNightMode
-                        ? Colors.white
-                        : Colors.black;
-                  }
-                  return SizedBox(
-                    width: ScreenUtil().setWidth(150),
-                    height: ScreenUtil().setHeight(30),
-                    child: ElevatedButton(
-                        // color: const Color.fromRGBO(248, 248, 248, 1.0),
-                        // shape: RoundedRectangleBorder(
-                        //     borderRadius: BorderRadius.circular(20.0)),
-                        onPressed: () => toRouterPage(e),
-                        style: raisedButtonStyle,
-                        child: Center(
-                          child: Text(
-                            "${e['label']}",
-                            style: TextStyle(
-                                fontSize: ScreenUtil().setSp(14),
-                                color: buttonTextColor),
-                          ),
-                        )),
-                  );
-                }).toList(),
-              ),
-            )));
+          // color: Colors.blue.shade300,
+          child: ListView(
+            physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics()),
+            children: toolList.map((e) {
+              Color buttonTextColor;
+              String routerPath = e['RouterPath'];
+              if (routerPath.isEmpty) {
+                buttonTextColor = Colors.grey;
+              } else {
+                buttonTextColor = context.watch<CurrentTheme>().isNightMode
+                    ? Colors.white
+                    : Colors.black;
+              }
+              return Container(
+                height: ScreenUtil().setHeight(50),
+                margin: EdgeInsets.only(top: ScreenUtil().setHeight(35)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: ScreenUtil().setWidth(250),
+                      child: ElevatedButton(
+                          // color: const Color.fromRGBO(248, 248, 248, 1.0),
+                          // shape: RoundedRectangleBorder(
+                          //     borderRadius: BorderRadius.circular(20.0)),
+                          onPressed: () => toRouterPage(e),
+                          style: raisedButtonStyle,
+                          child: Center(
+                            child: Text(
+                              "${e['label']}",
+                              style: TextStyle(
+                                  fontSize: ScreenUtil().setSp(14),
+                                  color: buttonTextColor),
+                            ),
+                          )),
+                    )
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+        ));
   }
 }

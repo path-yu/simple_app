@@ -489,6 +489,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Please select data!`
+  String get noSelectNoteMessage {
+    return Intl.message(
+      'Please select data!',
+      name: 'noSelectNoteMessage',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
