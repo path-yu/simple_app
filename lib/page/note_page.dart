@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:date_format/date_format.dart' hide S;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -9,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:simple_app/common/color.dart';
 import 'package:simple_app/components/base/base_animated_opacity.dart';
 import 'package:simple_app/components/base/build_base_app_bar.dart';
+import 'package:simple_app/components/base/draggable_floating_action_button.dart';
 import 'package:simple_app/components/base/loading.dart';
 import 'package:simple_app/components/search_bar.dart';
 import 'package:simple_app/data/index.dart';
@@ -436,9 +436,11 @@ class _NotePageState extends State<NotePage> {
       ),
       floatingActionButton: baseAnimatedOpacity(
           value: !isShowCheckBox,
-          child: FloatingActionButton(
-            onPressed: () => toCreateOrEditorNotePage(),
-            child: const Icon(Icons.add),
+          child: DrageAbleFloatingActionButton(
+            child: FloatingActionButton(
+              child: const Icon(Icons.add),
+              onPressed: () => toCreateOrEditorNotePage(),
+            ),
           )),
     );
   }
