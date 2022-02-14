@@ -118,7 +118,6 @@ class _CalculatorPageState extends State<CalculatorPage> {
   }
 
   void calcExpression() {
-    print(currentClickOperator);
     // 第一次点击了数字
     if (numOperatorList.contains(currentClickOperator) &&
         prevClickOperator == null) {
@@ -149,7 +148,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
     } else if (prevClickOperator == '.' &&
         operatorSymbolList.contains(currentClickOperator)) {
       calcResultList.add(currentClickOperator);
-    }else if( currentClickOperator == 'x'){
+    } else if (currentClickOperator == 'x') {
       currentClickOperator = prevClickOperator;
     }
     calcResult();
@@ -240,8 +239,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
         isScaleText = true;
       });
     } else if (operator == 'x') {
-
-      if(calcResultList.isNotEmpty){
+      if (calcResultList.isNotEmpty) {
         setState(() {
           expression = expression.substring(0, expression.length - 1);
         });
@@ -249,16 +247,16 @@ class _CalculatorPageState extends State<CalculatorPage> {
         if (operatorSymbolList.contains(last)) {
           calcResultList.remove(last);
         } else {
-          if(last.length == 1){
+          if (last.length == 1) {
             calcResultList.remove(last);
-          }else{
+          } else {
             calcResultList.last = last.substring(0, last.length - 1);
           }
         }
         currentClickOperator = 'x';
         calcExpression();
       }
-    } else if(operator == '.'){
+    } else if (operator == '.') {
       if (expression.isEmpty) {
         currentClickOperator = '.';
         prevClickOperator = '0';
@@ -280,8 +278,8 @@ class _CalculatorPageState extends State<CalculatorPage> {
           }
         }
       }
-    }else{
-      if(answerResult != '0'){
+    } else {
+      if (answerResult != '0') {
         setState(() {
           expression = '';
           currentClickOperator = null;
@@ -290,15 +288,14 @@ class _CalculatorPageState extends State<CalculatorPage> {
           answerResult = (num.parse(answerResult) / 100).toString();
         });
       }
-
     }
   }
 
   // 点击数字
   void handleClickNum(int num) {
-    if(expression.isNotEmpty){
+    if (expression.isNotEmpty) {
       String fistExpression = expression[0];
-      if(fistExpression == '0' && num == 0){
+      if (fistExpression == '0' && num == 0) {
         return;
       }
     }
