@@ -152,7 +152,6 @@ class _CalculatorPageState extends State<CalculatorPage> {
     } else if (currentClickOperator == 'x') {
       currentClickOperator = prevClickOperator;
     }
-    print(calcResultList);
     calcResult();
   }
 
@@ -173,7 +172,9 @@ class _CalculatorPageState extends State<CalculatorPage> {
     }
 
     for (int index = 0; index < count; index++) {
-      current = Decimal.parse(calcResultList[currentIndex]);
+      if (current == Decimal.zero) {
+        current = Decimal.parse(calcResultList[currentIndex]);
+      }
       if (currentIndex + 2 < calcResultList.length) {
         next = Decimal.parse(calcResultList[currentIndex + 2]);
       } else {
@@ -198,7 +199,8 @@ class _CalculatorPageState extends State<CalculatorPage> {
             current = result = current - (next ??= Decimal.zero);
             break;
           case '÷':
-            current = result = (current / (next ??= Decimal.one)).toDecimal();
+            var answer = current.toBigInt() / (next ??= Decimal.one).toBigInt();
+            result = current = Decimal.parse(answer.toString());
             break;
           default:
             break;
@@ -247,10 +249,12 @@ class _CalculatorPageState extends State<CalculatorPage> {
         });
         String last = calcResultList.last;
         if (operatorSymbolList.contains(last)) {
-          calcResultList.remove(last);
+          int index = calcResultList.lastIndexOf(last);
+          calcResultList.removeAt(index);
         } else {
           if (last.length == 1) {
-            calcResultList.remove(last);
+            int index = calcResultList.lastIndexOf(last);
+            calcResultList.removeAt(index);
           } else {
             calcResultList.last = last.substring(0, last.length - 1);
           }
@@ -335,6 +339,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
                             textAlign: TextAlign.right,
                           ),
                           style: TextStyle(
+                              color: textColor,
                               fontSize: isScaleText
                                   ? ScreenUtil().setSp(30)
                                   : ScreenUtil().setSp(48)),
@@ -346,6 +351,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
                         textAlign: TextAlign.right,
                       ),
                       style: TextStyle(
+                          color: textColor,
                           fontSize: isScaleText
                               ? ScreenUtil().setSp(48)
                               : ScreenUtil().setSp(30)),
@@ -361,7 +367,10 @@ class _CalculatorPageState extends State<CalculatorPage> {
                     children: operatorList.map((e) {
                       Widget child;
                       if (e == 'x') {
-                        child = const Icon(Icons.clear_rounded);
+                        child = Icon(
+                          Icons.clear_rounded,
+                          color: textColor,
+                        );
                       } else {
                         child = Text(e is int ? e.toString() : e,
                             style: TextStyle(
