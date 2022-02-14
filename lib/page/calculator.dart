@@ -328,6 +328,28 @@ class _CalculatorPageState extends State<CalculatorPage> {
 
   @override
   Widget build(BuildContext context) {
+    Color expressionColor = Colors.white10;
+    Color answerColor = Colors.red;
+    if (isScaleText) {
+      // 是否为暗色环境
+      if (context.watch<CurrentTheme>().isNightMode) {
+        expressionColor = Colors.white30;
+        answerColor = Colors.white;
+      } else {
+        expressionColor = Colors.black38;
+        answerColor = Colors.black;
+      }
+    } else {
+      // 是否为暗色环境
+      if (context.watch<CurrentTheme>().isNightMode) {
+        expressionColor = Colors.white;
+        answerColor = Colors.white30;
+      } else {
+        expressionColor = Colors.black;
+        answerColor = Colors.black38;
+        // expressionColor =
+      }
+    }
     return Scaffold(
         appBar: buildBaseAppBar(S.of(context).calculator),
         body: Container(
@@ -353,7 +375,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
                               maxLines: 1,
                             ),
                             style: TextStyle(
-                                color: textColor,
+                                color: expressionColor,
                                 fontSize: isScaleText
                                     ? ScreenUtil().setSp(30)
                                     : ScreenUtil().setSp(48)),
@@ -367,7 +389,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
                           maxLines: 1,
                         ),
                         style: TextStyle(
-                            color: textColor,
+                            color: answerColor,
                             fontSize: isScaleText
                                 ? ScreenUtil().setSp(48)
                                 : ScreenUtil().setSp(30)),
