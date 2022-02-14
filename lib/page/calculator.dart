@@ -1,3 +1,4 @@
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -151,13 +152,15 @@ class _CalculatorPageState extends State<CalculatorPage> {
     } else if (currentClickOperator == 'x') {
       currentClickOperator = prevClickOperator;
     }
+    print(calcResultList);
     calcResult();
   }
 
+  // 计算 运算式的值
   void calcResult() {
-    num current = 0;
-    num result = 0;
-    num? next;
+    Decimal current = Decimal.zero;
+    Decimal result = Decimal.zero;
+    Decimal? next;
     String? operator;
     int currentIndex = 0;
     // 当前需要计算的次数0; 根据有多少运算符来判断
@@ -166,15 +169,13 @@ class _CalculatorPageState extends State<CalculatorPage> {
         .length;
     // 如果当前只有一项数字, 说明还没有输入运算符,则直接赋值
     if (calcResultList.length == 1) {
-      result = num.parse(calcResultList[0]);
+      result = Decimal.parse(calcResultList[0]);
     }
 
     for (int index = 0; index < count; index++) {
-      if (current == 0) {
-        current = num.parse(calcResultList[currentIndex]);
-      }
+      current = Decimal.parse(calcResultList[currentIndex]);
       if (currentIndex + 2 < calcResultList.length) {
-        next = num.parse(calcResultList[currentIndex + 2]);
+        next = Decimal.parse(calcResultList[currentIndex + 2]);
       } else {
         next = null;
       }
@@ -187,16 +188,17 @@ class _CalculatorPageState extends State<CalculatorPage> {
       if (operator != null) {
         switch (operator) {
           case '×':
-            current = result = current * (next ??= 1);
+            ;
+            current = result = current * (next ??= Decimal.one);
             break;
           case '+':
-            current = result = current + (next ??= 1);
+            current = result = current + (next ??= Decimal.zero);
             break;
           case '-':
-            current = result = current - (next ??= 0);
+            current = result = current - (next ??= Decimal.zero);
             break;
           case '÷':
-            current = result = current / (next ??= 1);
+            current = result = (current / (next ??= Decimal.one)).toDecimal();
             break;
           default:
             break;
@@ -293,12 +295,6 @@ class _CalculatorPageState extends State<CalculatorPage> {
 
   // 点击数字
   void handleClickNum(int num) {
-    if (expression.isNotEmpty) {
-      String fistExpression = expression[0];
-      if (fistExpression == '0' && num == 0) {
-        return;
-      }
-    }
     setState(() {
       expression += num.toString();
     });
