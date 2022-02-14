@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -88,6 +89,15 @@ class _CalculatorPageState extends State<CalculatorPage> {
 
   // 点击
   void handleClick(dynamic operator) {
+    // 如果超过20位则不在计算, 只能进行AC 或清除
+    if (expression.length >= 20) {
+      if (operator == 'AC') {
+        handleOperatorSymbolClick(operator);
+      } else if (operator == 'x') {
+        handleOtherOperatorClick(operator);
+      }
+      return;
+    }
     // 避免第一次一直点击000
     if (operator == 0 && expression.isEmpty) {
       return;
@@ -327,36 +337,43 @@ class _CalculatorPageState extends State<CalculatorPage> {
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  // 运算表达式
-                  Visibility(
-                      visible: expression.isNotEmpty,
-                      child: AnimatedDefaultTextStyle(
-                          child: Text(
-                            expression,
-                            textAlign: TextAlign.right,
-                          ),
-                          style: TextStyle(
-                              color: textColor,
-                              fontSize: isScaleText
-                                  ? ScreenUtil().setSp(30)
-                                  : ScreenUtil().setSp(48)),
-                          duration: const Duration(milliseconds: 150))),
-                  // answer
-                  AnimatedDefaultTextStyle(
-                      child: Text(
-                        answerResult != '0' ? '= ' + answerResult : '0',
-                        textAlign: TextAlign.right,
-                      ),
-                      style: TextStyle(
-                          color: textColor,
-                          fontSize: isScaleText
-                              ? ScreenUtil().setSp(48)
-                              : ScreenUtil().setSp(30)),
-                      duration: const Duration(milliseconds: 150))
-                ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    // 运算表达式   ,
+                    Visibility(
+                        visible: expression.isNotEmpty,
+                        child: AnimatedDefaultTextStyle(
+                            child: AutoSizeText(
+                              expression,
+                              minFontSize: 16,
+                              textAlign: TextAlign.right,
+                              maxLines: 1,
+                            ),
+                            style: TextStyle(
+                                color: textColor,
+                                fontSize: isScaleText
+                                    ? ScreenUtil().setSp(30)
+                                    : ScreenUtil().setSp(48)),
+                            duration: const Duration(milliseconds: 250))),
+                    // answer
+                    AnimatedDefaultTextStyle(
+                        child: AutoSizeText(
+                          answerResult != '0' ? '= ' + answerResult : '0',
+                          minFontSize: 16,
+                          textAlign: TextAlign.right,
+                          maxLines: 1,
+                        ),
+                        style: TextStyle(
+                            color: textColor,
+                            fontSize: isScaleText
+                                ? ScreenUtil().setSp(48)
+                                : ScreenUtil().setSp(30)),
+                        duration: const Duration(milliseconds: 250))
+                  ],
+                ),
               ),
               SizedBox(
                 width: double.infinity,
