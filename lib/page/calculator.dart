@@ -309,8 +309,34 @@ class _CalculatorPageState extends State<CalculatorPage> {
 
   // 点击数字
   void handleClickNum(int num) {
+    var exp = '';
+    // 10+0
+    if (expression.isNotEmpty) {
+      // 判断0前面是否为数字
+      if (expression.length == 1) {
+        if (expression.isEmpty) {
+          exp = num.toString();
+        } else {
+          exp = expression + num.toString();
+        }
+      } else {
+        // 判断倒数第二项是否为为数子, 而且最后一位不为0
+        // 10+ 0
+        var str = expression[expression.length - 2];
+        if (num == 0 &&
+            !numOperatorList.contains(str) &&
+            expression[expression.length - 1] == '0') {
+          exp = expression;
+          print(34);
+        } else {
+          exp = expression + num.toString();
+        }
+      }
+    } else {
+      exp = expression + num.toString();
+    }
     setState(() {
-      expression += num.toString();
+      expression = exp;
     });
     calcExpression();
   }
