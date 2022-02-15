@@ -87,6 +87,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
   // String currentNum = '';
   bool isInputDot = true;
 
+  bool isLock = false;
   // 点击
   void handleClick(dynamic operator) {
     // 如果超过20位则不在计算, 只能进行AC 或清除
@@ -269,8 +270,16 @@ class _CalculatorPageState extends State<CalculatorPage> {
             calcResultList.last = last.substring(0, last.length - 1);
           }
         }
-        currentClickOperator = 'x';
-        calcExpression();
+        if (expression.isNotEmpty) {
+          currentClickOperator = 'x';
+          calcExpression();
+        } else {
+          expression = '';
+          currentClickOperator = null;
+          prevClickOperator = null;
+          calcResultList.clear();
+          answerResult = '0';
+        }
       }
     } else if (operator == '.') {
       if (expression.isEmpty) {
@@ -316,19 +325,25 @@ class _CalculatorPageState extends State<CalculatorPage> {
       if (expression.length == 1) {
         if (expression.isEmpty) {
           exp = num.toString();
+          isLock = false;
         } else {
+          isLock = false;
           exp = expression + num.toString();
         }
       } else {
         // 判断倒数第二项是否为为数子, 而且最后一位不为0
         // 10+ 0
         var str = expression[expression.length - 2];
-        if (num == 0 &&
-            !numOperatorList.contains(str) &&
+        if (!numOperatorList.contains(str) &&
             expression[expression.length - 1] == '0') {
           exp = expression;
-          print(34);
+          if (num == 0) {
+            isLock = true;
+          } else {
+            isLock = false;
+          }
         } else {
+          isLock = false;
           exp = expression + num.toString();
         }
       }
@@ -338,7 +353,9 @@ class _CalculatorPageState extends State<CalculatorPage> {
     setState(() {
       expression = exp;
     });
-    calcExpression();
+    if (!isLock) {
+      calcExpression();
+    }
   }
 
   int findStrCount(String str, String s) {
