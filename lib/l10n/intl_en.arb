@@ -43,5 +43,6 @@
   "deleteMessage": "Are you sure you want to delete?",
   "topping": "topping",
   "cancelTopping": "Cancel topping",
-  "noSelectNoteMessage": "Please select data!"
+  "noSelectNoteMessage": "Please select data!",
+  "outCalculationRange":"Out of calculation range!"
 }

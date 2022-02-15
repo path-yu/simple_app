@@ -499,6 +499,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Out of calculation range!`
+  String get outCalculationRange {
+    return Intl.message(
+      'Out of calculation range!',
+      name: 'outCalculationRange',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

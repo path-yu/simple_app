@@ -58,6 +58,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "notSearchNoteMessage": MessageLookupByLibrary.simpleMessage(
             "Unfortunately, no data was found!"),
         "note": MessageLookupByLibrary.simpleMessage("note"),
+        "outCalculationRange":
+            MessageLookupByLibrary.simpleMessage("Out of calculation range!"),
         "placeSearchContent": MessageLookupByLibrary.simpleMessage(
             "Please enter the search content!"),
         "saveFail": MessageLookupByLibrary.simpleMessage("Saved failed"),

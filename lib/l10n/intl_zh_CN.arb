@@ -43,5 +43,6 @@
   "deleteMessage": "你确定要删除吗?",
   "topping": "置顶",
   "cancelTopping": "取消置顶",
-  "noSelectNoteMessage": "请选择数据"
+  "noSelectNoteMessage": "请选择数据",
+  "outCalculationRange":"超出计算范围!"
 }

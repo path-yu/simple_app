@@ -7,6 +7,7 @@ import 'package:simple_app/components/base/build_base_app_bar.dart';
 import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/main.dart';
 import 'package:simple_app/provider/current_theme.dart';
+import 'package:simple_app/utils/show_toast.dart';
 
 class CalculatorPage extends StatefulWidget {
   const CalculatorPage({Key? key}) : super(key: key);
@@ -53,6 +54,8 @@ class _CalculatorPageState extends State<CalculatorPage> {
   // 运算表达式
   String expression = '';
 
+  bool get expressionIsEmpty => expression.isEmpty;
+
   // 运算结果
   String answerResult = '0';
 
@@ -75,32 +78,104 @@ class _CalculatorPageState extends State<CalculatorPage> {
   List operatorSymbolList = ['-', '+', '×', '÷'];
 
   // 其他运算符
-  List otherOperator = [
+  List otherOperatorList = [
     'x',
     '=',
     '.',
     'AC',
     '％',
   ];
-
-  //记录当前输入的数字
-  // String currentNum = '';
-  bool isInputDot = true;
-
+  // 是否为计算运算符
+  bool isCalcOperator(String value) => operatorSymbolList.contains(value);
+  // 是否为数字运算符
+  bool isNumberOperatror(String value) => numOperatorList.contains(value);
+  // 是否为其他操作运算符
+  bool isOntherOperator(String value) => otherOperatorList.contains(value);
+  //确保表达式正确的锁, 默认关闭
   bool isLock = false;
-  // 点击
-  void handleClick(dynamic operator) {
+
+  // 用于过滤不正常的输入, 为true 表示过滤
+  bool filterInput(String operator) {
     // 如果超过20位则不在计算, 只能进行AC 或清除
     if (expression.length >= 20) {
+        showToast(S.of(context).outCalculationRange);
       if (operator == 'AC' || operator == 'x') {
         handleOtherOperatorClick(operator);
       }
-      return;
+      return true;
     }
-    // 避免第一次一直点击000
-    if (operator == 0 && expression.isEmpty) {
-      return;
+    // 如果当前点击了计算运算符
+    if (isCalcOperator(operator)) {
+      // 如果为空, 则不进行计算
+      if (expression.isEmpty) {
+        return true;
+      } else {
+        String lastExpression = expression[expression.length - 1];
+        // 判断表达式前一位是否为数字而且不为运算符, 如果是则计算, 否则过滤
+        if (isNumberOperatror(lastExpression) &&
+            !operatorSymbolList.contains(lastExpression)) {
+          return false;
+        } else {
+          return true;
+        }
+      }
     }
+    // 如果当前点击了数字运算符
+    if (isNumberOperatror(operator)) {
+      // 过滤输入0 时的数据异常边界值
+      if (operator == '0') {
+        if (expressionIsEmpty) return true;
+        // 过滤一直例如10+0 , 一直输入0000的情况
+        if (expression.length == 1) {
+          if (expression == '0') {
+            return true;
+          } else {
+            return false;
+          }
+        } else {
+          // 判断倒数第二项是否为为数字, 而且最后一位不为0,且不等于小数点
+          var str = expression[expression.length - 2];
+          var last = expression[expression.length - 1];
+          if (!isNumberOperatror(str) && last == '0' && last != '.') {
+            return true;
+          } else {
+            return false;
+          }
+        }
+      } else {
+        return false;
+      }
+    }
+    // 其他运算符
+    if (isOntherOperator(operator)) {
+      // 如果输入的小数点.
+      if (operator == '.') {
+        if (expression.isNotEmpty) {
+          String lastExpression = expression[expression.length - 1];
+          // 确保计算式最后一位为数字而且不为运算符
+          if (isNumberOperatror(lastExpression) &&
+              !operatorSymbolList.contains(lastExpression)) {
+            // 判断最后一位是否只有一位小数点,如果不为一位则过滤 避免一直输入小数点
+            if (findStrCount(calcResultList.last, '.') != 0) {
+              return true;
+            } else {
+              return false;
+            }
+          } else {
+            return true;
+          }
+        } else {
+          return false;
+        }
+      }
+    }
+    return false;
+  }
+
+  // 点击运算符
+  void handleClick(dynamic operator) {
+    if (filterInput(operator.toString())) return;
+
     // 记录当前点击的运算符和上一次的运算符 首次只能点击 数字
     if (currentClickOperator != null) {
       if (!['x', '=', 'AC', '％'].contains(operator)) {
@@ -128,15 +203,13 @@ class _CalculatorPageState extends State<CalculatorPage> {
 
   void calcExpression() {
     // 第一次点击了数字
-    if (numOperatorList.contains(currentClickOperator) &&
-        prevClickOperator == null) {
+    if (isNumberOperatror(currentClickOperator) && prevClickOperator == null) {
       setState(() {
         answerResult = currentClickOperator;
       });
       calcResultList.add(currentClickOperator);
-    } else if (numOperatorList.contains(currentClickOperator) &&
-        (numOperatorList.contains(prevClickOperator) ||
-            prevClickOperator == '.')) {
+    } else if (isNumberOperatror(currentClickOperator) &&
+        (isNumberOperatror(prevClickOperator) || prevClickOperator == '.')) {
       String last = calcResultList.last;
       // 是否只有一个小数点, 并且最后一位不为运算符
       if (findStrCount(last, '.') == 0 &&
@@ -146,16 +219,16 @@ class _CalculatorPageState extends State<CalculatorPage> {
       } else {
         calcResultList.last += currentClickOperator;
       }
-    } else if (operatorSymbolList.contains(currentClickOperator) &&
-        numOperatorList.contains(prevClickOperator)) {
+    } else if (isCalcOperator(currentClickOperator) &&
+        isNumberOperatror(prevClickOperator)) {
       // 上一次为数字, 当前为运算符
       calcResultList.add(currentClickOperator);
-    } else if (numOperatorList.contains(currentClickOperator) &&
-        operatorSymbolList.contains(prevClickOperator)) {
+    } else if (isNumberOperatror(currentClickOperator) &&
+        isCalcOperator(prevClickOperator)) {
       // 当前为数字.上一次为运算符
       calcResultList.add(currentClickOperator);
     } else if (prevClickOperator == '.' &&
-        operatorSymbolList.contains(currentClickOperator)) {
+        isCalcOperator(currentClickOperator)) {
       calcResultList.add(currentClickOperator);
     } else if (currentClickOperator == 'x') {
       currentClickOperator = prevClickOperator;
@@ -224,16 +297,10 @@ class _CalculatorPageState extends State<CalculatorPage> {
   // 处理计算运算符点击
   void handleOperatorSymbolClick(String operator) {
     if (expression.isNotEmpty) {
-      String lastExpression = expression[expression.length - 1];
-      // 判断表达式前一位是否为数字而且不为运算符
-      if (numOperatorList.contains(lastExpression) &&
-              !operatorSymbolList.contains(lastExpression) ||
-          lastExpression == '.') {
-        setState(() {
-          expression += operator;
-        });
-        calcExpression();
-      }
+      setState(() {
+        expression += operator;
+      });
+      calcExpression();
     }
   }
 
@@ -258,7 +325,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
           expression = expression.substring(0, expression.length - 1);
         });
         String last = calcResultList.last;
-        if (operatorSymbolList.contains(last)) {
+        if (isCalcOperator(last)) {
           int index = calcResultList.lastIndexOf(last);
           calcResultList.removeAt(index);
         } else {
@@ -290,20 +357,12 @@ class _CalculatorPageState extends State<CalculatorPage> {
         });
         calcResultList.add('0' + '.');
       } else {
-        String lastExpression = expression[expression.length - 1];
-        // 确保计算式前一位为数字而且不为运算符
-        if (numOperatorList.contains(lastExpression) &&
-            !operatorSymbolList.contains(lastExpression)) {
-          if (findStrCount(calcResultList.last, '.') == 0) {
-            setState(() {
-              expression += '.';
-            });
-            calcExpression();
-          }
-        }
+        setState(() {
+          expression += '.';
+        });
       }
     } else {
-      if (answerResult != '0') {
+      if (answerResult != '0' && expression.isNotEmpty) {
         setState(() {
           expression = '';
           currentClickOperator = null;
@@ -317,43 +376,10 @@ class _CalculatorPageState extends State<CalculatorPage> {
 
   // 点击数字
   void handleClickNum(int num) {
-    var exp = '';
-    // 10+0
-    if (expression.isNotEmpty) {
-      // 判断0前面是否为数字
-      if (expression.length == 1) {
-        if (expression.isEmpty) {
-          exp = num.toString();
-          isLock = false;
-        } else {
-          isLock = false;
-          exp = expression + num.toString();
-        }
-      } else {
-        // 判断倒数第二项是否为为数子, 而且最后一位不为0
-        var str = expression[expression.length - 2];
-        if (!numOperatorList.contains(str) &&
-            expression[expression.length - 1] == '0') {
-          exp = expression;
-          if (num == 0) {
-            isLock = true;
-          } else {
-            isLock = false;
-          }
-        } else {
-          isLock = false;
-          exp = expression + num.toString();
-        }
-      }
-    } else {
-      exp = expression + num.toString();
-    }
     setState(() {
-      expression = exp;
+      expression += num.toString();
     });
-    if (!isLock) {
-      calcExpression();
-    }
+    calcExpression();
   }
 
   int findStrCount(String str, String s) {

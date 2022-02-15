@@ -52,6 +52,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "notSearchNoteMessage":
             MessageLookupByLibrary.simpleMessage("很遗憾,没有搜索到数据!"),
         "note": MessageLookupByLibrary.simpleMessage("便签"),
+        "outCalculationRange": MessageLookupByLibrary.simpleMessage("超出计算范围!"),
         "placeSearchContent": MessageLookupByLibrary.simpleMessage("请输入搜索内容!"),
         "saveFail": MessageLookupByLibrary.simpleMessage("保存失败"),
         "saveSuccess": MessageLookupByLibrary.simpleMessage("保存成功"),
