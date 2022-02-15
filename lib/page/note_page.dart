@@ -105,9 +105,12 @@ class _NotePageState extends State<NotePage> {
   }
 
   // 跳转到新建便签 页面
-  void toCreateOrEditorNotePage({int? id, int? time}) {
+  void toCreateOrEditorNotePage({int? id, int? time, int? index}) {
     // 如果开启了长按选择则不进行跳转
     if (isShowCheckBox) {
+      // 判断是否选中
+      NewNote target = noteList[index!];
+      handleChangeCheckBox(!target.isSelect, index);
       return;
     }
     if (id != null) {
@@ -199,7 +202,7 @@ class _NotePageState extends State<NotePage> {
     }
   }
 
-  // 选择checkbox回调
+  // 更新checkbox
   void handleChangeCheckBox(bool value, int index) {
     setState(() {
       noteList[index].isSelect = value;
@@ -284,7 +287,8 @@ class _NotePageState extends State<NotePage> {
             : [yyyy, '年', mm, '月', dd, '日']);
     var padding = ScreenUtil().setSp(20);
     return InkWell(
-      onTap: () => toCreateOrEditorNotePage(id: target.id, time: target.time),
+      onTap: () => toCreateOrEditorNotePage(
+          id: target.id, time: target.time, index: index),
       onLongPress: () => handLongPress(index, context),
       child: AnimatedContainer(
         duration: const Duration(seconds: 1),
