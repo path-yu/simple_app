@@ -97,8 +97,8 @@ class _CalculatorPageState extends State<CalculatorPage> {
   // 用于过滤不正常的输入, 为true 表示过滤
   bool filterInput(String operator) {
     // 如果超过20位则不在计算, 只能进行AC 或清除
-    if (expression.length >= 20) {
-        showToast(S.of(context).outCalculationRange);
+    if (expression.length >= 23) {
+      showToast(S.of(context).outCalculationRange);
       if (operator == 'AC' || operator == 'x') {
         handleOtherOperatorClick(operator);
       }
@@ -133,16 +133,29 @@ class _CalculatorPageState extends State<CalculatorPage> {
             return false;
           }
         } else {
-          // 判断倒数第二项是否为为数字, 而且最后一位不为0,且不等于小数点
+          // 判断倒数第二项是否不为为数字, 而且最后一位不为0,且不等于小数点
           var str = expression[expression.length - 2];
           var last = expression[expression.length - 1];
           if (!isNumberOperatror(str) && last == '0' && last != '.') {
-            return true;
+            if (str == '.') {
+              return false;
+            } else {
+              return true;
+            }
           } else {
             return false;
           }
         }
       } else {
+        if (expression.isNotEmpty) {
+          String last = calcResultList.last;
+          // 过滤最后一位数字为0时,输入02222类型情况
+          if (last.length == 1 && last == '0') {
+            return true;
+          } else {
+            return false;
+          }
+        }
         return false;
       }
     }
@@ -233,6 +246,8 @@ class _CalculatorPageState extends State<CalculatorPage> {
     } else if (currentClickOperator == 'x') {
       currentClickOperator = prevClickOperator;
     }
+    print(calcResultList);
+
     calcResult();
   }
 
@@ -358,6 +373,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
         calcResultList.add('0' + '.');
       } else {
         setState(() {
+          calcResultList.last = calcResultList.last + '.';
           expression += '.';
         });
       }
@@ -474,7 +490,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
                       Widget child;
                       if (e == 'x') {
                         child = Icon(
-                          Icons.clear_rounded,
+                          Icons.cleaning_services_outlined,
                           color: textColor,
                         );
                       } else {
