@@ -16,6 +16,7 @@ class CurrentTheme with ChangeNotifier {
   Color get themeBackgroundColor =>
       isNightMode ? easyDarkColor : const Color.fromRGBO(246, 246, 246, 1.0);
 
+  Color get dartOrWhiteColor => isNightMode ? Colors.white : Colors.black;
   changeMode(Brightness mode) async {
     themeMode = mode;
     final SharedPreferences prefs = await SharedPreferences.getInstance();

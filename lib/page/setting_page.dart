@@ -48,7 +48,8 @@ class _SettingPageState extends State<SettingPage> {
                 SizedBox(
                   width: ScreenUtil().setWidth(10),
                 ),
-                baseText(S.of(context).switchLanguage)
+                baseText(S.of(context).switchLanguage,
+                    color: context.watch<CurrentTheme>().dartOrWhiteColor)
               ],
             ),
             value: context.watch<CurrentLocale>().languageIsEnglishMode,
@@ -61,7 +62,8 @@ class _SettingPageState extends State<SettingPage> {
                 SizedBox(
                   width: ScreenUtil().setWidth(10),
                 ),
-                baseText(S.of(context).nightMode)
+                baseText(S.of(context).nightMode,
+                    color: context.watch<CurrentTheme>().dartOrWhiteColor)
               ],
             ),
             value: context.watch<CurrentTheme>().isNightMode,

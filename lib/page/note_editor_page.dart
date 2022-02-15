@@ -133,15 +133,16 @@ class _NoteEditorPageState extends State<NoteEditorPage>
   void _deleteDocument() async {
     isNeedUpdate = true;
     // 弹出对话框判断用户是否真的需要删除
-    var res = await showConfirmDialog(context, message: '确定删除当前便签吗');
+    var res = await showConfirmDialog(context,
+        message: S.of(context).deleteTodoMessage);
     if (res != null) {
       int res = await DBProvider().deleteData(id!);
       if (res > 0) {
-        showToast('删除成功');
+        showToast(S.of(context).deleteSuccess);
         // 跳转到上一个页面
         Navigator.pop(context, true);
       } else {
-        showToast('删除失败');
+        showToast(S.of(context).deleteFail);
       }
     }
   }

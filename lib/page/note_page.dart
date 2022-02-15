@@ -46,8 +46,11 @@ class _NotePageState extends State<NotePage> {
   // 当前所有选择的下标
   List<int> selectIndexList = [];
 
+  // 是否全选
+  bool get isSelectAll => noteList.every((note) => note.isSelect == true);
   @override
   void initState() {
+    if (isSelectAll) {}
     super.initState();
     getData(DBProvider().findAll);
   }
@@ -399,7 +402,9 @@ class _NotePageState extends State<NotePage> {
                 value: isShowCheckBox,
                 child: IconButton(
                     onPressed: handleSelectMenu,
-                    icon: const Icon(Icons.menu_open_sharp)))
+                    icon: Icon(isSelectAll
+                        ? Icons.check_circle
+                        : Icons.check_circle_outline)))
           ],
           leading: isShowCheckBox
               ? IconButton(
