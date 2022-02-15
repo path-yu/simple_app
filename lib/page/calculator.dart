@@ -92,9 +92,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
   void handleClick(dynamic operator) {
     // 如果超过20位则不在计算, 只能进行AC 或清除
     if (expression.length >= 20) {
-      if (operator == 'AC') {
-        handleOperatorSymbolClick(operator);
-      } else if (operator == 'x') {
+      if (operator == 'AC' || operator == 'x') {
         handleOtherOperatorClick(operator);
       }
       return;
@@ -122,7 +120,6 @@ class _CalculatorPageState extends State<CalculatorPage> {
       if (operatorSymbolList.contains(operator)) {
         handleOperatorSymbolClick(operator);
         setState(() => isScaleText = false);
-        calcExpression();
       } else {
         handleOtherOperatorClick(operator);
       }
@@ -183,6 +180,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
     }
 
     for (int index = 0; index < count; index++) {
+      // 第一次赋值
       if (current == Decimal.zero) {
         current = Decimal.parse(calcResultList[currentIndex]);
       }
@@ -234,6 +232,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
         setState(() {
           expression += operator;
         });
+        calcExpression();
       }
     }
   }
@@ -332,7 +331,6 @@ class _CalculatorPageState extends State<CalculatorPage> {
         }
       } else {
         // 判断倒数第二项是否为为数子, 而且最后一位不为0
-        // 10+ 0
         var str = expression[expression.length - 2];
         if (!numOperatorList.contains(str) &&
             expression[expression.length - 1] == '0') {
