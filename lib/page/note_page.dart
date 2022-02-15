@@ -9,6 +9,7 @@ import 'package:simple_app/common/color.dart';
 import 'package:simple_app/components/base/base_animated_opacity.dart';
 import 'package:simple_app/components/base/build_base_app_bar.dart';
 import 'package:simple_app/components/base/draggable_floating_action_button.dart';
+import 'package:simple_app/components/base/hide_key_bord.dart';
 import 'package:simple_app/components/base/loading.dart';
 import 'package:simple_app/components/search_bar.dart';
 import 'package:simple_app/data/index.dart';
@@ -390,7 +391,8 @@ class _NotePageState extends State<NotePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return HideKeyboard(
+        child: Scaffold(
       appBar: buildBaseAppBar(showAppBarTitle(),
           action: [
             baseAnimatedOpacity(
@@ -446,7 +448,7 @@ class _NotePageState extends State<NotePage> {
               onPressed: () => toCreateOrEditorNotePage(),
             ),
           )),
-    );
+    ));
   }
 }
 

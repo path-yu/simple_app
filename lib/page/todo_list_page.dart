@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_app/common/color.dart';
 import 'package:simple_app/common/global.dart';
 import 'package:simple_app/components/base/build_base_app_bar.dart';
+import 'package:simple_app/components/base/hide_key_bord.dart';
 import 'package:simple_app/components/base/loading.dart';
 import 'package:simple_app/components/search_bar.dart';
 import 'package:simple_app/components/todoList/todo_list.dart';
@@ -216,58 +217,59 @@ class _TodoListPageState extends State<TodoListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: buildBaseAppBar(S.of(context).todoList),
-        resizeToAvoidBottomInset: false, //输入框抵住键盘 内容不随键盘滚动
-        body: loading
-            ? const Loading()
-            : ListView(
-                physics: const BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics()),
-                children: [
-                  Container(
-                    color: context.watch<CurrentTheme>().isNightMode
-                        ? Theme.of(context).cardTheme.color
-                        : appBackgroundColor,
-                    padding: EdgeInsets.all(ScreenUtil().setSp(10)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                            child: Center(
-                                child: SearchBar(
-                          _todoController,
-                          addConfirm,
-                          TextInputAction.done,
-                          S.of(context).addTodo,
-                          key: _searchBarKey,
-                          prefixIcon: const Icon(
-                            Icons.add,
-                            color: themeColor,
-                          ),
-                        )))
-                      ],
-                    ),
-                  ),
-                  TodoList(
-                    key: _underWayTodoListKey,
-                    listData: underwayList,
-                    title: S.of(context).underway,
-                    checkBoxChange: checkBoxChange,
-                    deleteToDoListItem: deleteToDoListItem,
-                    searchBarKey: _searchBarKey,
-                    updateTodoTopping: updateTodoTopping,
-                  ),
-                  TodoList(
-                    key: _completeToDoListKey,
-                    listData: completeToDoList,
-                    title: S.of(context).complete,
-                    checkBoxChange: checkBoxChange,
-                    deleteToDoListItem: deleteToDoListItem,
-                    searchBarKey: _searchBarKey,
-                    updateTodoTopping: updateTodoTopping,
-                  )
-                ],
-              ));
+    return HideKeyboard(
+        child: Scaffold(
+            appBar: buildBaseAppBar(S.of(context).todoList),
+            resizeToAvoidBottomInset: false, //输入框抵住键盘 内容不随键盘滚动
+            body: loading
+                ? const Loading()
+                : ListView(
+                    physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics()),
+                    children: [
+                      Container(
+                        color: context.watch<CurrentTheme>().isNightMode
+                            ? Theme.of(context).cardTheme.color
+                            : appBackgroundColor,
+                        padding: EdgeInsets.all(ScreenUtil().setSp(10)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                                child: Center(
+                                    child: SearchBar(
+                              _todoController,
+                              addConfirm,
+                              TextInputAction.done,
+                              S.of(context).addTodo,
+                              key: _searchBarKey,
+                              prefixIcon: const Icon(
+                                Icons.add,
+                                color: themeColor,
+                              ),
+                            )))
+                          ],
+                        ),
+                      ),
+                      TodoList(
+                        key: _underWayTodoListKey,
+                        listData: underwayList,
+                        title: S.of(context).underway,
+                        checkBoxChange: checkBoxChange,
+                        deleteToDoListItem: deleteToDoListItem,
+                        searchBarKey: _searchBarKey,
+                        updateTodoTopping: updateTodoTopping,
+                      ),
+                      TodoList(
+                        key: _completeToDoListKey,
+                        listData: completeToDoList,
+                        title: S.of(context).complete,
+                        checkBoxChange: checkBoxChange,
+                        deleteToDoListItem: deleteToDoListItem,
+                        searchBarKey: _searchBarKey,
+                        updateTodoTopping: updateTodoTopping,
+                      )
+                    ],
+                  )));
   }
 }

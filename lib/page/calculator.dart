@@ -246,8 +246,6 @@ class _CalculatorPageState extends State<CalculatorPage> {
     } else if (currentClickOperator == 'x') {
       currentClickOperator = prevClickOperator;
     }
-    print(calcResultList);
-
     calcResult();
   }
 
