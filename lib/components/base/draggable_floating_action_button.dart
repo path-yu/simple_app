@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-class DrageAbleFloatingActionButton extends StatefulWidget {
+class DragAbleFloatingActionButton extends StatefulWidget {
   //子控件
   Widget child;
-  DrageAbleFloatingActionButton({Key? key, required this.child})
+  DragAbleFloatingActionButton({Key? key, required this.child})
       : super(key: key);
 
   @override
-  State<DrageAbleFloatingActionButton> createState() =>
-      _DrageAbleFloatingActionButtonState();
+  State<DragAbleFloatingActionButton> createState() =>
+      _DragAbleFloatingActionButtonState();
 }
 
-class _DrageAbleFloatingActionButtonState
-    extends State<DrageAbleFloatingActionButton> {
+class _DragAbleFloatingActionButtonState
+    extends State<DragAbleFloatingActionButton> {
   Offset position = const Offset(0, 0);
   @override
   Widget build(BuildContext context) {

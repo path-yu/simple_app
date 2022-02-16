@@ -447,7 +447,7 @@ class _NotePageState extends State<NotePage> {
       ),
       floatingActionButton: baseAnimatedOpacity(
           value: !isShowCheckBox,
-          child: DrageAbleFloatingActionButton(
+          child: DragAbleFloatingActionButton(
             child: FloatingActionButton(
               child: const Icon(Icons.add),
               onPressed: () => toCreateOrEditorNotePage(),

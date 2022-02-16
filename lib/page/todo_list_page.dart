@@ -15,7 +15,6 @@ import 'package:simple_app/components/search_bar.dart';
 import 'package:simple_app/components/todoList/build_todo_list_title.dart';
 import 'package:simple_app/components/todoList/todo_list.dart';
 import 'package:simple_app/generated/l10n.dart';
-import 'package:simple_app/page/test.dart';
 import 'package:simple_app/provider/current_theme.dart';
 import 'package:simple_app/utils/Notification.dart';
 import 'package:simple_app/utils/index.dart';

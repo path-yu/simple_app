@@ -90,7 +90,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
   // 是否为数字运算符
   bool isNumberOperatror(String value) => numOperatorList.contains(value);
   // 是否为其他操作运算符
-  bool isOntherOperator(String value) => otherOperatorList.contains(value);
+  bool isOtherOperator(String value) => otherOperatorList.contains(value);
   //确保表达式正确的锁, 默认关闭
   bool isLock = false;
 
@@ -147,7 +147,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
           }
         }
       } else {
-        if (expression.isNotEmpty) {
+        if (expression.isNotEmpty && calcResultList.isNotEmpty) {
           String last = calcResultList.last;
           // 过滤最后一位数字为0时,输入02222类型情况
           if (last.length == 1 && last == '0') {
@@ -160,7 +160,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
       }
     }
     // 其他运算符
-    if (isOntherOperator(operator)) {
+    if (isOtherOperator(operator)) {
       // 如果输入的小数点.
       if (operator == '.') {
         if (expression.isNotEmpty) {
@@ -244,8 +244,20 @@ class _CalculatorPageState extends State<CalculatorPage> {
         isCalcOperator(currentClickOperator)) {
       calcResultList.add(currentClickOperator);
     } else if (currentClickOperator == 'x') {
-      currentClickOperator = prevClickOperator;
+      /// 如果上一步为运算符则取上一步, 否则取最后一位运算符
+      if(isCalcOperator(prevClickOperator) || prevClickOperator == '.'){
+        if(calcResultList.last == 0){
+          prevClickOperator = null;
+        }else{
+          currentClickOperator = calcResultList.last[calcResultList.last.length - 1];
+        }
+      }else{
+        currentClickOperator = prevClickOperator;
+      }
     }
+    print(currentClickOperator);
+    print(prevClickOperator);
+    print(calcResultList);
     calcResult();
   }
 
@@ -284,7 +296,6 @@ class _CalculatorPageState extends State<CalculatorPage> {
       if (operator != null) {
         switch (operator) {
           case '×':
-            ;
             current = result = current * (next ??= Decimal.one);
             break;
           case '+':
@@ -365,10 +376,10 @@ class _CalculatorPageState extends State<CalculatorPage> {
         currentClickOperator = '.';
         prevClickOperator = '0';
         setState(() {
-          expression = '0' + '.';
+          expression = '0' '.';
           answerResult = '0';
         });
-        calcResultList.add('0' + '.');
+        calcResultList.add('0' '.');
       } else {
         setState(() {
           calcResultList.last = calcResultList.last + '.';
