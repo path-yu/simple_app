@@ -1,14 +1,26 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-Widget buildTodoListTitle(String title, int count) {
+Widget buildTodoListTitle(String title, int count,
+    {void Function()? onTap, required bool isSpread}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
-      Text(
-        title,
-        style: TextStyle(
-            fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(20)),
+      GestureDetector(
+        onTap: onTap,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: ScreenUtil().setSp(20)),
+            ),
+            Icon(isSpread ? Icons.arrow_drop_down : Icons.arrow_drop_up),
+          ],
+        ),
       ),
       ClipOval(
           child: Container(

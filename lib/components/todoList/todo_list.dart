@@ -15,14 +15,17 @@ class TodoList extends StatefulWidget {
   final Function deleteToDoListItem;
   final GlobalKey<SearchBarState> searchBarKey;
   final Function updateTodoTopping;
+  // 是否展开
+  final bool isSpread;
   const TodoList(
       {required Key key,
-        required this.listData,
-        required this.title,
-        required this.checkBoxChange,
-        required this.deleteToDoListItem,
-        required this.searchBarKey,
-        required this.updateTodoTopping})
+      required this.listData,
+      required this.title,
+      required this.isSpread,
+      required this.checkBoxChange,
+      required this.deleteToDoListItem,
+      required this.searchBarKey,
+      required this.updateTodoTopping})
       : super(key: key);
 
   @override
@@ -30,18 +33,23 @@ class TodoList extends StatefulWidget {
 }
 
 class TodoListState extends State<TodoList>
-    with SingleTickerProviderStateMixin {
-  final GlobalKey<AnimatedListState> listkey = GlobalKey<AnimatedListState>();
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
+  final GlobalKey<AnimatedListState> _listkey = GlobalKey<AnimatedListState>();
 
   // The default insert/remove animation duration.
   final Duration _kDuration = const Duration(milliseconds: 300);
 
   // 拷贝父组件数据
   List myList = [];
+  // 是否展开
+  bool isSpread = true;
+  // 当前组件的高度
+  double? currentHeight;
+  // 每个todo 平均高度
+  double? averageHeight;
 
-  // 滑动菜单key
-  Key slidAbleKey = const ValueKey(0);
-
+  //列表总数
+  int? count;
   void removeItem(_index) {
     animatedRemoveItem(_index);
     // 因为删除动画需要时间300 毫秒 所以需要等待300ms后
@@ -54,14 +62,16 @@ class TodoListState extends State<TodoList>
   }
 
   void animatedRemoveItem(_index) {
-    listkey.currentState?.removeItem(
+    _listkey.currentState?.removeItem(
         _index, (context, animation) => _buildItem(animation, _index),
         duration: _kDuration);
   }
 
   void addItem() {
     final _index = widget.listData.length;
-    listkey.currentState?.insertItem(_index, duration: _kDuration);
+    count = myList.length + 1;
+    _getContainerHeight(null);
+    _listkey.currentState?.insertItem(_index, duration: _kDuration);
   }
 
   void handleRemoveItem(index) async {
@@ -72,6 +82,8 @@ class TodoListState extends State<TodoList>
         message: S.of(context).deleteTodoMessage);
 
     if (delete != null) {
+      count = myList.length - 1;
+      _getContainerHeight(null);
       removeItem(index);
     }
   }
@@ -81,8 +93,11 @@ class TodoListState extends State<TodoList>
     setState(() {
       myList[index]['done'] = value;
     });
+
     Future.delayed(const Duration(milliseconds: 100), () {
       myList[index]['done'] = !value;
+      count = myList.length - 1;
+      _getContainerHeight(null);
       widget.checkBoxChange(value, target, done);
     });
   }
@@ -108,7 +123,7 @@ class TodoListState extends State<TodoList>
       isTopping = true;
       // 找到最后一个置顶的数据
       int resultIndex =
-      myList.lastIndexWhere((element) => element['isTop'] == true);
+          myList.lastIndexWhere((element) => element['isTop'] == true);
       if (resultIndex != -1) {
         // 如果为第一项置顶
         if (resultIndex == 0 && index == 0) {
@@ -117,7 +132,7 @@ class TodoListState extends State<TodoList>
         }
         //如果当前指定的元素为最后一个,则返回最后一个置顶下标, 否则置顶下标 + 1
         newIndex =
-        resultIndex == myList.length - 1 ? resultIndex : resultIndex + 1;
+            resultIndex == myList.length - 1 ? resultIndex : resultIndex + 1;
         oldIndex = target['oldIndex'] ?? index;
       } else {
         // 如果为第一个置顶 则不需要交换
@@ -145,13 +160,44 @@ class TodoListState extends State<TodoList>
   @override
   void initState() {
     super.initState();
-    setState(() => myList = widget.listData);
+    myList = widget.listData;
+    isSpread = widget.isSpread;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance?.removeObserver(this);
   }
 
   @override
   void didUpdateWidget(covariant TodoList oldWidget) {
     super.didUpdateWidget(oldWidget);
-    setState(() => myList = widget.listData);
+    myList = widget.listData;
+    isSpread = widget.isSpread;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    WidgetsBinding.instance?.addPostFrameCallback(_getContainerHeight);
+  }
+
+  _getContainerHeight(_) {
+    count ??= myList.length;
+    var height;
+    if (averageHeight == null) {
+      height =
+          (_listkey.currentContext?.size!.height)! + ScreenUtil().setHeight(20);
+      averageHeight = (height - ScreenUtil().setHeight(20)) / myList.length;
+    } else {
+      height =
+          (averageHeight! * count!.toDouble()) + ScreenUtil().setHeight(20);
+    }
+    setState(() {
+      isSpread = true;
+      currentHeight = count == 0 ? 0 : height;
+    });
   }
 
   Widget _buildItem(Animation<double> _animation, int index) {
@@ -165,11 +211,11 @@ class TodoListState extends State<TodoList>
       child: Container(
           color: context.watch<CurrentTheme>().isNightMode
               ? isTop
-              ? const Color.fromRGBO(26, 26, 26, 1)
-              : Colors.black12
+                  ? const Color.fromRGBO(26, 26, 26, 1)
+                  : Colors.black12
               : isTop
-              ? const Color.fromRGBO(244, 244, 244, 1)
-              : Colors.white,
+                  ? const Color.fromRGBO(244, 244, 244, 1)
+                  : Colors.white,
           child: Center(
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -203,60 +249,58 @@ class TodoListState extends State<TodoList>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOutSine,
       padding: EdgeInsets.all(ScreenUtil().setSp(10)),
-      child: Column(
-        children: [
-          AnimatedList(
-            shrinkWrap: true,
-            key: listkey,
-            physics: const ClampingScrollPhysics(), // 去掉回弹效果
-            initialItemCount: widget.listData.length,
-            itemBuilder: (BuildContext context, int index,
-                Animation<double> animation) {
-              Map target = myList[index];
-              bool isTop = target['isTop'];
-              return Slidable(
-                key: const ValueKey(0),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: ScreenUtil().setHeight(5),
-                    ),
-                    _buildItem(animation, index)
-                  ],
+      height: isSpread ? currentHeight : 0,
+      child: AnimatedList(
+        shrinkWrap: true,
+        key: _listkey,
+        physics: const NeverScrollableScrollPhysics(), // 去掉回弹效果 避免滑动冲突
+        initialItemCount: widget.listData.length,
+        itemBuilder:
+            (BuildContext context, int index, Animation<double> animation) {
+          Map target = myList[index];
+          bool isTop = target['isTop'];
+          return Slidable(
+            key: const ValueKey(0),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: ScreenUtil().setHeight(5),
                 ),
-                endActionPane: ActionPane(
-                  motion: const DrawerMotion(),
-                  extentRatio: isTop ? 0.6 : 0.5,
-                  children: [
-                    SlidableAction(
-                      spacing: 1,
-                      // An action can be bigger than the others.
-                      flex: 1,
-                      onPressed: (BuildContext context) =>
-                          handleRemoveItem(index),
-                      backgroundColor: const Color(0xFF7BC043),
-                      foregroundColor: Colors.white,
-                      label: S.of(context).delete,
-                    ),
-                    SlidableAction(
-                      flex: isTop ? 2 : 1,
-                      spacing: 1,
-                      onPressed: (BuildContext context) =>
-                          handleTopping(index, target),
-                      backgroundColor: const Color(0xFF0392CF),
-                      foregroundColor: Colors.white,
-                      label: isTop
-                          ? S.of(context).cancelTopping
-                          : S.of(context).topping,
-                    ),
-                  ],
+                _buildItem(animation, index)
+              ],
+            ),
+            endActionPane: ActionPane(
+              motion: const DrawerMotion(),
+              extentRatio: isTop ? 0.6 : 0.5,
+              children: [
+                SlidableAction(
+                  spacing: 1,
+                  // An action can be bigger than the others.
+                  flex: 1,
+                  onPressed: (BuildContext context) => handleRemoveItem(index),
+                  backgroundColor: const Color(0xFF7BC043),
+                  foregroundColor: Colors.white,
+                  label: S.of(context).delete,
                 ),
-              );
-            },
-          )
-        ],
+                SlidableAction(
+                  flex: isTop ? 2 : 1,
+                  spacing: 1,
+                  onPressed: (BuildContext context) =>
+                      handleTopping(index, target),
+                  backgroundColor: const Color(0xFF0392CF),
+                  foregroundColor: Colors.white,
+                  label: isTop
+                      ? S.of(context).cancelTopping
+                      : S.of(context).topping,
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

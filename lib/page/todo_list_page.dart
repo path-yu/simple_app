@@ -54,6 +54,10 @@ class _TodoListPageState extends State<TodoListPage> {
   // 是否正在加载数据
   bool loading = true;
 
+  // 是否展开正在进行的todo
+  bool underwayListIsSpread = true;
+
+  bool completeIsSpread = true;
   @override
   void initState() {
     super.initState();
@@ -219,7 +223,7 @@ class _TodoListPageState extends State<TodoListPage> {
 
   @override
   Widget build(BuildContext context) {
-    Color stickyTopColor =  context.watch<CurrentTheme>().isNightMode
+    Color stickyTopColor = context.watch<CurrentTheme>().isNightMode
         ? const Color.fromRGBO(45, 45, 45, 1)
         : const Color(0xfff7f7f7);
     return HideKeyboard(
@@ -229,6 +233,7 @@ class _TodoListPageState extends State<TodoListPage> {
             body: loading
                 ? const Loading()
                 : CustomScrollView(
+                    shrinkWrap: true,
                     physics: const BouncingScrollPhysics(
                         parent: AlwaysScrollableScrollPhysics()),
                     slivers: [
@@ -270,19 +275,22 @@ class _TodoListPageState extends State<TodoListPage> {
                           color: stickyTopColor,
                           padding: EdgeInsets.all(ScreenUtil().setHeight(10)),
                           child: buildTodoListTitle(
-                              S.of(context).underway, underwayList.length),
+                              S.of(context).underway, underwayList.length,
+                              isSpread: underwayListIsSpread,
+                              onTap: () => setState(() => underwayListIsSpread =
+                                  !underwayListIsSpread)),
                         ),
                         sliver: SliverList(
                           delegate: SliverChildBuilderDelegate(
                             (context, i) => TodoList(
-                              key: _underWayTodoListKey,
-                              listData: underwayList,
-                              title: S.of(context).todoCompleteMessage,
-                              checkBoxChange: checkBoxChange,
-                              deleteToDoListItem: deleteToDoListItem,
-                              searchBarKey: _searchBarKey,
-                              updateTodoTopping: updateTodoTopping,
-                            ),
+                                key: _underWayTodoListKey,
+                                listData: underwayList,
+                                title: S.of(context).todoCompleteMessage,
+                                checkBoxChange: checkBoxChange,
+                                deleteToDoListItem: deleteToDoListItem,
+                                searchBarKey: _searchBarKey,
+                                updateTodoTopping: updateTodoTopping,
+                                isSpread: underwayListIsSpread),
                             childCount: 1,
                           ),
                         ),
@@ -292,19 +300,22 @@ class _TodoListPageState extends State<TodoListPage> {
                           color: stickyTopColor,
                           padding: EdgeInsets.all(ScreenUtil().setHeight(10)),
                           child: buildTodoListTitle(
-                              S.of(context).complete, completeToDoList.length),
+                              S.of(context).complete, completeToDoList.length,
+                              isSpread: completeIsSpread,
+                              onTap: () => setState(
+                                  () => completeIsSpread = !completeIsSpread)),
                         ),
                         sliver: SliverList(
                           delegate: SliverChildBuilderDelegate(
                             (context, i) => TodoList(
-                              key: _completeToDoListKey,
-                              listData: completeToDoList,
-                              title: S.of(context).complete,
-                              checkBoxChange: checkBoxChange,
-                              deleteToDoListItem: deleteToDoListItem,
-                              searchBarKey: _searchBarKey,
-                              updateTodoTopping: updateTodoTopping,
-                            ),
+                                key: _completeToDoListKey,
+                                listData: completeToDoList,
+                                title: S.of(context).complete,
+                                checkBoxChange: checkBoxChange,
+                                deleteToDoListItem: deleteToDoListItem,
+                                searchBarKey: _searchBarKey,
+                                updateTodoTopping: updateTodoTopping,
+                                isSpread: completeIsSpread),
                             childCount: 1,
                           ),
                         ),
