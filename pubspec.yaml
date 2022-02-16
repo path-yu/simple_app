@@ -26,6 +26,7 @@ dependencies:
   flutter_slidable: ^1.2.0
   decimal: ^2.1.0
   auto_size_text: ^3.0.0
+  flutter_sticky_header: ^0.6.0
   flutter_localizations:
     sdk: flutter
 

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:date_format/date_format.dart' hide S;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_app/common/color.dart';
@@ -11,8 +12,10 @@ import 'package:simple_app/components/base/build_base_app_bar.dart';
 import 'package:simple_app/components/base/hide_key_bord.dart';
 import 'package:simple_app/components/base/loading.dart';
 import 'package:simple_app/components/search_bar.dart';
+import 'package:simple_app/components/todoList/build_todo_list_title.dart';
 import 'package:simple_app/components/todoList/todo_list.dart';
 import 'package:simple_app/generated/l10n.dart';
+import 'package:simple_app/page/test.dart';
 import 'package:simple_app/provider/current_theme.dart';
 import 'package:simple_app/utils/Notification.dart';
 import 'package:simple_app/utils/index.dart';
@@ -217,58 +220,96 @@ class _TodoListPageState extends State<TodoListPage> {
 
   @override
   Widget build(BuildContext context) {
+    Color stickyTopColor =  context.watch<CurrentTheme>().isNightMode
+        ? const Color.fromRGBO(45, 45, 45, 1)
+        : const Color(0xfff7f7f7);
     return HideKeyboard(
         child: Scaffold(
             appBar: buildBaseAppBar(S.of(context).todoList),
             resizeToAvoidBottomInset: false, //输入框抵住键盘 内容不随键盘滚动
             body: loading
                 ? const Loading()
-                : ListView(
+                : CustomScrollView(
                     physics: const BouncingScrollPhysics(
                         parent: AlwaysScrollableScrollPhysics()),
-                    children: [
-                      Container(
-                        color: context.watch<CurrentTheme>().isNightMode
-                            ? Theme.of(context).cardTheme.color
-                            : appBackgroundColor,
-                        padding: EdgeInsets.all(ScreenUtil().setSp(10)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                                child: Center(
-                                    child: SearchBar(
-                              _todoController,
-                              addConfirm,
-                              TextInputAction.done,
-                              S.of(context).addTodo,
-                              key: _searchBarKey,
-                              prefixIcon: const Icon(
-                                Icons.add,
-                                color: themeColor,
+                    slivers: [
+                      SliverStickyHeader(
+                        header: const SizedBox(
+                          height: 0,
+                        ),
+                        sliver: SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, i) => Container(
+                              color: stickyTopColor,
+                              padding: EdgeInsets.all(ScreenUtil().setSp(20)),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                      child: Center(
+                                          child: SearchBar(
+                                    _todoController,
+                                    addConfirm,
+                                    TextInputAction.done,
+                                    S.of(context).addTodo,
+                                    key: _searchBarKey,
+                                    prefixIcon: const Icon(
+                                      Icons.add,
+                                      color: themeColor,
+                                    ),
+                                  )))
+                                ],
                               ),
-                            )))
-                          ],
+                            ),
+                            childCount: 1,
+                          ),
                         ),
                       ),
-                      TodoList(
-                        key: _underWayTodoListKey,
-                        listData: underwayList,
-                        title: S.of(context).underway,
-                        checkBoxChange: checkBoxChange,
-                        deleteToDoListItem: deleteToDoListItem,
-                        searchBarKey: _searchBarKey,
-                        updateTodoTopping: updateTodoTopping,
+                      SliverStickyHeader(
+                        header: Container(
+                          color: stickyTopColor,
+                          padding: EdgeInsets.all(ScreenUtil().setHeight(10)),
+                          child: buildTodoListTitle(
+                              S.of(context).underway, underwayList.length),
+                        ),
+                        sliver: SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, i) => TodoList(
+                              key: _underWayTodoListKey,
+                              listData: underwayList,
+                              title: S.of(context).todoCompleteMessage,
+                              checkBoxChange: checkBoxChange,
+                              deleteToDoListItem: deleteToDoListItem,
+                              searchBarKey: _searchBarKey,
+                              updateTodoTopping: updateTodoTopping,
+                            ),
+                            childCount: 1,
+                          ),
+                        ),
                       ),
-                      TodoList(
-                        key: _completeToDoListKey,
-                        listData: completeToDoList,
-                        title: S.of(context).complete,
-                        checkBoxChange: checkBoxChange,
-                        deleteToDoListItem: deleteToDoListItem,
-                        searchBarKey: _searchBarKey,
-                        updateTodoTopping: updateTodoTopping,
-                      )
+                      SliverStickyHeader(
+                        header: Container(
+                          color: stickyTopColor,
+                          padding: EdgeInsets.all(ScreenUtil().setHeight(10)),
+                          child: buildTodoListTitle(
+                              S.of(context).complete, completeToDoList.length),
+                        ),
+                        sliver: SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, i) => TodoList(
+                              key: _completeToDoListKey,
+                              listData: completeToDoList,
+                              title: S.of(context).complete,
+                              checkBoxChange: checkBoxChange,
+                              deleteToDoListItem: deleteToDoListItem,
+                              searchBarKey: _searchBarKey,
+                              updateTodoTopping: updateTodoTopping,
+                            ),
+                            childCount: 1,
+                          ),
+                        ),
+                      ),
                     ],
                   )));
   }

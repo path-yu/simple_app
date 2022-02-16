@@ -18,12 +18,12 @@ class TodoList extends StatefulWidget {
   final Function updateTodoTopping;
   const TodoList(
       {required Key key,
-      required this.listData,
-      required this.title,
-      required this.checkBoxChange,
-      required this.deleteToDoListItem,
-      required this.searchBarKey,
-      required this.updateTodoTopping})
+        required this.listData,
+        required this.title,
+        required this.checkBoxChange,
+        required this.deleteToDoListItem,
+        required this.searchBarKey,
+        required this.updateTodoTopping})
       : super(key: key);
 
   @override
@@ -109,7 +109,7 @@ class TodoListState extends State<TodoList>
       isTopping = true;
       // 找到最后一个置顶的数据
       int resultIndex =
-          myList.lastIndexWhere((element) => element['isTop'] == true);
+      myList.lastIndexWhere((element) => element['isTop'] == true);
       if (resultIndex != -1) {
         // 如果为第一项置顶
         if (resultIndex == 0 && index == 0) {
@@ -118,7 +118,7 @@ class TodoListState extends State<TodoList>
         }
         //如果当前指定的元素为最后一个,则返回最后一个置顶下标, 否则置顶下标 + 1
         newIndex =
-            resultIndex == myList.length - 1 ? resultIndex : resultIndex + 1;
+        resultIndex == myList.length - 1 ? resultIndex : resultIndex + 1;
         oldIndex = target['oldIndex'] ?? index;
       } else {
         // 如果为第一个置顶 则不需要交换
@@ -166,11 +166,11 @@ class TodoListState extends State<TodoList>
       child: Container(
           color: context.watch<CurrentTheme>().isNightMode
               ? isTop
-                  ? const Color.fromRGBO(26, 26, 26, 1)
-                  : Colors.black12
+              ? const Color.fromRGBO(26, 26, 26, 1)
+              : Colors.black12
               : isTop
-                  ? const Color.fromRGBO(244, 244, 244, 1)
-                  : Colors.white,
+              ? const Color.fromRGBO(244, 244, 244, 1)
+              : Colors.white,
           child: Center(
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -185,8 +185,7 @@ class TodoListState extends State<TodoList>
                       Text(value),
                     ],
                   ),
-                  Expanded(
-                      child: Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
@@ -197,7 +196,7 @@ class TodoListState extends State<TodoList>
                         width: ScreenUtil().setWidth(30),
                       )
                     ],
-                  )),
+                  ),
                 ]),
           )),
     );
@@ -209,61 +208,54 @@ class TodoListState extends State<TodoList>
       padding: EdgeInsets.all(ScreenUtil().setSp(10)),
       child: Column(
         children: [
-          buildTodoListTitle(widget.title, widget.listData.length),
-          SizedBox(
-            height: ScreenUtil().setHeight(10),
-          ),
-          ConstrainedBox(
-            constraints: BoxConstraints(maxHeight: ScreenUtil().setHeight(350)),
-            child: AnimatedList(
-              shrinkWrap: true,
-              key: listkey,
-              physics: const BouncingScrollPhysics(),
-              initialItemCount: widget.listData.length,
-              itemBuilder: (BuildContext context, int index,
-                  Animation<double> animation) {
-                Map target = myList[index];
-                bool isTop = target['isTop'];
-                return Slidable(
-                  key: const ValueKey(0),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: ScreenUtil().setHeight(5),
-                      ),
-                      _buildItem(animation, index)
-                    ],
-                  ),
-                  endActionPane: ActionPane(
-                    motion: const DrawerMotion(),
-                    extentRatio: isTop ? 0.6 : 0.5,
-                    children: [
-                      SlidableAction(
-                        spacing: 1,
-                        // An action can be bigger than the others.
-                        flex: 1,
-                        onPressed: (BuildContext context) =>
-                            handleRemoveItem(index),
-                        backgroundColor: const Color(0xFF7BC043),
-                        foregroundColor: Colors.white,
-                        label: S.of(context).delete,
-                      ),
-                      SlidableAction(
-                        flex: isTop ? 2 : 1,
-                        spacing: 1,
-                        onPressed: (BuildContext context) =>
-                            handleTopping(index, target),
-                        backgroundColor: const Color(0xFF0392CF),
-                        foregroundColor: Colors.white,
-                        label: isTop
-                            ? S.of(context).cancelTopping
-                            : S.of(context).topping,
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
+          AnimatedList(
+            shrinkWrap: true,
+            key: listkey,
+            physics: const ClampingScrollPhysics(), // 去掉回弹效果
+            initialItemCount: widget.listData.length,
+            itemBuilder: (BuildContext context, int index,
+                Animation<double> animation) {
+              Map target = myList[index];
+              bool isTop = target['isTop'];
+              return Slidable(
+                key: const ValueKey(0),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: ScreenUtil().setHeight(5),
+                    ),
+                    _buildItem(animation, index)
+                  ],
+                ),
+                endActionPane: ActionPane(
+                  motion: const DrawerMotion(),
+                  extentRatio: isTop ? 0.6 : 0.5,
+                  children: [
+                    SlidableAction(
+                      spacing: 1,
+                      // An action can be bigger than the others.
+                      flex: 1,
+                      onPressed: (BuildContext context) =>
+                          handleRemoveItem(index),
+                      backgroundColor: const Color(0xFF7BC043),
+                      foregroundColor: Colors.white,
+                      label: S.of(context).delete,
+                    ),
+                    SlidableAction(
+                      flex: isTop ? 2 : 1,
+                      spacing: 1,
+                      onPressed: (BuildContext context) =>
+                          handleTopping(index, target),
+                      backgroundColor: const Color(0xFF0392CF),
+                      foregroundColor: Colors.white,
+                      label: isTop
+                          ? S.of(context).cancelTopping
+                          : S.of(context).topping,
+                    ),
+                  ],
+                ),
+              );
+            },
           )
         ],
       ),
