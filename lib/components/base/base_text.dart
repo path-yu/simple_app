@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 Text baseText(String data, {Color? color, num fontSize = 16}) {
   return Text(
     data,
-    style: TextStyle(fontSize: ScreenUtil().setSp(fontSize), color: color),
+    style: TextStyle(
+        fontSize: ScreenUtil().setSp(fontSize), color: color, height: 1.5),
   );
 }

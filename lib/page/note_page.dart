@@ -51,6 +51,8 @@ class _NotePageState extends State<NotePage> {
 
   // 是否全选
   bool get isSelectAll => noteList.every((note) => note.isSelect == true);
+
+  Animation<double>? animationController;
   @override
   void initState() {
     if (isSelectAll) {}
@@ -166,7 +168,7 @@ class _NotePageState extends State<NotePage> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                     baseIcon(Icons.delete),
+                    baseIcon(Icons.delete),
                     Text(S.of(context).delete)
                   ]),
             ),
@@ -255,29 +257,21 @@ class _NotePageState extends State<NotePage> {
     Navigator.pop(context);
   }
 
-  // 返回导航栏标签文字
-  showAppBarTitle() {
-    return isShowCheckBox
-        ? S.of(context).selected +
-            ' ' +
-            selectIndexList.length.toString() +
-            " " +
-            S.of(context).item
-        : S.of(context).note;
-  }
-
   Widget appBarWidget() {
     return isShowCheckBox
         ? Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            verticalDirection: VerticalDirection.up,
             children: [
                 baseText(S.of(context).selected + ' ', fontSize: 18),
                 AnimatedFlipCounter(
                   value: selectIndexList.length,
                   curve: Curves.bounceIn,
                   duration: const Duration(milliseconds: 250),
-                  textStyle: TextStyle(fontSize: ScreenUtil().setSp(20)),
+                  textStyle: TextStyle(
+                      fontSize: ScreenUtil().setSp(18),
+                      height: 1.5,
+                      textBaseline: TextBaseline.alphabetic),
                 ),
                 // baseText(selectIndexList.length.toString() + ' ', fontSize: 20),
                 baseText(' ' + S.of(context).item + ' ', fontSize: 18)
@@ -428,9 +422,21 @@ class _NotePageState extends State<NotePage> {
                 value: isShowCheckBox,
                 child: IconButton(
                     onPressed: handleSelectMenu,
-                    icon: Icon(isSelectAll
-                        ? Icons.check_box_outlined
-                        : Icons.check_box_outline_blank_sharp)))
+                    icon: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 250),
+                      transitionBuilder:
+                          (Widget child, Animation<double> animation) {
+                        //执行缩放动画
+                        return ScaleTransition(child: child, scale: animation);
+                      },
+                      child: Icon(
+                        isSelectAll
+                            ? Icons.check_box_outlined
+                            : Icons.check_box_outline_blank_sharp,
+                        //显示指定key，不同的key会被认为是不同的Text，这样才能执行动画
+                        key: ValueKey<bool>(isSelectAll),
+                      ),
+                    )))
           ],
           leading: isShowCheckBox
               ? IconButton(
