@@ -305,7 +305,7 @@ class _TodoListPageState extends State<TodoListPage> {
                               searchBarKey: _searchBarKey,
                               updateTodoTopping: updateTodoTopping,
                               isSpread: underwayListIsSpread,
-                              updateSpread: updateUnderwaySpread,
+                              updateSpread: updateCompleteSpread,
                             ),
                             childCount: 1,
                           ),
