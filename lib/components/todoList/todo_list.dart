@@ -92,6 +92,10 @@ class TodoListState extends State<TodoList>
     if (delete != null) {
       count = myList.length - 1;
       _getContainerHeight(null);
+      // 如果删完了则更新展开状态
+      if(count == 0){
+        widget.updateSpread!();
+      }
       removeItem(index);
     }
   }

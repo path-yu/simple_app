@@ -157,6 +157,8 @@ class _TodoListPageState extends State<TodoListPage> {
       await Future.delayed(const Duration(milliseconds: 350), () {
         _completeToDoListKey.currentState?.addItem();
         doneSuccess!();
+        // 展开已经完成的todo
+        setState(() => completeIsSpread = true);
         changeState();
       });
     } else {
@@ -165,6 +167,8 @@ class _TodoListPageState extends State<TodoListPage> {
       await Future.delayed(const Duration(milliseconds: 350), () {
         _underWayTodoListKey.currentState?.addItem();
         doneSuccess!();
+        // 展开正在进行的todo
+        setState(() => underwayListIsSpread = true);
         changeState();
       });
     }
@@ -301,7 +305,7 @@ class _TodoListPageState extends State<TodoListPage> {
                               searchBarKey: _searchBarKey,
                               updateTodoTopping: updateTodoTopping,
                               isSpread: underwayListIsSpread,
-                              updateSpread: updateCompleteSpread,
+                              updateSpread: updateUnderwaySpread,
                             ),
                             childCount: 1,
                           ),
