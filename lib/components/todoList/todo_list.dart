@@ -261,7 +261,8 @@ class TodoListState extends State<TodoList>
       curve: Curves.easeInOutCirc,
       padding: EdgeInsets.all(padding),
       height: currentHeight,
-      child: AnimatedList(
+      child: SlidableAutoCloseBehavior(
+          child: AnimatedList(
         shrinkWrap: true,
         key: _listkey,
         physics: const NeverScrollableScrollPhysics(), // 去掉回弹效果 避免滑动冲突
@@ -273,6 +274,7 @@ class TodoListState extends State<TodoList>
           return Container(
             margin: EdgeInsets.only(top: index == 0 ? 0 : marin),
             child: Slidable(
+              groupTag: '0',
               child: Column(
                 children: [_buildItem(animation, index)],
               ),
@@ -306,7 +308,7 @@ class TodoListState extends State<TodoList>
             ),
           );
         },
-      ),
+      )),
     );
   }
 }
