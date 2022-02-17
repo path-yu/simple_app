@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:simple_app/components/base/base_icon.dart';
 import 'package:simple_app/components/base/base_text.dart';
 import 'package:simple_app/components/base/build_base_app_bar.dart';
 import 'package:simple_app/generated/l10n.dart';
@@ -27,9 +28,9 @@ class _SettingPageState extends State<SettingPage> {
   // 切换夜间模式
   void changeNightMode(value) {
     if (value) {
-      context.read<CurrentTheme>().changeMode(Brightness.dark);
+      context.read<CurrentTheme>().changeMode(ThemeMode.dark);
     } else {
-      context.read<CurrentTheme>().changeMode(Brightness.light);
+      context.read<CurrentTheme>().changeMode(ThemeMode.light);
     }
   }
 
@@ -44,12 +45,13 @@ class _SettingPageState extends State<SettingPage> {
           SwitchListTile(
             title: Row(
               children: [
-                const Icon(Icons.language_outlined),
+                baseIcon(Icons.language_outlined),
                 SizedBox(
                   width: ScreenUtil().setWidth(10),
                 ),
-                baseText(S.of(context).switchLanguage,
-                    color: context.watch<CurrentTheme>().dartOrWhiteColor)
+                baseText(
+                  S.of(context).switchLanguage,
+                )
               ],
             ),
             value: context.watch<CurrentLocale>().languageIsEnglishMode,
@@ -58,12 +60,13 @@ class _SettingPageState extends State<SettingPage> {
           SwitchListTile(
             title: Row(
               children: [
-                const Icon(Icons.mode_night_rounded),
+                baseIcon(Icons.mode_night_rounded),
                 SizedBox(
                   width: ScreenUtil().setWidth(10),
                 ),
-                baseText(S.of(context).nightMode,
-                    color: context.watch<CurrentTheme>().dartOrWhiteColor)
+                baseText(
+                  S.of(context).nightMode,
+                )
               ],
             ),
             value: context.watch<CurrentTheme>().isNightMode,

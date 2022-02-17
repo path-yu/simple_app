@@ -8,6 +8,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_app/common/color.dart';
 import 'package:simple_app/components/base/base_animated_opacity.dart';
+import 'package:simple_app/components/base/base_icon.dart';
 import 'package:simple_app/components/base/base_text.dart';
 import 'package:simple_app/components/base/build_base_app_bar.dart';
 import 'package:simple_app/components/base/draggable_floating_action_button.dart';
@@ -165,7 +166,7 @@ class _NotePageState extends State<NotePage> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.delete),
+                     baseIcon(Icons.delete),
                     Text(S.of(context).delete)
                   ]),
             ),

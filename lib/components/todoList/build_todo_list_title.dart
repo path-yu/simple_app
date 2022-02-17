@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:simple_app/components/base/base_icon.dart';
 
 Widget buildTodoListTitle(String title, int count,
     {void Function()? onTap, required bool isSpread}) {
@@ -18,13 +19,13 @@ Widget buildTodoListTitle(String title, int count,
                   fontWeight: FontWeight.bold,
                   fontSize: ScreenUtil().setSp(20)),
             ),
-            Icon(isSpread ? Icons.arrow_drop_down : Icons.arrow_drop_up),
+            baseIcon(isSpread ? Icons.arrow_drop_down : Icons.arrow_drop_up),
           ],
         ),
       ),
       ClipOval(
           child: Container(
-              width: ScreenUtil().setWidth(20),
+              width: ScreenUtil().setHeight(20),
               height: ScreenUtil().setHeight(20),
               color: const Color(0xffE6E6FA),
               child: Center(

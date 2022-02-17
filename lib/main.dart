@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_app/common/color.dart';
@@ -35,9 +36,9 @@ void main(List<String> args) {
     }
     if (isNightMode != null) {
       nightMode = CurrentTheme(
-          themeMode: isNightMode ? Brightness.dark : Brightness.light);
+          themeMode: isNightMode ? ThemeMode.dark : ThemeMode.light);
     } else {
-      nightMode = CurrentTheme(themeMode: Brightness.light);
+      nightMode = CurrentTheme(themeMode: ThemeMode.light);
     }
     runApp(MultiProvider(
       providers: [
@@ -75,7 +76,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return NeumorphicApp(
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: routes,
@@ -87,24 +88,37 @@ class _MyAppState extends State<MyApp> {
         GlobalCupertinoLocalizations.delegate,
         S.delegate
       ],
+      themeMode: context.watch<CurrentTheme>().value,
+      theme:  const NeumorphicThemeData(
+        baseColor: Color(0xfff7f7f7),
+        lightSource: LightSource.bottom,
+        // accentColor: Colors.cyan,
+        // boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(30)), 
+        depth: 8,
+        // depth: 10,
+      ),
+      darkTheme: const NeumorphicThemeData(
+        baseColor: darkColor,
+        depth: 8,
+        lightSource: LightSource.bottom,
+      ),
       //应用支持的语言列表
       supportedLocales: const [
         Locale('en', 'US'), // English
         Locale('zh', 'CN'), // 中文
       ],
-      // 设置视觉密度：适应平台密度
       // 保存全局navigatorkey
       navigatorKey: navigatorKey,
       // 当前语言
       locale: context.watch<CurrentLocale>().value,
       // // 当系统请求“暗模式”时使用时, 使用暗模式
-      theme: ThemeData(
-        primaryColor: themeColor,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        brightness: context.watch<CurrentTheme>().isNightMode
-            ? Brightness.dark
-            : Brightness.light,
-      ),
+      // theme: ThemeData(
+      //   primaryColor: themeColor,
+      //   visualDensity: VisualDensity.adaptivePlatformDensity,
+      //   brightness: context.watch<CurrentTheme>().isNightMode
+      //       ? Brightness.dark
+      //       : Brightness.light,
+      // ),
       localeResolutionCallback: (deviceLocale, supportedLocales) {
         _prefs.then((prefs) {
           strLocale = prefs.getString(ConstantKey.localeKey);

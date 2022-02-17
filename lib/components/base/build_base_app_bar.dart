@@ -13,7 +13,7 @@ AppBar buildBaseAppBar({String? title,Widget? leading, List<Widget>? action,Widg
     // 144,201,173 23,61,44 const Color.fromRGBO(144, 201, 172, 1),
     backgroundColor:
         navigatorKey.currentState!.context.watch<CurrentTheme>().isNightMode
-            ? const Color.fromRGBO(23, 61, 44, 1)
+            ? const Color(0xFF3E3E3E)
             : const Color.fromRGBO(144, 201, 172, 1),
     title: titleWidget ?? Text(
       title!,

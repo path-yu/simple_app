@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_app/components/base/build_base_app_bar.dart';
@@ -490,8 +491,8 @@ class _CalculatorPageState extends State<CalculatorPage> {
               SizedBox(
                 width: double.infinity,
                 child: Wrap(
-                    spacing: 5,
-                    runSpacing: 5,
+                    spacing: 10,
+                    runSpacing: 10,
                     alignment: WrapAlignment.spaceBetween,
                     children: operatorList.map((e) {
                       Widget child;
@@ -507,20 +508,18 @@ class _CalculatorPageState extends State<CalculatorPage> {
                                 fontWeight: FontWeight.bold,
                                 fontSize: ScreenUtil().setSp(24)));
                       }
-                      return ElevatedButton(
-                          onPressed: () => handleClick(e),
-                          style: ElevatedButton.styleFrom(
-                              minimumSize: e == 0
-                                  ? const Size(170, 75)
-                                  : const Size(75, 75),
-                              shape: e == 0
-                                  ? const RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(35)),
-                                    )
-                                  : const CircleBorder(),
-                              primary: primary),
-                          child: child);
+                      return SizedBox(
+                          width: e == 0 ? ScreenUtil().setWidth(160) : ScreenUtil().setWidth(65),
+                          height: e == 0 ? ScreenUtil().setWidth(65) : ScreenUtil().setWidth(65),
+                          child: NeumorphicButton(
+                              onPressed: () => handleClick(e),
+                              style: NeumorphicStyle(
+                                boxShape: e == 0
+                                    ?  const NeumorphicBoxShape.stadium()
+                                    :  const NeumorphicBoxShape.stadium(),
+                              ),
+                              child: Center(child: child,)));
+                      ;
                     }).toList()),
               )
             ],

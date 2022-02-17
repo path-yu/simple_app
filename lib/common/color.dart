@@ -9,3 +9,4 @@ const Color appBackgroundColor = Color(0xfff7f7f7);
 const Color searchBarFillColor = Color(0xffEDEDED);
 // 暗黑色
 const easyDarkColor = Color.fromRGBO(48, 48, 48, 0.3);
+const darkColor = Color(0xFF3E3E3E);

@@ -5,19 +5,20 @@ import 'package:simple_app/common/global.dart';
 
 class CurrentTheme with ChangeNotifier {
   // 当前语言环境
-  Brightness themeMode;
+  ThemeMode themeMode;
 
-  Brightness get value => themeMode;
-  CurrentTheme({this.themeMode = Brightness.light});
+  ThemeMode get value => themeMode;
+  
+  CurrentTheme({this.themeMode = ThemeMode.light});
   // 是否为夜间模式
-  bool get isNightMode => themeMode == Brightness.dark ? true : false;
+  bool get isNightMode => themeMode == ThemeMode.dark ? true : false;
 
   // 暗色或白色背景色
   Color get themeBackgroundColor =>
       isNightMode ? easyDarkColor : const Color.fromRGBO(246, 246, 246, 1.0);
 
   Color get dartOrWhiteColor => isNightMode ? Colors.white : Colors.black;
-  changeMode(Brightness mode) async {
+  changeMode(ThemeMode mode) async {
     themeMode = mode;
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool(ConstantKey.isNightMode, isNightMode);
@@ -28,7 +29,7 @@ class CurrentTheme with ChangeNotifier {
   void initNightMode({bool? isNightMode}) async {
     if (isNightMode != null) {
       if (isNightMode) {
-        themeMode = Brightness.dark;
+        themeMode = ThemeMode.dark;
         notifyListeners();
       }
     }
