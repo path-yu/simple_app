@@ -93,7 +93,7 @@ class TodoListState extends State<TodoList>
       count = myList.length - 1;
       _getContainerHeight(null);
       // 如果删完了则更新展开状态
-      if(count == 0){
+      if (count == 0) {
         widget.updateSpread!();
       }
       removeItem(index);
@@ -107,7 +107,7 @@ class TodoListState extends State<TodoList>
       myList[index]['done'] = value;
     });
     // 等待动画播放结束
-    await Future.delayed(const Duration(milliseconds: 300));
+    await Future.delayed(const Duration(milliseconds: 200));
     myList[index]['done'] = !value;
     widget.checkBoxChange(value, target, done, () {
       count = myList.length - 1;
@@ -223,7 +223,6 @@ class TodoListState extends State<TodoList>
               : isTop
                   ? const Color.fromRGBO(244, 244, 244, 1)
                   : Colors.white,
-          height: 50,
           child: Center(
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

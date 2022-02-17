@@ -291,9 +291,11 @@ class _TodoListPageState extends State<TodoListPage> {
                           color: stickyTopColor,
                           padding: EdgeInsets.all(ScreenUtil().setHeight(10)),
                           child: buildTodoListTitle(
-                              S.of(context).underway, underwayList.length,
-                              isSpread: underwayListIsSpread,
-                              onTap: updateUnderwaySpread),
+                            S.of(context).underway,
+                            underwayList.length,
+                            isSpread: underwayListIsSpread,
+                            onTap: updateUnderwaySpread,
+                          ),
                         ),
                         sliver: SliverList(
                           delegate: SliverChildBuilderDelegate(
