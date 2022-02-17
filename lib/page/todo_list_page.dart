@@ -131,6 +131,7 @@ class _TodoListPageState extends State<TodoListPage> {
     });
     changeState(removeInputVal: true, data: todoAllList);
     _underWayTodoListKey.currentState?.addItem();
+    setState(() => underwayListIsSpread = true);
   }
 
   // 删除todo
@@ -146,7 +147,8 @@ class _TodoListPageState extends State<TodoListPage> {
   }
 
   // 点击切换 todo状态触发
-  void checkBoxChange(bool value, Map target, bool done) async {
+  void checkBoxChange(
+      bool value, Map target, bool done, Function? doneSuccess) async {
     int index = todoAllList.indexOf(target);
     // 如果是done false 说明当前点击的是正在进行的todo项, 则将其删除,并将其添加到已经完成中 反之类似
     if (done == false) {
@@ -154,6 +156,7 @@ class _TodoListPageState extends State<TodoListPage> {
       _underWayTodoListKey.currentState!.animatedRemoveItem(removeIndex);
       await Future.delayed(const Duration(milliseconds: 350), () {
         changeState();
+        doneSuccess!();
         _completeToDoListKey.currentState?.addItem();
       });
     } else {
@@ -161,6 +164,7 @@ class _TodoListPageState extends State<TodoListPage> {
       _completeToDoListKey.currentState?.animatedRemoveItem(removeIndex);
       await Future.delayed(const Duration(milliseconds: 350), () {
         changeState();
+        doneSuccess!();
         _underWayTodoListKey.currentState?.addItem();
       });
     }
@@ -221,6 +225,14 @@ class _TodoListPageState extends State<TodoListPage> {
     changeState();
   }
 
+  void updateUnderwaySpread() {
+    setState(() => underwayListIsSpread = !underwayListIsSpread);
+  }
+
+  void updateCompleteSpread() {
+    setState(() => completeIsSpread = !completeIsSpread);
+  }
+
   @override
   Widget build(BuildContext context) {
     Color stickyTopColor = context.watch<CurrentTheme>().isNightMode
@@ -233,7 +245,7 @@ class _TodoListPageState extends State<TodoListPage> {
             body: loading
                 ? const Loading()
                 : CustomScrollView(
-                    shrinkWrap: true,
+                    shrinkWrap: false,
                     physics: const BouncingScrollPhysics(
                         parent: AlwaysScrollableScrollPhysics()),
                     slivers: [
@@ -277,20 +289,20 @@ class _TodoListPageState extends State<TodoListPage> {
                           child: buildTodoListTitle(
                               S.of(context).underway, underwayList.length,
                               isSpread: underwayListIsSpread,
-                              onTap: () => setState(() => underwayListIsSpread =
-                                  !underwayListIsSpread)),
+                              onTap: updateUnderwaySpread),
                         ),
                         sliver: SliverList(
                           delegate: SliverChildBuilderDelegate(
                             (context, i) => TodoList(
-                                key: _underWayTodoListKey,
-                                listData: underwayList,
-                                title: S.of(context).todoCompleteMessage,
-                                checkBoxChange: checkBoxChange,
-                                deleteToDoListItem: deleteToDoListItem,
-                                searchBarKey: _searchBarKey,
-                                updateTodoTopping: updateTodoTopping,
-                                isSpread: underwayListIsSpread),
+                              key: _underWayTodoListKey,
+                              listData: underwayList,
+                              checkBoxChange: checkBoxChange,
+                              deleteToDoListItem: deleteToDoListItem,
+                              searchBarKey: _searchBarKey,
+                              updateTodoTopping: updateTodoTopping,
+                              isSpread: underwayListIsSpread,
+                              updateSpread: updateCompleteSpread,
+                            ),
                             childCount: 1,
                           ),
                         ),
@@ -302,20 +314,20 @@ class _TodoListPageState extends State<TodoListPage> {
                           child: buildTodoListTitle(
                               S.of(context).complete, completeToDoList.length,
                               isSpread: completeIsSpread,
-                              onTap: () => setState(
-                                  () => completeIsSpread = !completeIsSpread)),
+                              onTap: updateCompleteSpread),
                         ),
                         sliver: SliverList(
                           delegate: SliverChildBuilderDelegate(
                             (context, i) => TodoList(
-                                key: _completeToDoListKey,
-                                listData: completeToDoList,
-                                title: S.of(context).complete,
-                                checkBoxChange: checkBoxChange,
-                                deleteToDoListItem: deleteToDoListItem,
-                                searchBarKey: _searchBarKey,
-                                updateTodoTopping: updateTodoTopping,
-                                isSpread: completeIsSpread),
+                              key: _completeToDoListKey,
+                              listData: completeToDoList,
+                              checkBoxChange: checkBoxChange,
+                              deleteToDoListItem: deleteToDoListItem,
+                              searchBarKey: _searchBarKey,
+                              updateTodoTopping: updateTodoTopping,
+                              isSpread: completeIsSpread,
+                              updateSpread: updateCompleteSpread,
+                            ),
                             childCount: 1,
                           ),
                         ),

@@ -10,22 +10,27 @@ import 'package:simple_app/utils/show_dialog.dart';
 class TodoList extends StatefulWidget {
   // 接受父组件传递的listdata
   final List listData;
-  final String title;
+  //切换todo 状态
   final Function checkBoxChange;
+  //删除todo
   final Function deleteToDoListItem;
+  //搜索框key
   final GlobalKey<SearchBarState> searchBarKey;
+  // 更新置顶状态
   final Function updateTodoTopping;
+  //更新展开状态
+  final void Function()? updateSpread;
   // 是否展开
-  final bool isSpread;
-  const TodoList(
+  bool isSpread;
+  TodoList(
       {required Key key,
       required this.listData,
-      required this.title,
-      required this.isSpread,
       required this.checkBoxChange,
       required this.deleteToDoListItem,
       required this.searchBarKey,
-      required this.updateTodoTopping})
+      required this.updateTodoTopping,
+      this.updateSpread,
+      required this.isSpread})
       : super(key: key);
 
   @override
@@ -41,12 +46,11 @@ class TodoListState extends State<TodoList>
 
   // 拷贝父组件数据
   List myList = [];
-  // 是否展开
-  bool isSpread = true;
+
   // 当前组件的高度
   double? currentHeight;
   // 每个todo 平均高度
-  double? averageHeight;
+  double averageHeight = 48 + 10;
 
   //列表总数
   int? count;
@@ -67,11 +71,12 @@ class TodoListState extends State<TodoList>
         duration: _kDuration);
   }
 
-  void addItem() {
+  void addItem() async {
     final _index = widget.listData.length;
     count = myList.length + 1;
     _getContainerHeight(null);
     _listkey.currentState?.insertItem(_index, duration: _kDuration);
+    await Future.delayed(const Duration(milliseconds: 350));
   }
 
   void handleRemoveItem(index) async {
@@ -88,17 +93,17 @@ class TodoListState extends State<TodoList>
     }
   }
 
-  void handleCheckBoxChange(bool value, Map target, bool done, int index) {
+  void handleCheckBoxChange(
+      bool value, Map target, bool done, int index) async {
     // 先更新todo done自身状态, 在调用父级方法更新列表数据
     setState(() {
       myList[index]['done'] = value;
     });
-
-    Future.delayed(const Duration(milliseconds: 100), () {
-      myList[index]['done'] = !value;
+    await Future.delayed(const Duration(milliseconds: 250));
+    myList[index]['done'] = !value;
+    widget.checkBoxChange(value, target, done, () {
       count = myList.length - 1;
       _getContainerHeight(null);
-      widget.checkBoxChange(value, target, done);
     });
   }
 
@@ -161,7 +166,6 @@ class TodoListState extends State<TodoList>
   void initState() {
     super.initState();
     myList = widget.listData;
-    isSpread = widget.isSpread;
   }
 
   @override
@@ -174,7 +178,7 @@ class TodoListState extends State<TodoList>
   void didUpdateWidget(covariant TodoList oldWidget) {
     super.didUpdateWidget(oldWidget);
     myList = widget.listData;
-    isSpread = widget.isSpread;
+    _getContainerHeight(null);
   }
 
   @override
@@ -185,18 +189,8 @@ class TodoListState extends State<TodoList>
 
   _getContainerHeight(_) {
     count ??= myList.length;
-    var height;
-    if (averageHeight == null) {
-      height =
-          (_listkey.currentContext?.size!.height)! + ScreenUtil().setHeight(20);
-      averageHeight = (height - ScreenUtil().setHeight(20)) / myList.length;
-    } else {
-      height =
-          (averageHeight! * count!.toDouble()) + ScreenUtil().setHeight(20);
-    }
     setState(() {
-      isSpread = true;
-      currentHeight = count == 0 ? 0 : height;
+      currentHeight = widget.isSpread ? averageHeight * count! : 0;
     });
   }
 
@@ -251,9 +245,9 @@ class TodoListState extends State<TodoList>
   Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 500),
-      curve: Curves.easeInOutSine,
+      curve: Curves.easeIn,
       padding: EdgeInsets.all(ScreenUtil().setSp(10)),
-      height: isSpread ? currentHeight : 0,
+      height: currentHeight,
       child: AnimatedList(
         shrinkWrap: true,
         key: _listkey,
