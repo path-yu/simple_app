@@ -245,13 +245,14 @@ class _CalculatorPageState extends State<CalculatorPage> {
       calcResultList.add(currentClickOperator);
     } else if (currentClickOperator == 'x') {
       /// 如果上一步为运算符则取上一步, 否则取最后一位运算符
-      if(isCalcOperator(prevClickOperator) || prevClickOperator == '.'){
-        if(calcResultList.last == 0){
+      if (isCalcOperator(prevClickOperator) || prevClickOperator == '.') {
+        if (calcResultList.last == 0) {
           prevClickOperator = null;
-        }else{
-          currentClickOperator = calcResultList.last[calcResultList.last.length - 1];
+        } else {
+          currentClickOperator =
+              calcResultList.last[calcResultList.last.length - 1];
         }
-      }else{
+      } else {
         currentClickOperator = prevClickOperator;
       }
     }
@@ -440,7 +441,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
       }
     }
     return Scaffold(
-        appBar: buildBaseAppBar(S.of(context).calculator),
+        appBar: buildBaseAppBar(title: S.of(context).calculator),
         body: Container(
           padding: EdgeInsets.all(ScreenUtil().setHeight(20)),
           width: double.infinity,

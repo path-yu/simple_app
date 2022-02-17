@@ -240,7 +240,7 @@ class _TodoListPageState extends State<TodoListPage> {
         : const Color(0xfff7f7f7);
     return HideKeyboard(
         child: Scaffold(
-            appBar: buildBaseAppBar(S.of(context).todoList),
+            appBar: buildBaseAppBar(title: S.of(context).todoList),
             resizeToAvoidBottomInset: false, //输入框抵住键盘 内容不随键盘滚动
             body: loading
                 ? const Loading()

@@ -62,7 +62,7 @@ class _ToolKitPageState extends State<ToolKitPage> {
       ),
     );
     return Scaffold(
-        appBar: buildBaseAppBar(S.of(context).toolKit),
+        appBar: buildBaseAppBar(title: S.of(context).toolKit),
         body: ListView(
           physics: const BouncingScrollPhysics(
               parent: AlwaysScrollableScrollPhysics()),

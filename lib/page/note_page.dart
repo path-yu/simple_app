@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:date_format/date_format.dart' hide S;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_app/common/color.dart';
 import 'package:simple_app/components/base/base_animated_opacity.dart';
+import 'package:simple_app/components/base/base_text.dart';
 import 'package:simple_app/components/base/build_base_app_bar.dart';
 import 'package:simple_app/components/base/draggable_floating_action_button.dart';
 import 'package:simple_app/components/base/hide_key_bord.dart';
@@ -263,6 +265,28 @@ class _NotePageState extends State<NotePage> {
         : S.of(context).note;
   }
 
+  Widget appBarWidget() {
+    return isShowCheckBox
+        ? Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+                baseText(S.of(context).selected + ' ', fontSize: 18),
+                AnimatedFlipCounter(
+                  value: selectIndexList.length,
+                  curve: Curves.bounceIn,
+                  duration: const Duration(milliseconds: 250),
+                  textStyle: TextStyle(fontSize: ScreenUtil().setSp(20)),
+                ),
+                // baseText(selectIndexList.length.toString() + ' ', fontSize: 20),
+                baseText(' ' + S.of(context).item + ' ', fontSize: 18)
+              ])
+        : Text(
+            S.of(context).note,
+            style: TextStyle(fontSize: ScreenUtil().setSp(18)),
+          );
+  }
+
   Widget noteItemBuild(BuildContext context, int index) {
     NewNote target = noteList[index];
     var date = DateTime.fromMicrosecondsSinceEpoch(target.time);
@@ -396,15 +420,16 @@ class _NotePageState extends State<NotePage> {
   Widget build(BuildContext context) {
     return HideKeyboard(
         child: Scaffold(
-      appBar: buildBaseAppBar(showAppBarTitle(),
+      appBar: buildBaseAppBar(
+          titleWidget: appBarWidget(),
           action: [
             baseAnimatedOpacity(
                 value: isShowCheckBox,
                 child: IconButton(
                     onPressed: handleSelectMenu,
                     icon: Icon(isSelectAll
-                        ? Icons.check_circle
-                        : Icons.check_circle_outline)))
+                        ? Icons.check_box_outlined
+                        : Icons.check_box_outline_blank_sharp)))
           ],
           leading: isShowCheckBox
               ? IconButton(

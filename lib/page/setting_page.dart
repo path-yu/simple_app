@@ -36,7 +36,7 @@ class _SettingPageState extends State<SettingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildBaseAppBar(S.of(context).setting),
+      appBar: buildBaseAppBar(title: S.of(context).setting),
       body: ListView(
         physics: const BouncingScrollPhysics(
             parent: AlwaysScrollableScrollPhysics()),

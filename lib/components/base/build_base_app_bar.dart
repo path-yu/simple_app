@@ -5,7 +5,7 @@ import 'package:simple_app/main.dart';
 import 'package:simple_app/provider/current_theme.dart';
 
 // 基础Appbar
-AppBar buildBaseAppBar(String title, {Widget? leading, List<Widget>? action}) {
+AppBar buildBaseAppBar({String? title,Widget? leading, List<Widget>? action,Widget? titleWidget}) {
   return AppBar(
     toolbarHeight: ScreenUtil().setSp(55),
     leading: leading,
@@ -15,10 +15,10 @@ AppBar buildBaseAppBar(String title, {Widget? leading, List<Widget>? action}) {
         navigatorKey.currentState!.context.watch<CurrentTheme>().isNightMode
             ? const Color.fromRGBO(23, 61, 44, 1)
             : const Color.fromRGBO(144, 201, 172, 1),
-    title: Text(
-      title,
+    title: titleWidget ?? Text(
+      title!,
       style: TextStyle(fontSize: ScreenUtil().setSp(18)),
-    ),
+    ) ,
     centerTitle: true,
   );
 }

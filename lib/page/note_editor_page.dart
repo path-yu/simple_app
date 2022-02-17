@@ -210,7 +210,8 @@ class _NoteEditorPageState extends State<NoteEditorPage>
     final saveOrUpdateIcon =
         isEditor ? Icons.update_rounded : Icons.save_rounded;
     return Scaffold(
-      appBar: buildBaseAppBar(S.of(context).editorNote,
+      appBar: buildBaseAppBar(
+          title: S.of(context).editorNote,
           action: [
             Builder(
               builder: (context) => IconButton(
