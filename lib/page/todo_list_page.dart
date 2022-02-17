@@ -155,17 +155,17 @@ class _TodoListPageState extends State<TodoListPage> {
       int removeIndex = underwayList.indexOf(target);
       _underWayTodoListKey.currentState!.animatedRemoveItem(removeIndex);
       await Future.delayed(const Duration(milliseconds: 350), () {
-        changeState();
-        doneSuccess!();
         _completeToDoListKey.currentState?.addItem();
+        doneSuccess!();
+        changeState();
       });
     } else {
       int removeIndex = completeToDoList.indexOf(target);
       _completeToDoListKey.currentState?.animatedRemoveItem(removeIndex);
       await Future.delayed(const Duration(milliseconds: 350), () {
-        changeState();
-        doneSuccess!();
         _underWayTodoListKey.currentState?.addItem();
+        doneSuccess!();
+        changeState();
       });
     }
     todoAllList[index]['done'] = value;
