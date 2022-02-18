@@ -1,6 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:decimal/decimal.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -64,9 +63,11 @@ class _CalculatorPageState extends State<CalculatorPage> {
   bool isScaleText = false;
 
   //上一次点击的运算符
+  // ignore: prefer_typing_uninitialized_variables
   var prevClickOperator;
 
   // 当前点击的运算符
+  // ignore: prefer_typing_uninitialized_variables
   var currentClickOperator;
 
   // 待结算的数据列表 如 23x43 即为 23,x,43
@@ -519,7 +520,6 @@ class _CalculatorPageState extends State<CalculatorPage> {
                                     :  const NeumorphicBoxShape.stadium(),
                               ),
                               child: Center(child: child,)));
-                      ;
                     }).toList()),
               )
             ],
