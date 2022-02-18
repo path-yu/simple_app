@@ -7,6 +7,7 @@ import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/provider/current_theme.dart';
 import 'package:simple_app/utils/show_dialog.dart';
 
+// ignore: must_be_immutable
 class TodoList extends StatefulWidget {
   // 接受父组件传递的listdata
   final List listData;

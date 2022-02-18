@@ -10,7 +10,6 @@ AppBar buildBaseAppBar({String? title,Widget? leading, List<Widget>? action,Widg
     toolbarHeight: ScreenUtil().setSp(55),
     leading: leading,
     actions: action,
-    // 144,201,173 23,61,44 const Color.fromRGBO(144, 201, 172, 1),
     backgroundColor:
         navigatorKey.currentState!.context.watch<CurrentTheme>().isNightMode
             ? const Color(0xFF3E3E3E)

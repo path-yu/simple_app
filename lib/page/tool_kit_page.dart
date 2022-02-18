@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import "package:flutter/material.dart";
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:simple_app/common/color.dart';
 import 'package:simple_app/components/base/build_base_app_bar.dart';
 import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/page/calculator.dart';
@@ -50,18 +48,7 @@ class _ToolKitPageState extends State<ToolKitPage> {
         "comp": const TodoListPage()
       },
     ];
-    final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
-      onPrimary: Colors.black38,
-      primary: context.watch<CurrentTheme>().isNightMode
-          ? easyDarkColor
-          : const Color.fromRGBO(248, 248, 248, 1.0),
-      // minimumSize: const Size(88, 36),
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      maximumSize: const Size(100, 100),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(30)),
-      ),
-    );
+   
     return Scaffold(
         appBar: buildBaseAppBar(title: S.of(context).toolKit),
         body: ListView(
