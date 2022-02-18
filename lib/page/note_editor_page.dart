@@ -59,11 +59,11 @@ class _NoteEditorPageState extends State<NoteEditorPage>
     Map args = ModalRoute.of(context)?.settings.arguments as Map;
     if (args['isEditor']) {
       isEditor = true;
-      appbarTitle = args['appbarTitle'];
+      appbarTitle = S.of(context).editorNote;
       id = args['id'];
       time = args['time'];
     } else {
-      appbarTitle = args['appbarTitle'];
+      appbarTitle = S.of(context).createNote;
       isEditor = false;
     }
   }
@@ -211,7 +211,7 @@ class _NoteEditorPageState extends State<NoteEditorPage>
         isEditor ? Icons.update_rounded : Icons.save_rounded;
     return Scaffold(
       appBar: buildBaseAppBar(
-          title: S.of(context).editorNote,
+          title: appbarTitle,
           action: [
             Builder(
               builder: (context) => IconButton(

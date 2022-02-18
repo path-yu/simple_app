@@ -92,7 +92,8 @@ class DBProvider {
   // 根据 note id 批量删除数据
   Future<int> deleteByIds(List<int> ids) async {
     var _db = await db;
-    return await _db!.delete('NoteList', where: 'id = ?', whereArgs: ids);
+    var list = ids.join(',');
+    return await _db!.rawDelete('delete from NoteList where id in ($list)', );
   }
   //  根据标题 模糊查询
   Future<List<Note>> findTitleNoteList(String title) async {

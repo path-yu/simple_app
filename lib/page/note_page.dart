@@ -52,6 +52,8 @@ class _NotePageState extends State<NotePage> {
   // 是否全选
   bool get isSelectAll => noteList.every((note) => note.isSelect == true);
 
+  // 动画过渡
+  final Duration _duration = const Duration(milliseconds: 350);
   Animation<double>? animationController;
   @override
   void initState() {
@@ -124,22 +126,16 @@ class _NotePageState extends State<NotePage> {
     }
     if (id != null) {
       // 打开新页面 并等待返回结果
-      Navigator.pushNamed(context, '/create_note_or_editor_page', arguments: {
-        'appbarTitle': S.of(context).editorNote,
-        'isEditor': true,
-        "id": id,
-        'time': time
-      }).then((value) {
+      Navigator.pushNamed(context, '/create_note_or_editor_page',
+          arguments: {'isEditor': true, "id": id, 'time': time}).then((value) {
         // 然后返回了数据则更新页面
         if (value != null) {
           getData(DBProvider().findAll);
         }
       });
     } else {
-      Navigator.pushNamed(context, '/create_note_or_editor_page', arguments: {
-        'appbarTitle': S.of(context).createNote,
-        'isEditor': false
-      }).then((value) {
+      Navigator.pushNamed(context, '/create_note_or_editor_page',
+          arguments: {'isEditor': false}).then((value) {
         getData(DBProvider().findAll);
       });
     }
@@ -179,11 +175,11 @@ class _NotePageState extends State<NotePage> {
   }
 
   // 点击底部删除按钮
-  void handleDelete() async {
+  handleDelete() async {
+    if (selectIndexList.isEmpty) {
+      return showToast(S.of(context).noSelectNoteMessage);
+    }
     showBaseCupertinoModalPopup(context, () async {
-      if (selectIndexList.isEmpty) {
-        return showToast(S.of(context).noSelectNoteMessage);
-      }
       //删除数据
       int result = await DBProvider().deleteByIds(selectIndexList);
       if (result > 0) {
@@ -313,15 +309,18 @@ class _NotePageState extends State<NotePage> {
       onTap: () => toCreateOrEditorNotePage(
           id: target.id, time: target.time, index: index),
       onLongPress: () => handLongPress(index, context),
+      // 和盒子容器保持一致
+      borderRadius: BorderRadius.circular(ScreenUtil().setSp(20)),
       child: AnimatedContainer(
         duration: const Duration(seconds: 1),
         child: DecoratedBox(
             decoration: BoxDecoration(
-                border: Border.all(color: Colors.white12, width: 1),
+                border: Border.all(
+                    color: Colors.white12, width: ScreenUtil().setWidth(1)),
                 color: context.watch<CurrentTheme>().isNightMode
                     ? easyDarkColor
                     : Colors.white,
-                borderRadius: BorderRadius.circular(ScreenUtil().setSp(10))),
+                borderRadius: BorderRadius.circular(ScreenUtil().setSp(20))),
             child: Padding(
               padding: EdgeInsets.fromLTRB(padding, padding, padding, 0),
               child: Column(
@@ -336,7 +335,7 @@ class _NotePageState extends State<NotePage> {
                   Text(
                     content,
                     overflow: TextOverflow.ellipsis,
-                    maxLines: 3,
+                    maxLines: 5,
                     style: const TextStyle(color: Color(0xff636363)),
                   ),
                   Row(
@@ -423,7 +422,7 @@ class _NotePageState extends State<NotePage> {
                 child: IconButton(
                     onPressed: handleSelectMenu,
                     icon: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 250),
+                      duration: _duration,
                       transitionBuilder:
                           (Widget child, Animation<double> animation) {
                         //执行缩放动画
@@ -438,12 +437,22 @@ class _NotePageState extends State<NotePage> {
                       ),
                     )))
           ],
-          leading: isShowCheckBox
-              ? IconButton(
-                  onPressed: handleClose, icon: const Icon(Icons.close))
-              : IconButton(
-                  onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.arrow_back))),
+          leading: IconButton(
+              onPressed:
+                  isShowCheckBox ? handleClose : () => Navigator.pop(context),
+              icon: AnimatedSwitcher(
+                duration: _duration,
+                transitionBuilder: (Widget child, Animation<double> value) {
+                  return ScaleTransition(
+                    child: child,
+                    scale: value,
+                  );
+                },
+                child: Icon(
+                  isShowCheckBox ? Icons.close : Icons.arrow_back,
+                  key: ValueKey<bool>(isShowCheckBox),
+                ),
+              ))),
       body: WillPopScope(
         // 判断是否添加对应的回调 如果需要拦截则添加 不需要则 为null ,避免拦截ios下的 右滑返回
         onWillPop: isShowCheckBox ? handleWillPop : null,
