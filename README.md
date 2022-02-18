@@ -1,16 +1,13 @@
 # simple_app
 
-A new Flutter project.
+这是一个简单的flutter项目
 
-## Getting Started
+## 主要有这三大核心应用
+  1. 代办事项
+  2. 便签
+  3. 计算器
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 打包部署命令
+```shell
+flutter build apk --obfuscate --split-debug-info=splitMap --target-platform android-arm,android-arm64,android-x64 --split-per-abi
+```
