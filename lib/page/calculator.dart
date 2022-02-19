@@ -93,8 +93,6 @@ class _CalculatorPageState extends State<CalculatorPage> {
   bool isNumberOperator(String value) => numOperatorList.contains(value);
   // 是否为其他操作运算符
   bool isOtherOperator(String value) => otherOperatorList.contains(value);
-  //确保表达式正确的锁, 默认关闭
-  bool isLock = false;
 
   // 用于过滤不正常的输入, 为true 表示过滤
   bool filterInput(String operator) {
@@ -510,16 +508,22 @@ class _CalculatorPageState extends State<CalculatorPage> {
                                 fontSize: ScreenUtil().setSp(24)));
                       }
                       return SizedBox(
-                          width: e == 0 ? ScreenUtil().setWidth(160) : ScreenUtil().setWidth(65),
-                          height: e == 0 ? ScreenUtil().setWidth(65) : ScreenUtil().setWidth(65),
+                          width: e == 0
+                              ? ScreenUtil().setWidth(160)
+                              : ScreenUtil().setWidth(65),
+                          height: e == 0
+                              ? ScreenUtil().setWidth(65)
+                              : ScreenUtil().setWidth(65),
                           child: NeumorphicButton(
                               onPressed: () => handleClick(e),
                               style: NeumorphicStyle(
                                 boxShape: e == 0
-                                    ?  const NeumorphicBoxShape.stadium()
-                                    :  const NeumorphicBoxShape.stadium(),
+                                    ? const NeumorphicBoxShape.stadium()
+                                    : const NeumorphicBoxShape.stadium(),
                               ),
-                              child: Center(child: child,)));
+                              child: Center(
+                                child: child,
+                              )));
                     }).toList()),
               )
             ],

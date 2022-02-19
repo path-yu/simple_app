@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:simple_app/components/base/build_base_app_bar.dart';
 import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/page/calculator.dart';
+import 'package:simple_app/page/count_down.dart';
 import 'package:simple_app/page/note_page.dart';
 import 'package:simple_app/page/todo_list_page.dart';
 import 'package:simple_app/provider/current_theme.dart';
@@ -30,8 +31,11 @@ class _ToolKitPageState extends State<ToolKitPage> {
   @override
   Widget build(BuildContext context) {
     final List<Map> toolList = [
-      {"RouterPath": '', "label": S.of(context).translate},
-      {"RouterPath": '', "label": S.of(context).weatherQuery},
+      {
+        "RouterPath": '/count_down',
+        "label": S.of(context).countDown,
+        "comp": const CountDownPage()
+      },
       {
         "RouterPath": '/note_list_page',
         "label": S.of(context).note,
@@ -48,45 +52,45 @@ class _ToolKitPageState extends State<ToolKitPage> {
         "comp": const TodoListPage()
       },
     ];
-   
+
     return Scaffold(
         appBar: buildBaseAppBar(title: S.of(context).toolKit),
         body: ListView(
-            physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics()),
-            children: toolList.map((e) {
-              Color buttonTextColor;
-              String routerPath = e['RouterPath'];
-              if (routerPath.isEmpty) {
-                buttonTextColor = Colors.grey;
-              } else {
-                buttonTextColor = context.watch<CurrentTheme>().isNightMode
-                    ? Colors.white
-                    : Colors.black;
-              }
-              return Container(
-                height: ScreenUtil().setHeight(50),
-                margin: EdgeInsets.only(top: ScreenUtil().setHeight(35)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: ScreenUtil().setWidth(250),
-                      child: NeumorphicButton(
-                          // shape: RoundedRectangleBorder(
-                          //     borderRadius: BorderRadius.circular(20.0)),
-                          onPressed: () => toRouterPage(e),
-                          child: Center(
-                            child: Text(
-                              "${e['label']}",
-                              style: TextStyle(color: buttonTextColor),
-                            ),
-                          )),
-                    )
-                  ],
-                ),
-              );
-            }).toList(),
-          ));
+          physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics()),
+          children: toolList.map((e) {
+            Color buttonTextColor;
+            String routerPath = e['RouterPath'];
+            if (routerPath.isEmpty) {
+              buttonTextColor = Colors.grey;
+            } else {
+              buttonTextColor = context.watch<CurrentTheme>().isNightMode
+                  ? Colors.white
+                  : Colors.black;
+            }
+            return Container(
+              height: ScreenUtil().setHeight(50),
+              margin: EdgeInsets.only(top: ScreenUtil().setHeight(35)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: ScreenUtil().setWidth(250),
+                    child: NeumorphicButton(
+                        // shape: RoundedRectangleBorder(
+                        //     borderRadius: BorderRadius.circular(20.0)),
+                        onPressed: () => toRouterPage(e),
+                        child: Center(
+                          child: Text(
+                            "${e['label']}",
+                            style: TextStyle(color: buttonTextColor),
+                          ),
+                        )),
+                  )
+                ],
+              ),
+            );
+          }).toList(),
+        ));
   }
 }
