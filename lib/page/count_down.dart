@@ -14,7 +14,7 @@ class _CountDownPageState extends State<CountDownPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildBaseAppBar(title: S.of(context).countDown),
-      body: Center(
+      body: const Center(
         child: Text('count_down'),
       ),
     );

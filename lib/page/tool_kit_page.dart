@@ -77,8 +77,8 @@ class _ToolKitPageState extends State<ToolKitPage> {
                   SizedBox(
                     width: ScreenUtil().setWidth(250),
                     child: NeumorphicButton(
-                        // shape: RoundedRectangleBorder(
-                        //     borderRadius: BorderRadius.circular(20.0)),
+                        style: const NeumorphicStyle(
+                            boxShape: NeumorphicBoxShape.stadium()),
                         onPressed: () => toRouterPage(e),
                         child: Center(
                           child: Text(

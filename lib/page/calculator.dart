@@ -443,7 +443,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
     return Scaffold(
         appBar: buildBaseAppBar(title: S.of(context).calculator),
         body: Container(
-          padding: EdgeInsets.all(ScreenUtil().setHeight(20)),
+          padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
           width: double.infinity,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -504,16 +504,15 @@ class _CalculatorPageState extends State<CalculatorPage> {
                         child = Text(e is int ? e.toString() : e,
                             style: TextStyle(
                                 color: textColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: ScreenUtil().setSp(24)));
+                                fontSize: ScreenUtil().setSp(22)));
                       }
                       return SizedBox(
                           width: e == 0
-                              ? ScreenUtil().setWidth(160)
-                              : ScreenUtil().setWidth(65),
+                              ? ScreenUtil().setWidth(166)
+                              : ScreenUtil().setWidth(68),
                           height: e == 0
-                              ? ScreenUtil().setWidth(65)
-                              : ScreenUtil().setWidth(65),
+                              ? ScreenUtil().setWidth(68)
+                              : ScreenUtil().setWidth(68),
                           child: NeumorphicButton(
                               onPressed: () => handleClick(e),
                               style: NeumorphicStyle(
