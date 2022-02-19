@@ -9,7 +9,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_app/common/color.dart';
 import 'package:simple_app/common/global.dart';
 import 'package:simple_app/generated/l10n.dart';
-import 'package:simple_app/page/note_editor_page.dart';
 import 'package:simple_app/provider/current_locale.dart';
 import 'package:simple_app/provider/current_theme.dart';
 import 'package:simple_app/router.dart';
@@ -88,11 +87,9 @@ class _MyAppState extends State<MyApp> {
         S.delegate
       ],
       themeMode: context.watch<CurrentTheme>().value,
-      theme:  const NeumorphicThemeData(
+      theme: const NeumorphicThemeData(
         baseColor: Color(0xfff7f7f7),
         lightSource: LightSource.bottom,
-        // accentColor: Colors.cyan,
-        // boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(30)), 
         depth: 8,
         // depth: 10,
       ),
@@ -110,7 +107,6 @@ class _MyAppState extends State<MyApp> {
       navigatorKey: navigatorKey,
       // 当前语言
       locale: context.watch<CurrentLocale>().value,
-      // // 当系统请求“暗模式”时使用时, 使用暗模式
       // theme: ThemeData(
       //   primaryColor: themeColor,
       //   visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -129,15 +125,6 @@ class _MyAppState extends State<MyApp> {
           }
         });
         return null;
-      },
-      onGenerateRoute: (settings) {
-        switch (settings.name) {
-          case '/create_note_or_editor_page':
-            return CupertinoPageRoute(
-                builder: (context) => const NoteEditorPage());
-          default:
-            return null;
-        }
       },
     );
   }
