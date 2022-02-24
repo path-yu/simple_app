@@ -44,5 +44,6 @@
   "topping": "置顶",
   "cancelTopping": "取消置顶",
   "noSelectNoteMessage": "请选择数据",
-  "outCalculationRange":"超出计算范围!"
+  "outCalculationRange":"超出计算范围!",
+  "countDown":"倒计时"
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:date_format/date_format.dart' hide S;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -18,6 +19,7 @@ import 'package:simple_app/components/search_bar.dart';
 import 'package:simple_app/data/index.dart';
 import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/model/note.dart';
+import 'package:simple_app/page/note_editor_page.dart';
 import 'package:simple_app/provider/current_locale.dart';
 import 'package:simple_app/provider/current_theme.dart';
 import 'package:simple_app/utils/index.dart';
@@ -54,6 +56,7 @@ class _NotePageState extends State<NotePage> {
 
   // 动画过渡
   final Duration _duration = const Duration(milliseconds: 350);
+  // 动画控制器
   Animation<double>? animationController;
   @override
   void initState() {
@@ -124,21 +127,29 @@ class _NotePageState extends State<NotePage> {
       handleChangeCheckBox(!target.isSelect, index);
       return;
     }
+    var params = {};
     if (id != null) {
-      // 打开新页面 并等待返回结果
-      Navigator.pushNamed(context, '/create_note_or_editor_page',
-          arguments: {'isEditor': true, "id": id, 'time': time}).then((value) {
-        // 然后返回了数据则更新页面
-        if (value != null) {
-          getData(DBProvider().findAll);
-        }
-      });
+      params = {'id': id, 'time': time, 'isEditor': true};
     } else {
-      Navigator.pushNamed(context, '/create_note_or_editor_page',
-          arguments: {'isEditor': false}).then((value) {
-        getData(DBProvider().findAll);
-      });
+      params = {'isEditor': false};
     }
+
+    Navigator.push(
+        context,
+        CupertinoPageRoute(
+            builder: ((context) => NoteEditorPage(
+                  id: params['id'],
+                  time: params['time'] ??= null,
+                  isEditor: params['isEditor'],
+                )))).then((value) {
+      if (!params['isEditor']) {
+        getData(DBProvider().findAll);
+      }
+      // 然后返回了数据则更新页面
+      if (value != null) {
+        getData(DBProvider().findAll);
+      }
+    });
   }
 
   // 长按选择

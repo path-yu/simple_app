@@ -30,6 +30,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "cancelTopping": MessageLookupByLibrary.simpleMessage("取消置顶"),
         "complete": MessageLookupByLibrary.simpleMessage("已经完成"),
         "confirm": MessageLookupByLibrary.simpleMessage("确认"),
+        "countDown": MessageLookupByLibrary.simpleMessage("倒计时"),
         "createNote": MessageLookupByLibrary.simpleMessage("新建便签"),
         "delete": MessageLookupByLibrary.simpleMessage("删除"),
         "deleteFail": MessageLookupByLibrary.simpleMessage("删除失败"),

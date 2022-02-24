@@ -44,5 +44,6 @@
   "topping": "topping",
   "cancelTopping": "Cancel topping",
   "noSelectNoteMessage": "Please select data!",
-  "outCalculationRange":"Out of calculation range!"
+  "outCalculationRange":"Out of calculation range!",
+  "countDown":"Count down"
 }

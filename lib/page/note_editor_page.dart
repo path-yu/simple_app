@@ -13,7 +13,17 @@ import 'package:simple_app/utils/show_toast.dart';
 import 'package:zefyr/zefyr.dart';
 
 class NoteEditorPage extends StatefulWidget {
-  const NoteEditorPage({Key? key}) : super(key: key);
+  //编辑还是新建
+  final bool isEditor;
+
+  // 便签id
+  final int? id;
+
+  //便签创建时间
+  final int? time;
+
+  const NoteEditorPage({Key? key, this.id, this.time, this.isEditor = false})
+      : super(key: key);
 
   @override
   _NoteEditorPageState createState() => _NoteEditorPageState();
@@ -30,17 +40,8 @@ class _NoteEditorPageState extends State<NoteEditorPage>
   //定义一个标题输入controller
   final TextEditingController _titleController = TextEditingController();
 
-  //导航栏标题文字
-  String? appbarTitle;
-
   //标题
   String? title = "";
-
-  //编辑还是新建
-  bool isEditor = false;
-
-  // 便签id
-  int? id;
 
   //数据是否正在加载中
   bool isLoading = false;
@@ -48,25 +49,10 @@ class _NoteEditorPageState extends State<NoteEditorPage>
   // 是否需要更新数据
   bool isNeedUpdate = false;
 
-  //便签创建事件
-  int? time;
-
   // 是否显示工具栏
   bool visible = false;
 
-  initData() async {
-    // 获取路由参数
-    Map args = ModalRoute.of(context)?.settings.arguments as Map;
-    if (args['isEditor']) {
-      isEditor = true;
-      appbarTitle = S.of(context).editorNote;
-      id = args['id'];
-      time = args['time'];
-    } else {
-      appbarTitle = S.of(context).createNote;
-      isEditor = false;
-    }
-  }
+  initData() async {}
 
   // 将json 转为 delta
   Delta getDelta(doc) {
@@ -82,7 +68,7 @@ class _NoteEditorPageState extends State<NoteEditorPage>
   Future<NotusDocument> _loadDocument({required bool isEditor}) async {
     //如果为编辑 则从数据库取出对应的数据
     if (isEditor) {
-      List<Note> res = await DBProvider().findNoteListData(id!);
+      List<Note> res = await DBProvider().findNoteListData(widget.id!);
       _titleController.text = res[0].title!;
       titleChange(_titleController.text);
       Delta deltaData = getDelta(res[0].content);
@@ -103,9 +89,10 @@ class _NoteEditorPageState extends State<NoteEditorPage>
       return showToast(S.of(context).NoteNotNullMessage);
     }
     // 如果isEditor 则 更新数据 否者写入数据
-    if (isEditor) {
+    if (widget.isEditor) {
       // 写入文本内容
-      Note note = Note(title: title!, content: contents, id: id, time: time!);
+      Note note = Note(
+          title: title!, content: contents, id: widget.id, time: widget.time!);
       int res = await DBProvider().update(note);
       if (res > 0) {
         isNeedUpdate = true;
@@ -136,7 +123,7 @@ class _NoteEditorPageState extends State<NoteEditorPage>
     var res = await showConfirmDialog(context,
         message: S.of(context).deleteTodoMessage);
     if (res != null) {
-      int res = await DBProvider().deleteData(id!);
+      int res = await DBProvider().deleteData(widget.id!);
       if (res > 0) {
         showToast(S.of(context).deleteSuccess);
         // 跳转到上一个页面
@@ -149,7 +136,7 @@ class _NoteEditorPageState extends State<NoteEditorPage>
 
   // 加载需要编辑写入的文本内容
   _loadData() async {
-    final document = await _loadDocument(isEditor: isEditor);
+    final document = await _loadDocument(isEditor: widget.isEditor);
     if (_zefyrController == null) {
       setState(() {
         _zefyrController = ZefyrController(document);
@@ -188,6 +175,7 @@ class _NoteEditorPageState extends State<NoteEditorPage>
   @override
   void initState() {
     super.initState();
+    initData();
 
     /// 监听页面生命周期 ,添加观察者
     WidgetsBinding.instance?.addObserver(this);
@@ -197,9 +185,8 @@ class _NoteEditorPageState extends State<NoteEditorPage>
 
   @override
   Widget build(BuildContext context) {
-    initData();
     // 判断是否显示删除按钮
-    final removeIcon = isEditor
+    final removeIcon = widget.isEditor
         ? Builder(
             builder: (context) => IconButton(
                   icon: const Icon(Icons.close),
@@ -208,10 +195,12 @@ class _NoteEditorPageState extends State<NoteEditorPage>
         : const SizedBox(height: 0.0, width: 0.0);
     // 计算显示保存按钮还是更新按钮
     final saveOrUpdateIcon =
-        isEditor ? Icons.update_rounded : Icons.save_rounded;
+        widget.isEditor ? Icons.update_rounded : Icons.save_rounded;
     return Scaffold(
       appBar: buildBaseAppBar(
-          title: appbarTitle,
+          title: widget.isEditor
+              ? S.of(context).editorNote
+              : S.of(context).createNote,
           action: [
             Builder(
               builder: (context) => IconButton(

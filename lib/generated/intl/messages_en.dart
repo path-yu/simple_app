@@ -32,6 +32,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "cancelTopping": MessageLookupByLibrary.simpleMessage("Cancel topping"),
         "complete": MessageLookupByLibrary.simpleMessage("Have finished"),
         "confirm": MessageLookupByLibrary.simpleMessage("confirm"),
+        "countDown": MessageLookupByLibrary.simpleMessage("Count down"),
         "createNote": MessageLookupByLibrary.simpleMessage("Create note"),
         "delete": MessageLookupByLibrary.simpleMessage("delete"),
         "deleteFail": MessageLookupByLibrary.simpleMessage("Delete failed!"),

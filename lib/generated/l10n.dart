@@ -509,6 +509,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Count down`
+  String get countDown {
+    return Intl.message(
+      'Count down',
+      name: 'countDown',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
