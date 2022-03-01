@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
+import 'package:simple_app/common/color.dart';
 import 'package:simple_app/components/search_bar.dart';
 import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/provider/current_theme.dart';
@@ -211,9 +212,17 @@ class TodoListState extends State<TodoList>
   Widget _buildItem(Animation<double> _animation, int index) {
     Map target = myList[index];
     String value = target['value'].toString();
-    bool done = target['done'];
+    final bool done = target['done'];
     String time = target['time'];
     bool isTop = target['isTop'];
+    TextDecoration? decoration = done ? TextDecoration.lineThrough : null;
+    Color color = context.read<CurrentTheme>().isNightMode
+        ? done
+            ? Colors.grey
+            : Colors.white
+        : done
+            ? Colors.grey
+            : Colors.black;
     return SizeTransition(
       sizeFactor: _animation,
       child: Container(
@@ -235,7 +244,11 @@ class TodoListState extends State<TodoList>
                           shape: const CircleBorder(),
                           onChanged: (value) => handleCheckBoxChange(
                               value!, target, done, index)),
-                      Text(value),
+                      Text(
+                        value,
+                        style:
+                            TextStyle(decoration: decoration, color: color),
+                      ),
                     ],
                   ),
                   Row(
@@ -244,6 +257,8 @@ class TodoListState extends State<TodoList>
                       Text(
                         time,
                         textAlign: TextAlign.right,
+                        style:
+                            TextStyle(decoration: decoration, color: color),
                       ),
                       SizedBox(
                         width: ScreenUtil().setWidth(30),
