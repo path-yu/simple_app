@@ -152,24 +152,22 @@ class _TodoListPageState extends State<TodoListPage> {
     int index = todoAllList.indexOf(target);
     // 如果是done false 说明当前点击的是正在进行的todo项, 则将其删除,并将其添加到已经完成中 反之类似
     if (done == false) {
-      int removeIndex = underwayList.indexOf(target);
+      int removeIndex = underwayList.indexWhere((val) => val['id'] == target['id']);
       _underWayTodoListKey.currentState!.animatedRemoveItem(removeIndex);
       await Future.delayed(const Duration(milliseconds: 350), () {
         _completeToDoListKey.currentState?.addItem();
         doneSuccess!();
         // 展开已经完成的todo
         setState(() => completeIsSpread = true);
-        changeState();
       });
     } else {
-      int removeIndex = completeToDoList.indexOf(target);
+      int removeIndex = completeToDoList.indexWhere((val) => val['id'] == target['id']);
       _completeToDoListKey.currentState?.animatedRemoveItem(removeIndex);
       await Future.delayed(const Duration(milliseconds: 350), () {
         _underWayTodoListKey.currentState?.addItem();
         doneSuccess!();
         // 展开正在进行的todo
         setState(() => underwayListIsSpread = true);
-        changeState();
       });
     }
     todoAllList[index]['done'] = value;
