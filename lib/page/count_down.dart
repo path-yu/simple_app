@@ -1,14 +1,17 @@
+import 'dart:async';
+
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_sound/flutter_sound.dart';
+import 'package:percent_indicator/percent_indicator.dart';
+import 'package:provider/provider.dart';
 import 'package:simple_app/common/color.dart';
 import 'package:simple_app/components/base/build_base_app_bar.dart';
 import 'package:simple_app/generated/l10n.dart';
-import 'package:provider/provider.dart';
 import 'package:simple_app/provider/current_theme.dart';
-import 'dart:async';
-import 'package:percent_indicator/percent_indicator.dart';
 import 'package:simple_app/utils/show_dialog.dart';
 import 'package:simple_app/utils/show_toast.dart';
 import 'package:vibration/vibration.dart';
@@ -44,6 +47,10 @@ class _CountDownPageState extends State<CountDownPage> {
   Timer? timerId;
   // 计数器过渡动画
   final Duration _duration = const Duration(milliseconds: 250);
+
+  // 音频字节
+  ByteData? bytes;
+  FlutterSoundPlayer? _myPlayer = FlutterSoundPlayer();
   void handleStartClick() {
     if (pickerTime.inSeconds < 6) return;
     setState(() => show = true);
@@ -63,11 +70,18 @@ class _CountDownPageState extends State<CountDownPage> {
       second = s;
       hour = h == 0 ? null : h;
     });
+    final buffer = bytes!.buffer;
+
     Timer.periodic(timeout, (timer) async {
       startSecond++;
       int diffSecond = totalSecond - startSecond;
       timerId = timer;
       success = false;
+      _myPlayer!.startPlayer(
+        fromDataBuffer:
+            buffer.asUint8List(bytes!.offsetInBytes, bytes!.lengthInBytes),
+        codec: Codec.mp3,
+      );
       var time = Duration(seconds: diffSecond);
       // 更新时间
       setState(() {
@@ -97,7 +111,7 @@ class _CountDownPageState extends State<CountDownPage> {
         });
         success = true;
         if (await Vibration.hasCustomVibrationsSupport() != null) {
-         Vibration.vibrate(duration: 2500, amplitude: 128);
+          Vibration.vibrate(duration: 2500, amplitude: 128);
         }
         showToast(S.of(context).timeOut);
       }
@@ -128,6 +142,16 @@ class _CountDownPageState extends State<CountDownPage> {
     super.dispose();
     // 页面卸载 取消定时器
     timerId?.cancel();
+    _myPlayer?.closePlayer();
+    _myPlayer = null;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _myPlayer?.openPlayer().then((value) async {
+      bytes = await rootBundle.load("assets/15199.mp3");
+    });
   }
 
   @override
