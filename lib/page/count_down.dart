@@ -1,4 +1,3 @@
-
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -12,6 +11,7 @@ import 'dart:async';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:simple_app/utils/show_dialog.dart';
 import 'package:simple_app/utils/show_toast.dart';
+import 'package:vibration/vibration.dart';
 
 class CountDownPage extends StatefulWidget {
   const CountDownPage({Key? key}) : super(key: key);
@@ -27,9 +27,9 @@ class _CountDownPageState extends State<CountDownPage> {
   // 是否显示倒计时看板
   bool show = false;
   // 圆形大小背景
-  double size = ScreenUtil().setHeight(280);
+  double size = ScreenUtil().setHeight(350);
   // 进度条宽高度
-  double progressSize = ScreenUtil().setHeight(280);
+  double progressSize = ScreenUtil().setHeight(350);
   // 进度条大小
   double strokeWidth = ScreenUtil().setHeight(12);
   // 进度条进度
@@ -96,6 +96,9 @@ class _CountDownPageState extends State<CountDownPage> {
           progressValue = 0;
         });
         success = true;
+        if (await Vibration.hasCustomVibrationsSupport() != null) {
+         Vibration.vibrate(duration: 2500, amplitude: 128);
+        }
         showToast(S.of(context).timeOut);
       }
     });
