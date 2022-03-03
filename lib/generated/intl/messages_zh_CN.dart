@@ -27,6 +27,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "addTodoMessage": MessageLookupByLibrary.simpleMessage("您添加了一条新todo!"),
         "calculator": MessageLookupByLibrary.simpleMessage("计算器"),
         "cancel": MessageLookupByLibrary.simpleMessage("取消"),
+        "cancelCountDownMessage":
+            MessageLookupByLibrary.simpleMessage("倒计时还未结束,确定要退出吗?"),
         "cancelTopping": MessageLookupByLibrary.simpleMessage("取消置顶"),
         "complete": MessageLookupByLibrary.simpleMessage("已经完成"),
         "confirm": MessageLookupByLibrary.simpleMessage("确认"),
@@ -60,7 +62,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "searchNote": MessageLookupByLibrary.simpleMessage("搜索便签"),
         "selected": MessageLookupByLibrary.simpleMessage("已选择"),
         "setting": MessageLookupByLibrary.simpleMessage("设置"),
+        "startTiming": MessageLookupByLibrary.simpleMessage("开始计时"),
         "switchLanguage": MessageLookupByLibrary.simpleMessage("切换语言为英语"),
+        "timeOut": MessageLookupByLibrary.simpleMessage("时间到!"),
         "title": MessageLookupByLibrary.simpleMessage("标题"),
         "todoCompleteMessage":
             MessageLookupByLibrary.simpleMessage("今日的todo已经完成, 请再接再厉!"),

@@ -519,6 +519,36 @@ class S {
       args: [],
     );
   }
+
+  /// `Start timing`
+  String get startTiming {
+    return Intl.message(
+      'Start timing',
+      name: 'startTiming',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Time out!`
+  String get timeOut {
+    return Intl.message(
+      'Time out!',
+      name: 'timeOut',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The countdown is not over yet. Are you sure you want to exit?`
+  String get cancelCountDownMessage {
+    return Intl.message(
+      'The countdown is not over yet. Are you sure you want to exit?',
+      name: 'cancelCountDownMessage',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

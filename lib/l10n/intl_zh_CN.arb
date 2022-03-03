@@ -45,5 +45,8 @@
   "cancelTopping": "取消置顶",
   "noSelectNoteMessage": "请选择数据",
   "outCalculationRange":"超出计算范围!",
-  "countDown":"倒计时"
+  "countDown":"倒计时",
+  "startTiming":"开始计时",
+  "timeOut":"时间到!",
+  "cancelCountDownMessage":"倒计时还未结束,确定要退出吗?"
 }

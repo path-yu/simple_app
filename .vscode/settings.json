@@ -7,12 +7,14 @@
     "fluttertoast",
     "listdata",
     "listkey",
+    "localizely",
     "LTRB",
     "navigatorkey",
     "Neumorphic",
     "prefs",
     "RGBO",
     "screenutil",
+    "sqflite",
     "unfocus",
     "zefyr"
   ]

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
-import 'package:simple_app/common/color.dart';
 import 'package:simple_app/components/search_bar.dart';
 import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/provider/current_theme.dart';

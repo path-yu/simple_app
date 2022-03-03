@@ -29,6 +29,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("You added a new todo!"),
         "calculator": MessageLookupByLibrary.simpleMessage("calculator"),
         "cancel": MessageLookupByLibrary.simpleMessage("cancel"),
+        "cancelCountDownMessage": MessageLookupByLibrary.simpleMessage(
+            "The countdown is not over yet. Are you sure you want to exit?"),
         "cancelTopping": MessageLookupByLibrary.simpleMessage("Cancel topping"),
         "complete": MessageLookupByLibrary.simpleMessage("Have finished"),
         "confirm": MessageLookupByLibrary.simpleMessage("confirm"),
@@ -69,8 +71,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "searchNote": MessageLookupByLibrary.simpleMessage("Search note"),
         "selected": MessageLookupByLibrary.simpleMessage("Selected"),
         "setting": MessageLookupByLibrary.simpleMessage("setting"),
+        "startTiming": MessageLookupByLibrary.simpleMessage("Start timing"),
         "switchLanguage":
             MessageLookupByLibrary.simpleMessage("Switch language to english"),
+        "timeOut": MessageLookupByLibrary.simpleMessage("Time out!"),
         "title": MessageLookupByLibrary.simpleMessage("title"),
         "todoCompleteMessage": MessageLookupByLibrary.simpleMessage(
             "Today\'s todo has been completed, please make persistent efforts."),

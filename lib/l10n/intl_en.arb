@@ -45,5 +45,8 @@
   "cancelTopping": "Cancel topping",
   "noSelectNoteMessage": "Please select data!",
   "outCalculationRange":"Out of calculation range!",
-  "countDown":"Count down"
+  "countDown":"Count down",
+  "startTiming":"Start timing",
+  "timeOut":"Time out!",
+  "cancelCountDownMessage":"The countdown is not over yet. Are you sure you want to exit?"
 }
