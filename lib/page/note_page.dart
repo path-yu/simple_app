@@ -59,7 +59,7 @@ class _NotePageState extends State<NotePage> {
   // 动画控制器
   Animation<double>? animationController;
 
-  GlobalKey _parentKey = GlobalKey();
+  final GlobalKey _parentKey = GlobalKey();
   @override
   void initState() {
     if (isSelectAll) {}

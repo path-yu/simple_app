@@ -1,5 +1,5 @@
-import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -60,9 +60,13 @@ class _DragAbleFloatingActionButtonState
         _maxOffset = Offset(
             maxWidth! - size.width, maxHeight! - size.height);
       });
-      print(_maxOffset);
+      if (kDebugMode) {
+        print(_maxOffset);
+      }
     } catch (e) {
-      print('catch: $e');
+      if (kDebugMode) {
+        print('catch: $e');
+      }
     }
   }
 
