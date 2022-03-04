@@ -58,6 +58,8 @@ class _NotePageState extends State<NotePage> {
   final Duration _duration = const Duration(milliseconds: 350);
   // 动画控制器
   Animation<double>? animationController;
+
+  GlobalKey _parentKey = GlobalKey();
   @override
   void initState() {
     if (isSelectAll) {}
@@ -469,6 +471,7 @@ class _NotePageState extends State<NotePage> {
         onWillPop: isShowCheckBox ? handleWillPop : null,
         child: Container(
           padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
+          key: _parentKey,
           child: RefreshIndicator(
             child: Column(
               children: [
@@ -500,6 +503,7 @@ class _NotePageState extends State<NotePage> {
       floatingActionButton: baseAnimatedOpacity(
           value: !isShowCheckBox,
           child: DragAbleFloatingActionButton(
+            parentKey: _parentKey,
             child: FloatingActionButton(
               child: const Icon(Icons.add),
               onPressed: () => toCreateOrEditorNotePage(),
