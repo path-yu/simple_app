@@ -15,6 +15,7 @@ import 'package:simple_app/provider/current_theme.dart';
 import 'package:simple_app/utils/show_dialog.dart';
 import 'package:simple_app/utils/show_toast.dart';
 import 'package:vibration/vibration.dart';
+import 'package:shimmer/shimmer.dart';
 
 class CountDownPage extends StatefulWidget {
   const CountDownPage({Key? key}) : super(key: key);
@@ -30,7 +31,7 @@ class _CountDownPageState extends State<CountDownPage> {
   // 是否显示倒计时看板
   bool show = false;
   // 圆形大小背景
-  double size = ScreenUtil().setHeight(350);
+  double size = ScreenUtil().setHeight(326);
   // 进度条宽高度
   double progressSize = ScreenUtil().setHeight(350);
   // 进度条大小
@@ -47,7 +48,6 @@ class _CountDownPageState extends State<CountDownPage> {
   Timer? timerId;
   // 计数器过渡动画
   final Duration _duration = const Duration(milliseconds: 250);
-
   // 音频字节
   ByteData? bytes;
   FlutterSoundPlayer? _myPlayer = FlutterSoundPlayer();
@@ -55,7 +55,7 @@ class _CountDownPageState extends State<CountDownPage> {
     if (pickerTime.inSeconds < 6) return;
     setState(() => show = true);
     const timeout = Duration(seconds: 1);
-    // progressValue = 0;
+    progressValue = 0;
     int startSecond = 0;
     int totalSecond = pickerTime.inSeconds;
     int h = pickerTime.inHours;
@@ -133,9 +133,12 @@ class _CountDownPageState extends State<CountDownPage> {
   }
 
   TextStyle textStyle = TextStyle(
-      height: 1.5,
-      fontSize: ScreenUtil().setSp(35),
-      textBaseline: TextBaseline.alphabetic);
+    fontSize: ScreenUtil().setSp(50),
+    foreground: Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1
+      ..color = Colors.white,
+  );
 
   @override
   void dispose() {
@@ -172,10 +175,7 @@ class _CountDownPageState extends State<CountDownPage> {
                 key: ValueKey<bool>(show),
                 child: show
                     ? ClipOval(
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 100),
-                          width: size,
-                          height: size,
+                        child: Container(
                           child: Stack(
                             children: [
                               Positioned(
@@ -186,7 +186,7 @@ class _CountDownPageState extends State<CountDownPage> {
                                     lineWidth: strokeWidth,
                                     animateFromLastPercent: true,
                                     backgroundColor: Colors.grey,
-                                    circularStrokeCap: CircularStrokeCap.butt,
+                                    circularStrokeCap: CircularStrokeCap.round,
                                     linearGradient: const LinearGradient(
                                         colors: [
                                           Color.fromRGBO(179, 217, 200, 0.7),
@@ -198,59 +198,82 @@ class _CountDownPageState extends State<CountDownPage> {
                                   ),
                                 ),
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Visibility(
-                                      visible: hour != null,
-                                      child: Center(
-                                        child: AnimatedFlipCounter(
-                                          value: hour ??= 0,
-                                          duration: _duration,
-                                          textStyle: textStyle,
+                              Positioned(
+                                  top: strokeWidth,
+                                  left: strokeWidth,
+                                  child: ClipOval(
+                                    child: Shimmer.fromColors(
+                                        child: Container(
+                                          width: size,
+                                          height: size,
+                                          decoration:  const BoxDecoration(
+                                              gradient:  LinearGradient(
+                                                  begin: Alignment.centerLeft,
+                                                  end: Alignment.centerRight,
+                                                  colors: [
+                                                Color.fromRGBO(
+                                                    152, 203, 179, 0.5),
+                                                themeColor
+                                              ]),
+                                              ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Visibility(
+                                                  visible: hour != null,
+                                                  child: Center(
+                                                    child: AnimatedFlipCounter(
+                                                      value: hour ??= 0,
+                                                      duration: _duration,
+                                                      textStyle: textStyle,
+                                                    ),
+                                                  )),
+                                              Visibility(
+                                                visible: hour != 0,
+                                                child: Text(
+                                                  ':',
+                                                  style: textStyle,
+                                                ),
+                                              ),
+                                              Visibility(
+                                                  visible: minutes != null,
+                                                  child: Center(
+                                                    child: AnimatedFlipCounter(
+                                                      value: minutes ??= 0,
+                                                      duration: _duration,
+                                                      textStyle: textStyle,
+                                                    ),
+                                                  )),
+                                              Visibility(
+                                                visible: hour == 0
+                                                    ? minutes != 0
+                                                    : true,
+                                                child: Text(
+                                                  ':',
+                                                  style: textStyle,
+                                                ),
+                                              ),
+                                              Visibility(
+                                                  visible: second != null,
+                                                  child: Center(
+                                                    child: AnimatedFlipCounter(
+                                                      value: second ??= 0,
+                                                      duration: _duration,
+                                                      textStyle: textStyle,
+                                                    ),
+                                                  ))
+                                            ],
+                                          ),
                                         ),
-                                      )),
-                                  Visibility(
-                                    visible: hour != 0,
-                                    child: Text(
-                                      ':',
-                                      style: textStyle,
-                                    ),
-                                  ),
-                                  Visibility(
-                                      visible: minutes != null,
-                                      child: Center(
-                                        child: AnimatedFlipCounter(
-                                          value: minutes ??= 0,
-                                          duration: _duration,
-                                          textStyle: textStyle,
+                                        baseColor:
+                                            const Color.fromRGBO(179, 217, 200, 0.7),
+                                        highlightColor: themeColor,
+                                        period: const Duration(seconds: 1),
                                         ),
-                                      )),
-                                  Visibility(
-                                    visible: minutes != 0,
-                                    child: Text(
-                                      ':',
-                                      style: textStyle,
-                                    ),
-                                  ),
-                                  Visibility(
-                                      visible: second != null,
-                                      child: Center(
-                                        child: AnimatedFlipCounter(
-                                          value: second ??= 0,
-                                          duration: _duration,
-                                          textStyle: textStyle,
-                                        ),
-                                      ))
-                                ],
-                              )
+                                  ))
                             ],
                           ),
-                          decoration: const BoxDecoration(
-                              gradient: LinearGradient(
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                  colors: [Colors.white, themeColor])),
                         ),
                       )
                     : Column(
