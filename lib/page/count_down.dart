@@ -162,11 +162,12 @@ class _CountDownPageState extends State<CountDownPage> {
 
   void handleSwitchChange(value) {
     setState(() {
+      // 如果小时为0, 则不显示小时, 且如果分为0, 则也不显示分
       if (hour == 0) {
         hour = null;
-      }
-      if (minutes == 0) {
-        minutes = null;
+        if (minutes == 0) {
+          minutes = null;
+        }
       }
       enable = value;
     });
