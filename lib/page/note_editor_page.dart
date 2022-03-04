@@ -2,12 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:quill_delta/quill_delta.dart';
 import 'package:simple_app/components/base/build_base_app_bar.dart';
 import 'package:simple_app/components/base/loading.dart';
 import 'package:simple_app/data/index.dart';
 import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/model/note.dart';
+import 'package:simple_app/provider/current_theme.dart';
 import 'package:simple_app/utils/show_dialog.dart';
 import 'package:simple_app/utils/show_toast.dart';
 import 'package:zefyr/zefyr.dart';
@@ -243,7 +245,13 @@ class _NoteEditorPageState extends State<NoteEditorPage>
                     )),
                     Visibility(
                       visible: visible,
-                      child: ZefyrToolbar.basic(controller: _zefyrController!),
+                      child: IconTheme(
+                          data: IconThemeData(
+                              color: context
+                                  .read<CurrentTheme>()
+                                  .darkOrWhiteColor),
+                          child: ZefyrToolbar.basic(
+                              controller: _zefyrController!)),
                     )
                   ],
                 );

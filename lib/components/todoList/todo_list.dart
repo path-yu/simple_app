@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
+import 'package:simple_app/common/color.dart';
 import 'package:simple_app/components/search_bar.dart';
 import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/provider/current_theme.dart';
@@ -241,12 +242,12 @@ class TodoListState extends State<TodoList>
                       Checkbox(
                           value: done,
                           shape: const CircleBorder(),
+                          activeColor: themeColor,
                           onChanged: (value) => handleCheckBoxChange(
                               value!, target, done, index)),
                       Text(
                         value,
-                        style:
-                            TextStyle(decoration: decoration, color: color),
+                        style: TextStyle(decoration: decoration, color: color),
                       ),
                     ],
                   ),
@@ -256,8 +257,7 @@ class TodoListState extends State<TodoList>
                       Text(
                         time,
                         textAlign: TextAlign.right,
-                        style:
-                            TextStyle(decoration: decoration, color: color),
+                        style: TextStyle(decoration: decoration, color: color),
                       ),
                       SizedBox(
                         width: ScreenUtil().setWidth(30),

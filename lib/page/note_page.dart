@@ -364,6 +364,7 @@ class _NotePageState extends State<NotePage> {
                           value: isShowCheckBox,
                           child: Checkbox(
                               shape: const CircleBorder(),
+                              activeColor: themeColor,
                               materialTapTargetSize:
                                   MaterialTapTargetSize.shrinkWrap,
                               value: target.isSelect,
@@ -505,7 +506,10 @@ class _NotePageState extends State<NotePage> {
           child: DragAbleFloatingActionButton(
             parentKey: _parentKey,
             child: FloatingActionButton(
-              child: const Icon(Icons.add),
+              backgroundColor: context.read<CurrentTheme>().isNightMode
+                  ? Colors.black
+                  : themeColor,
+              child: const Icon(Icons.add, color: Colors.white),
               onPressed: () => toCreateOrEditorNotePage(),
             ),
           )),
