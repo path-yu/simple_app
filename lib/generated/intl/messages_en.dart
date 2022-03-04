@@ -47,6 +47,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "dialogDeleteMessage": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to delete?"),
         "editorNote": MessageLookupByLibrary.simpleMessage("Editor note"),
+        "enableShimmerMessage":
+            MessageLookupByLibrary.simpleMessage("Enable shimmer background?"),
         "hint": MessageLookupByLibrary.simpleMessage("hint"),
         "item": MessageLookupByLibrary.simpleMessage("item"),
         "nightMode": MessageLookupByLibrary.simpleMessage("Night mode"),

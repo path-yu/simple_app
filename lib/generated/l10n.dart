@@ -549,6 +549,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Enable shimmer background?`
+  String get enableShimmerMessage {
+    return Intl.message(
+      'Enable shimmer background?',
+      name: 'enableShimmerMessage',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

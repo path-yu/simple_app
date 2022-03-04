@@ -50,7 +50,10 @@ class _CountDownPageState extends State<CountDownPage> {
   final Duration _duration = const Duration(milliseconds: 250);
   // 音频字节
   ByteData? bytes;
+  // 播放控制器
   FlutterSoundPlayer? _myPlayer = FlutterSoundPlayer();
+  // 是否开启微光
+  bool enable = false;
   void handleStartClick() {
     if (pickerTime.inSeconds < 6) return;
     setState(() => show = true);
@@ -157,6 +160,18 @@ class _CountDownPageState extends State<CountDownPage> {
     });
   }
 
+  void handleSwitchChange(value) {
+    setState(() {
+      if (hour == 0) {
+        hour = null;
+      }
+      if (minutes == 0) {
+        minutes = null;
+      }
+      enable = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Color> colors = [];
@@ -181,107 +196,127 @@ class _CountDownPageState extends State<CountDownPage> {
               child: Container(
                 key: ValueKey<bool>(show),
                 child: show
-                    ? ClipOval(
-                        child: Stack(
-                          children: [
-                            Positioned(
-                              child: SizedBox(
-                                height: progressSize,
-                                width: progressSize,
-                                child: CircularPercentIndicator(
-                                  lineWidth: strokeWidth,
-                                  animateFromLastPercent: true,
-                                  backgroundColor: Colors.grey,
-                                  circularStrokeCap: CircularStrokeCap.round,
-                                  linearGradient:  LinearGradient(colors: colors),
-                                  percent: progressValue,
-                                  radius: (progressSize),
-                                  animation: true,
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: progressSize,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(S.of(context).enableShimmerMessage),
+                                Switch(
+                                    value: enable,
+                                    onChanged: handleSwitchChange),
+                              ],
+                            ),
+                          ),
+                          Stack(
+                            children: [
+                              Positioned(
+                                child: SizedBox(
+                                  height: progressSize,
+                                  width: progressSize,
+                                  child: CircularPercentIndicator(
+                                    lineWidth: strokeWidth,
+                                    animateFromLastPercent: true,
+                                    backgroundColor: isNightMode
+                                        ? Colors.grey
+                                        : Colors.grey.shade300,
+                                    circularStrokeCap: CircularStrokeCap.round,
+                                    linearGradient:
+                                        LinearGradient(colors: colors),
+                                    percent: progressValue,
+                                    radius: (progressSize),
+                                    animation: true,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Positioned(
+                              Positioned(
+                                  top: strokeWidth,
+                                  left: strokeWidth,
+                                  child: ClipOval(
+                                    child: Shimmer.fromColors(
+                                      enabled: enable,
+                                      child: Container(
+                                        width: size,
+                                        height: size,
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                              begin: Alignment.centerLeft,
+                                              end: Alignment.centerRight,
+                                              colors: colors),
+                                        ),
+                                      ),
+                                      baseColor: isNightMode
+                                          ? Colors.black12
+                                          : themeColor,
+                                      highlightColor: isNightMode
+                                          ? Colors.black
+                                          : Colors.green.shade200,
+                                      period: const Duration(seconds: 1),
+                                    ),
+                                  )),
+                              Positioned(
                                 top: strokeWidth,
                                 left: strokeWidth,
                                 child: ClipOval(
-                                  child: Shimmer.fromColors(
-                                    child: Container(
-                                      width: size,
-                                      height: size,
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                            begin: Alignment.centerLeft,
-                                            end: Alignment.centerRight,
-                                            colors: colors),
-                                      ),
-                                    ),
-                                    baseColor: isNightMode
-                                        ? Colors.black12
-                                        : themeColor,
-                                    highlightColor: isNightMode
-                                        ? Colors.black
-                                        : Colors.green.shade200,
-                                    period: const Duration(seconds: 1),
-                                  ),
-                                )),
-                            Positioned(
-                              top: strokeWidth,
-                              left: strokeWidth,
-                              child: ClipOval(
-                                  child: SizedBox(
-                                      width: size,
-                                      height: size,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Visibility(
-                                              visible: hour != null,
-                                              child: Center(
-                                                child: AnimatedFlipCounter(
-                                                  value: hour ??= 0,
-                                                  duration: _duration,
-                                                  textStyle: textStyle,
-                                                ),
-                                              )),
-                                          Visibility(
-                                            visible: hour != 0,
-                                            child: Text(
-                                              ':',
-                                              style: textStyle,
+                                    child: SizedBox(
+                                        width: size,
+                                        height: size,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Visibility(
+                                                visible: hour != null,
+                                                child: Center(
+                                                  child: AnimatedFlipCounter(
+                                                    value: hour ??= 0,
+                                                    duration: _duration,
+                                                    textStyle: textStyle,
+                                                  ),
+                                                )),
+                                            Visibility(
+                                              visible: hour != 0,
+                                              child: Text(
+                                                ':',
+                                                style: textStyle,
+                                              ),
                                             ),
-                                          ),
-                                          Visibility(
-                                              visible: minutes != null,
-                                              child: Center(
-                                                child: AnimatedFlipCounter(
-                                                  value: minutes ??= 0,
-                                                  duration: _duration,
-                                                  textStyle: textStyle,
-                                                ),
-                                              )),
-                                          Visibility(
-                                            visible:
-                                                hour == 0 ? minutes != 0 : true,
-                                            child: Text(
-                                              ':',
-                                              style: textStyle,
+                                            Visibility(
+                                                visible: minutes != null,
+                                                child: Center(
+                                                  child: AnimatedFlipCounter(
+                                                    value: minutes ??= 0,
+                                                    duration: _duration,
+                                                    textStyle: textStyle,
+                                                  ),
+                                                )),
+                                            Visibility(
+                                              visible: hour == 0
+                                                  ? minutes != 0
+                                                  : true,
+                                              child: Text(
+                                                ':',
+                                                style: textStyle,
+                                              ),
                                             ),
-                                          ),
-                                          Visibility(
-                                              visible: second != null,
-                                              child: Center(
-                                                child: AnimatedFlipCounter(
-                                                  value: second ??= 0,
-                                                  duration: _duration,
-                                                  textStyle: textStyle,
-                                                ),
-                                              ))
-                                        ],
-                                      ))),
-                            )
-                          ],
-                        ),
+                                            Visibility(
+                                                visible: second != null,
+                                                child: Center(
+                                                  child: AnimatedFlipCounter(
+                                                    value: second ??= 0,
+                                                    duration: _duration,
+                                                    textStyle: textStyle,
+                                                  ),
+                                                ))
+                                          ],
+                                        ))),
+                              )
+                            ],
+                          )
+                        ],
                       )
                     : Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -330,7 +365,6 @@ class _CountDownPageState extends State<CountDownPage> {
               ),
             ),
           ),
-
         ),
         onWillPop: show ? handleOnWillPop : null);
   }

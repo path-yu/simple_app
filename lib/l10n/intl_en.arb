@@ -48,5 +48,6 @@
   "countDown":"Count down",
   "startTiming":"Start timing",
   "timeOut":"Time out!",
-  "cancelCountDownMessage":"The countdown is not over yet. Are you sure you want to exit?"
+  "cancelCountDownMessage":"The countdown is not over yet. Are you sure you want to exit?",
+  "enableShimmerMessage":"Enable shimmer background?"
 }

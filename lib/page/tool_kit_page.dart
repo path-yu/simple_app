@@ -86,7 +86,7 @@ class _ToolKitPageState extends State<ToolKitPage> {
                             style: TextStyle(color: buttonTextColor),
                           ),
                         )),
-                  )
+                  ),
                 ],
               ),
             );

@@ -48,5 +48,6 @@
   "countDown":"倒计时",
   "startTiming":"开始计时",
   "timeOut":"时间到!",
-  "cancelCountDownMessage":"倒计时还未结束,确定要退出吗?"
+  "cancelCountDownMessage":"倒计时还未结束,确定要退出吗?",
+  "enableShimmerMessage":"是否开启微光背景?"
 }
