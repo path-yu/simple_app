@@ -55,7 +55,7 @@ flutter_native_splash:
   color_dark: "#042a49"
   image_dark: assets/logo_lockup_flutter_vertical_wht.png
   android: true
-  ios: false
+  ios: true
   web: false
   android_gravity: center
   fullerene: true

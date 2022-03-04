@@ -257,10 +257,20 @@ class _CountDownPageState extends State<CountDownPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SizedBox(
-                            height: ScreenUtil().setHeight(85),
-                            child: CupertinoTimerPicker(
-                                onTimerDurationChanged: (time) =>
-                                    setState(() => pickerTime = time)),
+                            height: ScreenUtil().setHeight(100),
+                            child: CupertinoTheme(
+                                data: CupertinoThemeData(
+                                    textTheme: CupertinoTextThemeData(
+                                        pickerTextStyle: TextStyle(
+                                            color: context
+                                                .read<CurrentTheme>()
+                                                .darkOrWhiteColor,
+                                            fontSize: ScreenUtil().setSp(20)))),
+                                child: Builder(
+                                    builder: (context) => CupertinoTimerPicker(
+                                        onTimerDurationChanged: (time) =>
+                                            setState(
+                                                () => pickerTime = time)))),
                           ),
                           SizedBox(
                             height: ScreenUtil().setHeight(50),

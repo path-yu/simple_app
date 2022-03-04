@@ -7,5 +7,5 @@ Widget baseIcon(IconData icon) {
   return Icon(icon,
       color: navigatorKey.currentState!.context
           .watch<CurrentTheme>()
-          .dartOrWhiteColor);
+          .darkOrWhiteColor);
 }
