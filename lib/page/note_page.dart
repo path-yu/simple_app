@@ -171,7 +171,6 @@ class _NotePageState extends State<NotePage> {
           height: ScreenUtil().setHeight(60),
           decoration: BoxDecoration(
               gradient: LinearGradient(
-               
                   colors: context.read<CurrentTheme>().gradientColors)),
           child: Center(
             child: InkWell(
@@ -180,11 +179,10 @@ class _NotePageState extends State<NotePage> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    baseIcon(Icons.delete,color: Colors.white),
+                    baseIcon(Icons.delete, color: Colors.white),
                     Text(
                       S.of(context).delete,
-                      style: const TextStyle(
-                          color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                     )
                   ]),
             ),
@@ -498,7 +496,7 @@ class _NotePageState extends State<NotePage> {
                     S.of(context).searchNote,
                     prefixIcon: Icon(
                       Icons.search,
-                      size: ScreenUtil().setSp(15),
+                      size: ScreenUtil().setSp(20),
                       color: themeColor,
                     ),
                   ),
@@ -518,18 +516,21 @@ class _NotePageState extends State<NotePage> {
           value: !isShowCheckBox,
           child: DragAbleFloatingActionButton(
             parentKey: _parentKey,
-            child: NeumorphicButton(
-              style: const NeumorphicStyle(
-                boxShape: NeumorphicBoxShape.circle(),
-                shape: NeumorphicShape.concave,
-                depth: 4,
-              ),
-              child: Icon(
-                Icons.add,
-                color: context.read<CurrentTheme>().darkOrWhiteColor,
-              ),
-              onPressed: () => toCreateOrEditorNotePage(),
-            ),
+            child: SizedBox(
+                height: 56,
+                width: 56,
+                child: NeumorphicButton(
+                  style: const NeumorphicStyle(
+                    boxShape: NeumorphicBoxShape.circle(),
+                    shape: NeumorphicShape.concave,
+                    depth: 4,
+                  ),
+                  child: Icon(
+                    Icons.add,
+                    color: context.read<CurrentTheme>().darkOrWhiteColor,
+                  ),
+                  onPressed: () => toCreateOrEditorNotePage(),
+                )),
           )),
     ));
   }

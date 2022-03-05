@@ -65,7 +65,7 @@ class SearchBarState extends State<SearchBar> {
             suffixIcon: IconButton(
                 enableFeedback: false,
                 icon: const Icon(Icons.clear),
-                iconSize: ScreenUtil().setSp(18),
+                iconSize: ScreenUtil().setSp(20),
                 splashColor: Colors.transparent,
                 color: themeColor,
                 onPressed: () {

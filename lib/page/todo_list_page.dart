@@ -241,7 +241,7 @@ class _TodoListPageState extends State<TodoListPage> {
   Widget build(BuildContext context) {
     Color stickyTopColor = context.watch<CurrentTheme>().isNightMode
         ? const Color.fromRGBO(45, 45, 45, 1)
-        : const Color.fromRGBO(144,201,172, 1);
+        : const Color.fromRGBO(144, 201, 172, 1);
     return HideKeyboard(
         child: Scaffold(
             appBar: buildBaseAppBar(title: S.of(context).todoList),
@@ -274,9 +274,10 @@ class _TodoListPageState extends State<TodoListPage> {
                                     TextInputAction.done,
                                     S.of(context).addTodo,
                                     key: _searchBarKey,
-                                    prefixIcon: const Icon(
+                                    prefixIcon: Icon(
                                       Icons.add,
                                       color: themeColor,
+                                      size: ScreenUtil().setSp(20),
                                     ),
                                   )))
                                 ],

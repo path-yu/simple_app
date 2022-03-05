@@ -214,6 +214,7 @@ class TodoListState extends State<TodoList>
     String value = target['value'].toString();
     final bool done = target['done'];
     String time = target['time'];
+    bool isTop = target['isTop'];
     TextDecoration? decoration = done ? TextDecoration.lineThrough : null;
     Color color = context.read<CurrentTheme>().isNightMode
         ? done
@@ -222,13 +223,22 @@ class TodoListState extends State<TodoList>
         : done
             ? Colors.grey
             : Colors.black;
+    Color backgroundColor = context.read<CurrentTheme>().isNightMode
+        ? isTop
+            ? Colors.black45
+            : Colors.black12
+        : isTop
+            ? Colors.grey.shade300
+            : Colors.white;
+
     return SizeTransition(
       sizeFactor: _animation,
       child: Neumorphic(
-          style:  const NeumorphicStyle(
+          style: NeumorphicStyle(
               depth: 0,
-              border: NeumorphicBorder(
-                color:Colors.black12,
+              color: backgroundColor,
+              border: const NeumorphicBorder(
+                color: Colors.black12,
                 width: 0.5,
               ),
               shape: NeumorphicShape.convex),
@@ -302,7 +312,7 @@ class TodoListState extends State<TodoList>
                     flex: 1,
                     onPressed: (BuildContext context) =>
                         handleRemoveItem(index),
-                    backgroundColor: const Color(0xFF7BC043),
+                    backgroundColor: themeColor,
                     foregroundColor: Colors.white,
                     label: S.of(context).delete,
                   ),
