@@ -55,17 +55,26 @@ class _NoteEditorPageState extends State<NoteEditorPage>
 
   //是否保存?
   bool isSave = false;
+
+  // 滚动控制器
+  final ScrollController _scrollController = ScrollController();
+
+  // 是否显示更新时间
+  bool showDate = true;
   // 将json 转为 delta
   Delta getDelta(doc) {
     return Delta.fromJson(json.decode(doc) as List);
   }
 
+  // 是否添加拦截导航返回操作回调
   bool isAddWillPopScopeCallback = false;
 
   // 记录上一次当前的编辑内容
   String? rawNoteDeltaData;
   // 记录标题
   String? rawTitle;
+
+  bool hide = false;
   //  读取便签内容
   Future<NotusDocument> _loadDocument({required bool isEditor}) async {
     //如果为编辑 则从数据库取出对应的数据
@@ -183,7 +192,25 @@ class _NoteEditorPageState extends State<NoteEditorPage>
     }
   }
 
-  // 拦截用户返回
+  // 监听滚动 上拉隐藏时间显示, 下拉显示
+  void _listenScroll() {
+    if (_scrollController.offset < -30) {
+      if (hide != false) {
+        setState(() {
+          hide = false;
+        });
+      }
+    }
+    if (_scrollController.offset > 30) {
+      if (hide != true) {
+        setState(() {
+          hide = true;
+        });
+      }
+    }
+  }
+
+  // 路由返回拦截用回调
   Future<bool> handleWillPop() async {
     if (isSave) {
       return true;
@@ -222,6 +249,7 @@ class _NoteEditorPageState extends State<NoteEditorPage>
     WidgetsBinding.instance?.removeObserver(this);
     _zefyrController?.removeListener(_listenerZefyrChang);
     _titleController.removeListener(_listenerTitleChange);
+    _scrollController.removeListener(_listenScroll);
   }
 
   @override
@@ -230,8 +258,11 @@ class _NoteEditorPageState extends State<NoteEditorPage>
 
     /// 监听页面生命周期 ,添加观察者
     WidgetsBinding.instance?.addObserver(this);
+    // 滚动监听
+    _scrollController.addListener(_listenScroll);
   }
 
+  // 根据不同的时间段格式化处理时间
   String formateTime(DateTime time) {
     String hourStr = time.hour.toString();
     int hour = time.hour;
@@ -347,7 +378,10 @@ class _NoteEditorPageState extends State<NoteEditorPage>
                           ),
                           Visibility(
                               visible: widget.time != null,
-                              child: Container(
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.decelerate,
+                                height: hide ? 0 : ScreenUtil().setHeight(40),
                                 padding:
                                     EdgeInsets.all(ScreenUtil().setHeight(10)),
                                 child: Row(
@@ -368,6 +402,7 @@ class _NoteEditorPageState extends State<NoteEditorPage>
                               )),
                           Expanded(
                               child: ZefyrEditor(
+                            scrollController: _scrollController,
                             scrollPhysics: const BouncingScrollPhysics(
                                 parent: AlwaysScrollableScrollPhysics()),
                             padding: EdgeInsets.fromLTRB(
