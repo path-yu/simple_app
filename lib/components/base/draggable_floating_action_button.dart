@@ -60,9 +60,6 @@ class _DragAbleFloatingActionButtonState
         _maxOffset = Offset(
             maxWidth! - size.width, maxHeight! - size.height);
       });
-      if (kDebugMode) {
-        print(_maxOffset);
-      }
     } catch (e) {
       if (kDebugMode) {
         print('catch: $e');

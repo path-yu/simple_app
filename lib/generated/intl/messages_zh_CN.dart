@@ -77,6 +77,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "startTiming": MessageLookupByLibrary.simpleMessage("开始计时"),
         "switchLanguage": MessageLookupByLibrary.simpleMessage("切换语言为英语"),
         "timeOut": MessageLookupByLibrary.simpleMessage("时间到!"),
+        "tipSaveMessage": MessageLookupByLibrary.simpleMessage("你还未保存?是否保存?"),
         "title": MessageLookupByLibrary.simpleMessage("标题"),
         "todoCompleteMessage":
             MessageLookupByLibrary.simpleMessage("今日的todo已经完成, 请再接再厉!"),

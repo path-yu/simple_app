@@ -59,5 +59,6 @@
   "afternoon":"下午",
   "evening":"傍晚",
   "night":"晚上",
-  "lateNight":"深夜"
+  "lateNight":"深夜",
+  "tipSaveMessage":"你还未保存?是否保存?"
 }

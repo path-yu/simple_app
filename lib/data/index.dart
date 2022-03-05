@@ -89,21 +89,23 @@ class DBProvider {
     var _db = await db;
     return await _db!.delete('NoteList', where: 'id = ?', whereArgs: [id]);
   }
+
   // 根据 note id 批量删除数据
   Future<int> deleteByIds(List<int> ids) async {
     var _db = await db;
     var list = ids.join(',');
-    return await _db!.rawDelete('delete from NoteList where id in ($list)', );
+    return await _db!.rawDelete(
+      'delete from NoteList where id in ($list)',
+    );
   }
+
   //  根据标题 模糊查询
   Future<List<Note>> findTitleNoteList(String title) async {
     var _db = await db;
-    List<Map<String, dynamic>> result = await _db!
-        .rawQuery("SELECT * FROM NoteList WHERE title LIKE '%$title%'");
-    return result.isNotEmpty
-        ? result.map((e) {
-            return Note.fromJson(e);
-          }).toList()
-        : [];
+    List<Map<String, dynamic>> result = await _db!.rawQuery(
+        "SELECT * FROM NoteList WHERE title LIKE '%$title%' or content like '%$title%'");
+    return result.map((e) {
+      return Note.fromJson(e);
+    }).toList();
   }
 }

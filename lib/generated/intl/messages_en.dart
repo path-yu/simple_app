@@ -89,6 +89,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "switchLanguage":
             MessageLookupByLibrary.simpleMessage("Switch language to english"),
         "timeOut": MessageLookupByLibrary.simpleMessage("Time out!"),
+        "tipSaveMessage": MessageLookupByLibrary.simpleMessage(
+            "You haven\'t saved it yet? Save?"),
         "title": MessageLookupByLibrary.simpleMessage("title"),
         "todoCompleteMessage": MessageLookupByLibrary.simpleMessage(
             "Today\'s todo has been completed, please make persistent efforts."),

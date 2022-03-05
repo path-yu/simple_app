@@ -59,5 +59,6 @@
   "afternoon":"afternoon",
   "evening":"evening",
   "night":"night",
-  "lateNight":"late at night"
+  "lateNight":"late at night",
+  "tipSaveMessage":"You haven't saved it yet? Save?"
 }

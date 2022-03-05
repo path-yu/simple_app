@@ -56,18 +56,19 @@ class _NoteEditorPageState extends State<NoteEditorPage>
   // 是否显示工具栏
   bool visible = false;
 
-  initData() async {}
-
   // 将json 转为 delta
   Delta getDelta(doc) {
     return Delta.fromJson(json.decode(doc) as List);
   }
+
+  bool isAddWillPopScopeCallback = false;
 
   // 监听标题编辑 事件
   void titleChange(String value) {
     title = value;
   }
 
+  String? rawNoteDeltaData;
   //  读取便签内容
   Future<NotusDocument> _loadDocument({required bool isEditor}) async {
     //如果为编辑 则从数据库取出对应的数据
@@ -76,6 +77,7 @@ class _NoteEditorPageState extends State<NoteEditorPage>
       _titleController.text = res[0].title!;
       titleChange(_titleController.text);
       Delta deltaData = getDelta(res[0].content);
+      rawNoteDeltaData = jsonEncode(deltaData);
       return NotusDocument.fromDelta(deltaData);
     } else {
       // 返回默认值
@@ -152,7 +154,32 @@ class _NoteEditorPageState extends State<NoteEditorPage>
             TextPosition(
                 affinity: TextAffinity.downstream, offset: document.length)));
       });
+      // 监听编辑器
+      _zefyrController?.addListener(_listenerZefyrChang);
     }
+  }
+
+  // 监听输入变化
+  void _listenerZefyrChang() {
+    // 读取便签内容
+    final contents = jsonEncode(_zefyrController?.document);
+    if (contents != rawNoteDeltaData) {
+      setState(() => isAddWillPopScopeCallback = true);
+    } else {
+      setState(() => isAddWillPopScopeCallback = false);
+    }
+  }
+
+  // 拦截用户返回
+  Future<bool> handleWillPop() async {
+    if (await showConfirmDialog(context,
+            message: S.of(context).tipSaveMessage) !=
+        null) {
+      await _saveDocument();
+      // 返回下一页, 更新数据
+      Navigator.pop(context, isNeedUpdate);
+    }
+    return true;
   }
 
   //应用尺寸改变时回调，例如旋转
@@ -177,12 +204,12 @@ class _NoteEditorPageState extends State<NoteEditorPage>
   void dispose() {
     super.dispose();
     WidgetsBinding.instance?.removeObserver(this);
+    _zefyrController?.removeListener(_listenerZefyrChang);
   }
 
   @override
   void initState() {
     super.initState();
-    initData();
 
     /// 监听页面生命周期 ,添加观察者
     WidgetsBinding.instance?.addObserver(this);
@@ -253,98 +280,105 @@ class _NoteEditorPageState extends State<NoteEditorPage>
     // 计算显示保存按钮还是更新按钮
     final saveOrUpdateIcon =
         widget.isEditor ? Icons.update_rounded : Icons.save_rounded;
-
-    return Scaffold(
-      appBar: buildBaseAppBar(
-          title: widget.isEditor
-              ? S.of(context).editorNote
-              : S.of(context).createNote,
-          action: [
-            Builder(
-              builder: (context) => IconButton(
-                icon: Icon(saveOrUpdateIcon),
-                onPressed: _saveDocument,
+    return WillPopScope(
+        child: Scaffold(
+          appBar: buildBaseAppBar(
+            title: widget.isEditor
+                ? S.of(context).editorNote
+                : S.of(context).createNote,
+            action: [
+              Builder(
+                builder: (context) => IconButton(
+                  icon: Icon(saveOrUpdateIcon),
+                  onPressed: _saveDocument,
+                ),
               ),
-            ),
-            removeIcon
-          ],
-          leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                // t跳转到上一个页面
-                Navigator.pop(context, isNeedUpdate);
-              })),
-      body: FutureBuilder(
-        future: _loadData(),
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          return _zefyrController == null
-              ? const Loading()
-              : Padding(
-                  padding: EdgeInsets.all(ScreenUtil().setHeight(10)),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Neumorphic(
-                        style: NeumorphicStyle(
-                            depth: -4,
-                            boxShape: NeumorphicBoxShape.roundRect(
-                                BorderRadius.circular(50))),
-                        child: TextField(
-                            controller: _titleController,
-                            decoration: InputDecoration(
-                                hintText: S.of(context).title,
-                                border: InputBorder.none,
-                                hintStyle: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.grey),
-                                contentPadding:
-                                    EdgeInsets.all(ScreenUtil().setSp(16)))),
-                      ),
-                      Visibility(
-                          visible: widget.time != null,
-                          child: Container(
-                            padding: EdgeInsets.all(ScreenUtil().setHeight(10)),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(S.of(context).lastUpdateTime + ':',
-                                    style: greyTextStyle),
-                                SizedBox(
-                                  width: ScreenUtil().setWidth(10),
-                                ),
-                                Text(fontEndTime, style: greyTextStyle),
-                                SizedBox(
-                                  width: ScreenUtil().setWidth(8),
-                                ),
-                                Text(endTime, style: greyTextStyle)
-                              ],
+              removeIcon
+            ],
+          ),
+          body: FutureBuilder(
+            future: _loadData(),
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+              return _zefyrController == null
+                  ? const Loading()
+                  : Padding(
+                      padding: EdgeInsets.all(ScreenUtil().setHeight(10)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                                maxHeight: ScreenUtil().setHeight(40)),
+                            child: Neumorphic(
+                              style: NeumorphicStyle(
+                                  depth: -4,
+                                  boxShape: NeumorphicBoxShape.roundRect(
+                                      BorderRadius.circular(50))),
+                              child: TextField(
+                                  controller: _titleController,
+                                  style: TextStyle(
+                                      color: Colors.black87,
+                                      fontSize: ScreenUtil().setSp(13)),
+                                  decoration: InputDecoration(
+                                      hintText: S.of(context).title,
+                                      border: InputBorder.none,
+                                      hintStyle: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey),
+                                      contentPadding: EdgeInsets.all(
+                                          ScreenUtil().setSp(16)))),
                             ),
+                          ),
+                          Visibility(
+                              visible: widget.time != null,
+                              child: Container(
+                                padding:
+                                    EdgeInsets.all(ScreenUtil().setHeight(10)),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(S.of(context).lastUpdateTime + ':',
+                                        style: greyTextStyle),
+                                    SizedBox(
+                                      width: ScreenUtil().setWidth(10),
+                                    ),
+                                    Text(fontEndTime, style: greyTextStyle),
+                                    SizedBox(
+                                      width: ScreenUtil().setWidth(8),
+                                    ),
+                                    Text(endTime, style: greyTextStyle)
+                                  ],
+                                ),
+                              )),
+                          Expanded(
+                              child: ZefyrEditor(
+                            scrollPhysics: const BouncingScrollPhysics(
+                                parent: AlwaysScrollableScrollPhysics()),
+                            padding: EdgeInsets.fromLTRB(
+                                ScreenUtil().setSp(16),
+                                0,
+                                ScreenUtil().setSp(16),
+                                ScreenUtil().setSp(16)),
+                            controller: _zefyrController!,
+                            focusNode: _focusNode,
+                            autofocus: true,
                           )),
-                      Expanded(
-                          child: ZefyrEditor(
-                        scrollPhysics: const BouncingScrollPhysics(
-                            parent: AlwaysScrollableScrollPhysics()),
-                        padding: EdgeInsets.fromLTRB(ScreenUtil().setSp(16), 0,
-                            ScreenUtil().setSp(16), ScreenUtil().setSp(16)),
-                        controller: _zefyrController!,
-                        focusNode: _focusNode,
-                        autofocus: true,
-                      )),
-                      Visibility(
-                        visible: visible,
-                        child: IconTheme(
-                            data: IconThemeData(
-                                color: context
-                                    .read<CurrentTheme>()
-                                    .darkOrWhiteColor),
-                            child: ZefyrToolbar.basic(
-                                controller: _zefyrController!)),
-                      )
-                    ],
-                  ),
-                );
-        },
-      ),
-    );
+                          Visibility(
+                            visible: visible,
+                            child: IconTheme(
+                                data: IconThemeData(
+                                    color: context
+                                        .read<CurrentTheme>()
+                                        .darkOrWhiteColor),
+                                child: ZefyrToolbar.basic(
+                                    controller: _zefyrController!)),
+                          )
+                        ],
+                      ),
+                    );
+            },
+          ),
+        ),
+        onWillPop: isAddWillPopScopeCallback ? handleWillPop : null);
   }
 }

@@ -659,6 +659,16 @@ class S {
       args: [],
     );
   }
+
+  /// `You haven't saved it yet? Save?`
+  String get tipSaveMessage {
+    return Intl.message(
+      'You haven\'t saved it yet? Save?',
+      name: 'tipSaveMessage',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
