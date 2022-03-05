@@ -36,7 +36,8 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   final NeumorphicStyle _neumorphicStyle = NeumorphicStyle(
-      shape: NeumorphicShape.concave,
+      // shape: NeumorphicShape.concave,
+      depth: -4,
       boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)));
   @override
   Widget build(BuildContext context) {
@@ -57,7 +58,7 @@ class _SettingPageState extends State<SettingPage> {
                   children: [
                     Row(
                       children: [
-                        baseIcon(Icons.language_rounded,color: themeColor),
+                        baseIcon(Icons.language_rounded, color: themeColor),
                         SizedBox(
                           width: ScreenUtil().setWidth(10),
                         ),
@@ -68,8 +69,10 @@ class _SettingPageState extends State<SettingPage> {
                     ),
                     NeumorphicSwitch(
                       height: ScreenUtil().setHeight(30),
-                          style: const NeumorphicSwitchStyle(activeTrackColor: themeColor),
-                      value: context.watch<CurrentLocale>().languageIsEnglishMode,
+                      style: const NeumorphicSwitchStyle(
+                          activeTrackColor: themeColor),
+                      value:
+                          context.watch<CurrentLocale>().languageIsEnglishMode,
                       onChanged: changeLanguage,
                     )
                   ],
@@ -88,7 +91,7 @@ class _SettingPageState extends State<SettingPage> {
                   children: [
                     Row(
                       children: [
-                        baseIcon(Icons.mode_night_rounded,color: themeColor),
+                        baseIcon(Icons.mode_night_rounded, color: themeColor),
                         SizedBox(
                           width: ScreenUtil().setWidth(10),
                         ),
@@ -99,7 +102,8 @@ class _SettingPageState extends State<SettingPage> {
                     ),
                     NeumorphicSwitch(
                       height: ScreenUtil().setHeight(30),
-                      style: const NeumorphicSwitchStyle(activeTrackColor: themeColor),
+                      style: const NeumorphicSwitchStyle(
+                          activeTrackColor: themeColor),
                       value: context.watch<CurrentTheme>().isNightMode,
                       onChanged: changeNightMode,
                     )

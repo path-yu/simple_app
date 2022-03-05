@@ -388,15 +388,11 @@ class _CountDownPageState extends State<CountDownPage> {
                               height: ScreenUtil().setHeight(100),
                               child: CupertinoTheme(
                                   data: CupertinoThemeData(
-                                      scaffoldBackgroundColor: Colors.red,
                                       textTheme: CupertinoTextThemeData(
-                                          primaryColor: Colors.red,
                                           pickerTextStyle: TextStyle(
                                               color: context
-                                                      .read<CurrentTheme>()
-                                                      .isNightMode
-                                                  ? Colors.white
-                                                  : themeColor,
+                                                  .read<CurrentTheme>()
+                                                  .darkOrWhiteColor,
                                               fontSize:
                                                   ScreenUtil().setSp(25)))),
                                   child: Builder(

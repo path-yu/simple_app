@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -23,13 +22,13 @@ class _DragAbleFloatingActionButtonState
   double? maxWidth;
   final GlobalKey _key = GlobalKey();
 
-   Offset? _minOffset;
-   Offset? _maxOffset;
+  Offset? _minOffset;
+  Offset? _maxOffset;
   void _updatePosition(PointerMoveEvent pointerMoveEvent) {
     double newOffsetX = position.dx + pointerMoveEvent.delta.dx;
     double newOffsetY = position.dy + pointerMoveEvent.delta.dy;
     //  边界限定
-     if (newOffsetX < _minOffset!.dx) {
+    if (newOffsetX < _minOffset!.dx) {
       newOffsetX = _minOffset!.dx;
     } else if (newOffsetX > _maxOffset!.dx) {
       newOffsetX = _maxOffset!.dx;
@@ -40,25 +39,27 @@ class _DragAbleFloatingActionButtonState
     } else if (newOffsetY > _maxOffset!.dy) {
       newOffsetY = _maxOffset!.dy;
     }
-
     setState(() {
       position = Offset(newOffsetX, newOffsetY);
     });
   }
+
   @override
   void initState() {
     super.initState();
-     WidgetsBinding.instance?.addPostFrameCallback(_setBoundary);
+    WidgetsBinding.instance?.addPostFrameCallback(_setBoundary);
   }
+
   void _setBoundary(_) {
     final RenderBox renderBox =
         _key.currentContext?.findRenderObject() as RenderBox;
     try {
       final Size size = renderBox.size;
+      print(size);
       setState(() {
-        _minOffset = const Offset(20, 20);
-        _maxOffset = Offset(
-            maxWidth! - size.width, maxHeight! - size.height);
+        _minOffset = const Offset(30, 30);
+        _maxOffset = Offset(maxWidth! - size.width, maxHeight! - size.height);
+        print(_maxOffset);
       });
     } catch (e) {
       if (kDebugMode) {
