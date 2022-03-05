@@ -559,6 +559,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Turn on sound?`
+  String get enableAudioMessage {
+    return Intl.message(
+      'Turn on sound?',
+      name: 'enableAudioMessage',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

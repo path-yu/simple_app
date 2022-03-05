@@ -54,6 +54,8 @@ class _CountDownPageState extends State<CountDownPage> {
   FlutterSoundPlayer? _myPlayer = FlutterSoundPlayer();
   // 是否开启微光
   bool enable = false;
+  // 是否开启声音
+  bool enableAudio = true;
   void handleStartClick() {
     if (pickerTime.inSeconds < 6) return;
     setState(() => show = true);
@@ -81,11 +83,14 @@ class _CountDownPageState extends State<CountDownPage> {
       int diffSecond = totalSecond - startSecond;
       timerId = timer;
       success = false;
-      _myPlayer!.startPlayer(
-        fromDataBuffer:
-            buffer.asUint8List(bytes!.offsetInBytes, bytes!.lengthInBytes),
-        codec: Codec.mp3,
-      );
+      if (enableAudio) {
+        _myPlayer!.startPlayer(
+          fromDataBuffer:
+              buffer.asUint8List(bytes!.offsetInBytes, bytes!.lengthInBytes),
+          codec: Codec.mp3,
+        );
+      }
+
       var time = Duration(seconds: diffSecond);
       // 更新时间
       setState(() {
@@ -143,8 +148,8 @@ class _CountDownPageState extends State<CountDownPage> {
       ..strokeWidth = 1
       ..color = Colors.white,
   );
-
-  @override
+  final NeumorphicSwitchStyle _neumorphicSwitchStyle =
+      const NeumorphicSwitchStyle(activeTrackColor: themeColor);
   void dispose() {
     super.dispose();
     // 页面卸载 取消定时器
@@ -161,7 +166,14 @@ class _CountDownPageState extends State<CountDownPage> {
     });
   }
 
-  void handleSwitchChange(value) {
+  void handleSwitchChange(value, type) {
+    if (type == 'audio') {
+      enableAudio = value;
+      _myPlayer!.stopPlayer();
+    }
+    if (type == 'background') {
+      enable = value;
+    }
     setState(() {
       // 如果小时为0, 则不显示小时, 且如果分为0, 则也不显示分
       if (hour == 0) {
@@ -170,7 +182,6 @@ class _CountDownPageState extends State<CountDownPage> {
           minutes = null;
         }
       }
-      enable = value;
     });
   }
 
@@ -202,33 +213,64 @@ class _CountDownPageState extends State<CountDownPage> {
                       ? Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Container(
-                              width: progressSize,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  NeumorphicSwitch(
-                                    style: const NeumorphicSwitchStyle(
-                                        activeTrackColor: themeColor),
-                                    height: ScreenUtil().setHeight(30),
-                                    value: enable,
-                                    onChanged: (value) {
-                                      enable = value;
-                                    },
+                            Column(
+                              // mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: progressSize,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      NeumorphicSwitch(
+                                        style: _neumorphicSwitchStyle,
+                                        height: ScreenUtil().setHeight(30),
+                                        value: enableAudio,
+                                        onChanged: (value) =>
+                                            handleSwitchChange(value, 'audio'),
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      AnimatedOpacity(
+                                        opacity: enableAudio ? 1 : 0.5,
+                                        duration: _duration,
+                                        child: Text(
+                                          S.of(context).enableAudioMessage,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  const SizedBox(
-                                    width: 10,
+                                  margin: EdgeInsets.only(
+                                      bottom: ScreenUtil().setHeight(20)),
+                                ),
+                                Container(
+                                  width: progressSize,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      NeumorphicSwitch(
+                                        style: _neumorphicSwitchStyle,
+                                        height: ScreenUtil().setHeight(30),
+                                        value: enable,
+                                        onChanged: (value) =>
+                                            handleSwitchChange(
+                                                value, 'background'),
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      AnimatedOpacity(
+                                        opacity: enable ? 1 : 0.5,
+                                        duration: _duration,
+                                        child: Text(
+                                            S.of(context).enableShimmerMessage),
+                                      ),
+                                    ],
                                   ),
-                                  AnimatedOpacity(
-                                    opacity: enable ? 1 : 0.5,
-                                    duration: _duration,
-                                    child: Text(
-                                        S.of(context).enableShimmerMessage),
-                                  ),
-                                ],
-                              ),
-                              margin: EdgeInsets.only(
-                                  bottom: ScreenUtil().setHeight(20)),
+                                  margin: EdgeInsets.only(
+                                      bottom: ScreenUtil().setHeight(20)),
+                                ),
+                              ],
                             ),
                             Stack(
                               children: [

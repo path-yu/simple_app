@@ -42,6 +42,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("确定删除当前代办事项吗?"),
         "dialogDeleteMessage": MessageLookupByLibrary.simpleMessage("你确定要删除吗?"),
         "editorNote": MessageLookupByLibrary.simpleMessage("编辑便签"),
+        "enableAudioMessage": MessageLookupByLibrary.simpleMessage("是否开启声音?"),
         "enableShimmerMessage":
             MessageLookupByLibrary.simpleMessage("是否开启微光背景?"),
         "hint": MessageLookupByLibrary.simpleMessage("提示"),
