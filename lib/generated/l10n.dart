@@ -569,6 +569,96 @@ class S {
       args: [],
     );
   }
+
+  /// `Last update time`
+  String get lastUpdateTime {
+    return Intl.message(
+      'Last update time',
+      name: 'lastUpdateTime',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `before dawn`
+  String get beforeDawn {
+    return Intl.message(
+      'before dawn',
+      name: 'beforeDawn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `morning`
+  String get morning {
+    return Intl.message(
+      'morning',
+      name: 'morning',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `forenoon`
+  String get forenoon {
+    return Intl.message(
+      'forenoon',
+      name: 'forenoon',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `noon`
+  String get noon {
+    return Intl.message(
+      'noon',
+      name: 'noon',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `afternoon`
+  String get afternoon {
+    return Intl.message(
+      'afternoon',
+      name: 'afternoon',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `evening`
+  String get evening {
+    return Intl.message(
+      'evening',
+      name: 'evening',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `night`
+  String get night {
+    return Intl.message(
+      'night',
+      name: 'night',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `late at night`
+  String get lateNight {
+    return Intl.message(
+      'late at night',
+      name: 'lateNight',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

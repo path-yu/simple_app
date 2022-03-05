@@ -50,5 +50,14 @@
   "timeOut":"时间到!",
   "cancelCountDownMessage":"倒计时还未结束,确定要退出吗?",
   "enableShimmerMessage":"是否开启微光背景?",
-  "enableAudioMessage":"是否开启声音?"
+  "enableAudioMessage":"是否开启声音?",
+  "lastUpdateTime":"最后更新时间",
+  "beforeDawn":"凌晨",
+  "morning":"早晨",
+  "forenoon":"上午",
+  "noon":"中午",
+  "afternoon":"下午",
+  "evening":"傍晚",
+  "night":"晚上",
+  "lateNight":"深夜"
 }

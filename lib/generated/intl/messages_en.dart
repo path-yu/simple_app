@@ -27,6 +27,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "addTodo": MessageLookupByLibrary.simpleMessage("Add todo"),
         "addTodoMessage":
             MessageLookupByLibrary.simpleMessage("You added a new todo!"),
+        "afternoon": MessageLookupByLibrary.simpleMessage("afternoon"),
+        "beforeDawn": MessageLookupByLibrary.simpleMessage("before dawn"),
         "calculator": MessageLookupByLibrary.simpleMessage("calculator"),
         "cancel": MessageLookupByLibrary.simpleMessage("cancel"),
         "cancelCountDownMessage": MessageLookupByLibrary.simpleMessage(
@@ -51,14 +53,22 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Turn on sound?"),
         "enableShimmerMessage":
             MessageLookupByLibrary.simpleMessage("Enable shimmer background?"),
+        "evening": MessageLookupByLibrary.simpleMessage("evening"),
+        "forenoon": MessageLookupByLibrary.simpleMessage("forenoon"),
         "hint": MessageLookupByLibrary.simpleMessage("hint"),
         "item": MessageLookupByLibrary.simpleMessage("item"),
+        "lastUpdateTime":
+            MessageLookupByLibrary.simpleMessage("Last update time"),
+        "lateNight": MessageLookupByLibrary.simpleMessage("late at night"),
+        "morning": MessageLookupByLibrary.simpleMessage("morning"),
+        "night": MessageLookupByLibrary.simpleMessage("night"),
         "nightMode": MessageLookupByLibrary.simpleMessage("Night mode"),
         "noDevelopment": MessageLookupByLibrary.simpleMessage("No development"),
         "noNotificationPermission": MessageLookupByLibrary.simpleMessage(
             "No notification permission, go to the settings interface to set the permission?"),
         "noSelectNoteMessage":
             MessageLookupByLibrary.simpleMessage("Please select data!"),
+        "noon": MessageLookupByLibrary.simpleMessage("noon"),
         "notEmpty": MessageLookupByLibrary.simpleMessage("Can not be empty"),
         "notNoteMessage": MessageLookupByLibrary.simpleMessage(
             "You haven\'t added a note yet. Please click the button to add a note!"),

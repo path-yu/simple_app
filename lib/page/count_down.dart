@@ -150,6 +150,7 @@ class _CountDownPageState extends State<CountDownPage> {
   );
   final NeumorphicSwitchStyle _neumorphicSwitchStyle =
       const NeumorphicSwitchStyle(activeTrackColor: themeColor);
+  @override
   void dispose() {
     super.dispose();
     // 页面卸载 取消定时器

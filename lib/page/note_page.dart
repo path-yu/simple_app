@@ -298,7 +298,7 @@ class _NotePageState extends State<NotePage> {
 
   Widget noteItemBuild(BuildContext context, int index) {
     NewNote target = noteList[index];
-    var date = DateTime.fromMicrosecondsSinceEpoch(target.time);
+    var date = DateTime.fromMillisecondsSinceEpoch(target.time);
     String content = getNoteContent(target);
     final title = target.title!.isEmpty
         ? const SizedBox(
@@ -314,11 +314,7 @@ class _NotePageState extends State<NotePage> {
           );
 
     String currentTime = formatDate(
-        DateTime(
-          date.year,
-          date.month,
-          date.day,
-        ),
+        date,
         context.watch<CurrentLocale>().languageIsEnglishMode
             ? [yyyy, '-', mm, '-', dd]
             : [yyyy, '年', mm, '月', dd, '日']);

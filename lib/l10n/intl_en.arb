@@ -50,5 +50,14 @@
   "timeOut":"Time out!",
   "cancelCountDownMessage":"The countdown is not over yet. Are you sure you want to exit?",
   "enableShimmerMessage":"Enable shimmer background?",
-  "enableAudioMessage":"Turn on sound?"
+  "enableAudioMessage":"Turn on sound?",
+  "lastUpdateTime":"Last update time",
+  "beforeDawn":"before dawn",
+  "morning":"morning",
+  "forenoon":"forenoon",
+  "noon":"noon",
+  "afternoon":"afternoon",
+  "evening":"evening",
+  "night":"night",
+  "lateNight":"late at night"
 }

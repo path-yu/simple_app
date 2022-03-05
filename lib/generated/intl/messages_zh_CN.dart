@@ -25,6 +25,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "NoteNotNullMessage": MessageLookupByLibrary.simpleMessage("内容不能为空!"),
         "addTodo": MessageLookupByLibrary.simpleMessage("添加代办事项"),
         "addTodoMessage": MessageLookupByLibrary.simpleMessage("您添加了一条新todo!"),
+        "afternoon": MessageLookupByLibrary.simpleMessage("下午"),
+        "beforeDawn": MessageLookupByLibrary.simpleMessage("凌晨"),
         "calculator": MessageLookupByLibrary.simpleMessage("计算器"),
         "cancel": MessageLookupByLibrary.simpleMessage("取消"),
         "cancelCountDownMessage":
@@ -45,13 +47,20 @@ class MessageLookup extends MessageLookupByLibrary {
         "enableAudioMessage": MessageLookupByLibrary.simpleMessage("是否开启声音?"),
         "enableShimmerMessage":
             MessageLookupByLibrary.simpleMessage("是否开启微光背景?"),
+        "evening": MessageLookupByLibrary.simpleMessage("傍晚"),
+        "forenoon": MessageLookupByLibrary.simpleMessage("上午"),
         "hint": MessageLookupByLibrary.simpleMessage("提示"),
         "item": MessageLookupByLibrary.simpleMessage("项"),
+        "lastUpdateTime": MessageLookupByLibrary.simpleMessage("最后更新时间"),
+        "lateNight": MessageLookupByLibrary.simpleMessage("深夜"),
+        "morning": MessageLookupByLibrary.simpleMessage("早晨"),
+        "night": MessageLookupByLibrary.simpleMessage("晚上"),
         "nightMode": MessageLookupByLibrary.simpleMessage("夜间模式"),
         "noDevelopment": MessageLookupByLibrary.simpleMessage("暂未开发"),
         "noNotificationPermission":
             MessageLookupByLibrary.simpleMessage("没有通知权限, 前往设置界面设置权限?"),
         "noSelectNoteMessage": MessageLookupByLibrary.simpleMessage("请选择数据"),
+        "noon": MessageLookupByLibrary.simpleMessage("中午"),
         "notEmpty": MessageLookupByLibrary.simpleMessage("不能为空!"),
         "notNoteMessage":
             MessageLookupByLibrary.simpleMessage("你还未添加添加便签,请点击按钮添加便签吧!"),

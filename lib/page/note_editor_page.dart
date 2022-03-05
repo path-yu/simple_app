@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
+import 'package:date_format/date_format.dart' hide S;
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:quill_delta/quill_delta.dart';
@@ -9,6 +10,7 @@ import 'package:simple_app/components/base/loading.dart';
 import 'package:simple_app/data/index.dart';
 import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/model/note.dart';
+import 'package:simple_app/provider/current_locale.dart';
 import 'package:simple_app/provider/current_theme.dart';
 import 'package:simple_app/utils/show_dialog.dart';
 import 'package:simple_app/utils/show_toast.dart';
@@ -94,7 +96,10 @@ class _NoteEditorPageState extends State<NoteEditorPage>
     if (widget.isEditor) {
       // 写入文本内容
       Note note = Note(
-          title: title!, content: contents, id: widget.id, time: widget.time!);
+          title: title!,
+          content: contents,
+          id: widget.id,
+          time: DateTime.now().millisecondsSinceEpoch);
       int res = await DBProvider().update(note);
       if (res > 0) {
         isNeedUpdate = true;
@@ -107,7 +112,7 @@ class _NoteEditorPageState extends State<NoteEditorPage>
       Note note = Note(
           title: title!,
           content: contents,
-          time: DateTime.now().microsecondsSinceEpoch);
+          time: DateTime.now().millisecondsSinceEpoch);
       int res = await DBProvider().saveData(note);
       if (res > 0) {
         isNeedUpdate = true;
@@ -185,8 +190,58 @@ class _NoteEditorPageState extends State<NoteEditorPage>
     _titleController.addListener(() => titleChange(_titleController.text));
   }
 
+  String formateTime(DateTime time) {
+    String hourStr = time.hour.toString();
+    int hour = time.hour;
+    String minute = time.minute < 10
+        ? '0' + time.minute.toString()
+        : time.minute.toString();
+    String timeSlot = '';
+    if (hour >= 3 && hour <= 6) {
+      timeSlot = S.of(context).beforeDawn;
+    } else if (hour >= 6 && hour <= 8) {
+      timeSlot = S.of(context).morning;
+    } else if (hour >= 11 && hour <= 13) {
+      timeSlot = S.of(context).noon;
+    } else if (hour >= 13 && hour <= 17) {
+      timeSlot = S.of(context).afternoon;
+    } else if (hour >= 17 && hour <= 19) {
+      timeSlot = S.of(context).evening;
+    } else if (hour >= 19 && hour <= 23) {
+      timeSlot = S.of(context).night;
+    } else {
+      timeSlot = S.of(context).lateNight;
+    }
+    if (hour >= 13) {
+      hourStr = (hour - 12).toString();
+    }
+    return timeSlot + ': ' + hourStr + ':' + minute;
+  }
+
+  TextStyle greyTextStyle = TextStyle(
+      color: Colors.grey.shade500,
+      fontSize: ScreenUtil().setSp(14),
+      textBaseline: TextBaseline.ideographic,
+      height: 1.5);
   @override
   Widget build(BuildContext context) {
+    var fontEndTime = '';
+    var endTime = '';
+    if (widget.time != null) {
+      var date = DateTime.fromMillisecondsSinceEpoch(widget.time!);
+      fontEndTime = formatDate(
+          date,
+          context.watch<CurrentLocale>().languageIsEnglishMode
+              ? [
+                  yyyy,
+                  '-',
+                  mm,
+                  '-',
+                  dd,
+                ]
+              : [yyyy, '年', mm, '月', dd, '日']);
+      endTime = formateTime(date);
+    }
     // 判断是否显示删除按钮
     final removeIcon = widget.isEditor
         ? Builder(
@@ -198,6 +253,7 @@ class _NoteEditorPageState extends State<NoteEditorPage>
     // 计算显示保存按钮还是更新按钮
     final saveOrUpdateIcon =
         widget.isEditor ? Icons.update_rounded : Icons.save_rounded;
+
     return Scaffold(
       appBar: buildBaseAppBar(
           title: widget.isEditor
@@ -223,37 +279,69 @@ class _NoteEditorPageState extends State<NoteEditorPage>
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           return _zefyrController == null
               ? const Loading()
-              : Column(
-                  children: [
-                    TextField(
-                        controller: _titleController,
-                        decoration: InputDecoration(
-                            hintText: S.of(context).title,
-                            border: InputBorder.none,
-                            hintStyle: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey),
-                            contentPadding:
-                                EdgeInsets.all(ScreenUtil().setSp(16)))),
-                    Expanded(
-                        child: ZefyrEditor(
-                      padding: EdgeInsets.fromLTRB(ScreenUtil().setSp(16), 0,
-                          ScreenUtil().setSp(16), ScreenUtil().setSp(16)),
-                      controller: _zefyrController!,
-                      focusNode: _focusNode,
-                      autofocus: true,
-                    )),
-                    Visibility(
-                      visible: visible,
-                      child: IconTheme(
-                          data: IconThemeData(
-                              color: context
-                                  .read<CurrentTheme>()
-                                  .darkOrWhiteColor),
-                          child: ZefyrToolbar.basic(
-                              controller: _zefyrController!)),
-                    )
-                  ],
+              : Padding(
+                  padding: EdgeInsets.all(ScreenUtil().setHeight(10)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Neumorphic(
+                        style: NeumorphicStyle(
+                            depth: -4,
+                            boxShape: NeumorphicBoxShape.roundRect(
+                                BorderRadius.circular(50))),
+                        child: TextField(
+                            controller: _titleController,
+                            decoration: InputDecoration(
+                                hintText: S.of(context).title,
+                                border: InputBorder.none,
+                                hintStyle: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey),
+                                contentPadding:
+                                    EdgeInsets.all(ScreenUtil().setSp(16)))),
+                      ),
+                      Visibility(
+                          visible: widget.time != null,
+                          child: Container(
+                            padding: EdgeInsets.all(ScreenUtil().setHeight(10)),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(S.of(context).lastUpdateTime + ':',
+                                    style: greyTextStyle),
+                                SizedBox(
+                                  width: ScreenUtil().setWidth(10),
+                                ),
+                                Text(fontEndTime, style: greyTextStyle),
+                                SizedBox(
+                                  width: ScreenUtil().setWidth(8),
+                                ),
+                                Text(endTime, style: greyTextStyle)
+                              ],
+                            ),
+                          )),
+                      Expanded(
+                          child: ZefyrEditor(
+                        scrollPhysics: const BouncingScrollPhysics(
+                            parent: AlwaysScrollableScrollPhysics()),
+                        padding: EdgeInsets.fromLTRB(ScreenUtil().setSp(16), 0,
+                            ScreenUtil().setSp(16), ScreenUtil().setSp(16)),
+                        controller: _zefyrController!,
+                        focusNode: _focusNode,
+                        autofocus: true,
+                      )),
+                      Visibility(
+                        visible: visible,
+                        child: IconTheme(
+                            data: IconThemeData(
+                                color: context
+                                    .read<CurrentTheme>()
+                                    .darkOrWhiteColor),
+                            child: ZefyrToolbar.basic(
+                                controller: _zefyrController!)),
+                      )
+                    ],
+                  ),
                 );
         },
       ),
