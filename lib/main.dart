@@ -106,13 +106,6 @@ class _MyAppState extends State<MyApp> {
       navigatorKey: navigatorKey,
       // 当前语言
       locale: context.watch<CurrentLocale>().value,
-      // theme: ThemeData(
-      //   primaryColor: themeColor,
-      //   visualDensity: VisualDensity.adaptivePlatformDensity,
-      //   brightness: context.watch<CurrentTheme>().isNightMode
-      //       ? Brightness.dark
-      //       : Brightness.light,
-      // ),
       localeResolutionCallback: (deviceLocale, supportedLocales) {
         _prefs.then((prefs) {
           strLocale = prefs.getString(ConstantKey.localeKey);

@@ -43,7 +43,7 @@ class CurrentLocale with ChangeNotifier {
 // 将持久化存储的locale数据转为locale;
 Locale strLocaleToLocale(String strLocale) {
   Locale locale;
-  if (strLocale == 'zh_CN') {
+  if (strLocale == 'zh') {
     locale = const Locale('zh', 'CN');
   } else {
     locale = const Locale('en', 'US');
