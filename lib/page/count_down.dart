@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:simple_app/common/color.dart';
 import 'package:simple_app/components/base/build_base_app_bar.dart';
 import 'package:simple_app/generated/l10n.dart';
@@ -15,7 +16,6 @@ import 'package:simple_app/provider/current_theme.dart';
 import 'package:simple_app/utils/show_dialog.dart';
 import 'package:simple_app/utils/show_toast.dart';
 import 'package:vibration/vibration.dart';
-import 'package:shimmer/shimmer.dart';
 
 class CountDownPage extends StatefulWidget {
   const CountDownPage({Key? key}) : super(key: key);
@@ -65,14 +65,15 @@ class _CountDownPageState extends State<CountDownPage> {
     int m = (pickerTime.inMinutes % 60).toInt();
     int s = pickerTime.inSeconds - (m * 60) - (h * 60 * 60);
     setState(() {
+      hour = h == 0 ? null : h;
       minutes = m == 0
           ? h == 0
               ? null
               : 0
           : m;
       second = s;
-      hour = h == 0 ? null : h;
     });
+
     final buffer = bytes!.buffer;
 
     Timer.periodic(timeout, (timer) async {
@@ -91,13 +92,13 @@ class _CountDownPageState extends State<CountDownPage> {
         int timeH = time.inHours;
         int timeM = (time.inMinutes % 60).toInt();
         int timeS = time.inSeconds - (timeM * 60) - (timeH * 60 * 60);
+        hour = timeH == 0 ? null : timeH;
         minutes = timeM == 0
             ? timeH == 0
                 ? null
                 : 0
             : timeM;
         second = timeS;
-        hour = timeH == 0 ? null : timeH;
         progressValue = startSecond / totalSecond;
       });
       // 倒计时完成
@@ -200,16 +201,19 @@ class _CountDownPageState extends State<CountDownPage> {
                     ? Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SizedBox(
-                            width: progressSize,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(S.of(context).enableShimmerMessage),
-                                Switch(
-                                    value: enable,
-                                    onChanged: handleSwitchChange),
-                              ],
+                          Container(
+                            width: progressSize - 70,
+                            margin: EdgeInsets.only(
+                                bottom: ScreenUtil().setHeight(20)),
+                            child: SwitchListTile(
+                              activeColor: themeColor,
+                              title: Text(
+                                S.of(context).enableShimmerMessage,
+                                style:
+                                    TextStyle(fontSize: ScreenUtil().setSp(18)),
+                              ),
+                              onChanged: handleSwitchChange,
+                              value: enable,
                             ),
                           ),
                           Stack(
@@ -222,7 +226,7 @@ class _CountDownPageState extends State<CountDownPage> {
                                     lineWidth: strokeWidth,
                                     animateFromLastPercent: true,
                                     backgroundColor: isNightMode
-                                        ? Colors.grey
+                                        ? Colors.grey.shade800
                                         : Colors.grey.shade300,
                                     circularStrokeCap: CircularStrokeCap.round,
                                     linearGradient:
@@ -326,12 +330,16 @@ class _CountDownPageState extends State<CountDownPage> {
                             height: ScreenUtil().setHeight(100),
                             child: CupertinoTheme(
                                 data: CupertinoThemeData(
+                                    scaffoldBackgroundColor: Colors.red,
                                     textTheme: CupertinoTextThemeData(
+                                        primaryColor: Colors.red,
                                         pickerTextStyle: TextStyle(
                                             color: context
-                                                .read<CurrentTheme>()
-                                                .darkOrWhiteColor,
-                                            fontSize: ScreenUtil().setSp(20)))),
+                                                    .read<CurrentTheme>()
+                                                    .isNightMode
+                                                ? Colors.white
+                                                : themeColor,
+                                            fontSize: ScreenUtil().setSp(25)))),
                                 child: Builder(
                                     builder: (context) => CupertinoTimerPicker(
                                         onTimerDurationChanged: (time) =>
