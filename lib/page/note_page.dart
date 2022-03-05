@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:date_format/date_format.dart' hide S;
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
@@ -59,6 +59,8 @@ class _NotePageState extends State<NotePage> {
   // 动画控制器
   Animation<double>? animationController;
 
+  //圆角
+  BorderRadius borderRadius = BorderRadius.circular(ScreenUtil().setSp(20));
   final GlobalKey _parentKey = GlobalKey();
   @override
   void initState() {
@@ -167,9 +169,10 @@ class _NotePageState extends State<NotePage> {
       (BuildContext context) {
         return Container(
           height: ScreenUtil().setHeight(60),
-          color: context.watch<CurrentTheme>().isNightMode
-              ? Colors.black12
-              : Colors.white60,
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+               
+                  colors: context.read<CurrentTheme>().gradientColors)),
           child: Center(
             child: InkWell(
               onTap: handleDelete,
@@ -177,8 +180,12 @@ class _NotePageState extends State<NotePage> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    baseIcon(Icons.delete),
-                    Text(S.of(context).delete)
+                    baseIcon(Icons.delete,color: Colors.white),
+                    Text(
+                      S.of(context).delete,
+                      style: const TextStyle(
+                          color: Colors.white),
+                    )
                   ]),
             ),
           ),
@@ -318,63 +325,70 @@ class _NotePageState extends State<NotePage> {
             ? [yyyy, '-', mm, '-', dd]
             : [yyyy, '年', mm, '月', dd, '日']);
     var padding = ScreenUtil().setSp(20);
-    return InkWell(
-      onTap: () => toCreateOrEditorNotePage(
-          id: target.id, time: target.time, index: index),
-      onLongPress: () => handLongPress(index, context),
-      // 和盒子容器保持一致
-      borderRadius: BorderRadius.circular(ScreenUtil().setSp(20)),
-      child: AnimatedContainer(
-        duration: const Duration(seconds: 1),
-        child: DecoratedBox(
-            decoration: BoxDecoration(
-                border: Border.all(
-                    color: Colors.white12, width: ScreenUtil().setWidth(1)),
-                color: context.watch<CurrentTheme>().isNightMode
-                    ? easyDarkColor
-                    : Colors.white,
-                borderRadius: BorderRadius.circular(ScreenUtil().setSp(20))),
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(padding, padding, padding, 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  title,
-                  SizedBox(
-                    height:
-                        ScreenUtil().setHeight(target.title!.isEmpty ? 0 : 15),
-                  ),
-                  Text(
-                    content,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 5,
-                    style: const TextStyle(color: Color(0xff636363)),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        currentTime,
-                        style: TextStyle(
-                            fontSize: ScreenUtil().setSp(12),
-                            color: const Color(0xff969696)),
-                      ),
-                      baseAnimatedOpacity(
-                          value: isShowCheckBox,
-                          child: Checkbox(
-                              shape: const CircleBorder(),
-                              activeColor: themeColor,
-                              materialTapTargetSize:
-                                  MaterialTapTargetSize.shrinkWrap,
-                              value: target.isSelect,
-                              onChanged: (value) =>
-                                  handleChangeCheckBox(value!, index)))
-                    ],
-                  ),
-                ],
-              ),
-            )),
+    return Neumorphic(
+      style: NeumorphicStyle(
+          lightSource: LightSource.bottomRight,
+          boxShape: NeumorphicBoxShape.roundRect(borderRadius),
+          depth: 2,
+          shape: NeumorphicShape.concave),
+      child: InkWell(
+        onTap: () => toCreateOrEditorNotePage(
+            id: target.id, time: target.time, index: index),
+        onLongPress: () => handLongPress(index, context),
+        // 和盒子容器保持一致
+        borderRadius: borderRadius,
+        child: AnimatedContainer(
+          duration: const Duration(seconds: 1),
+          child: DecoratedBox(
+              decoration: BoxDecoration(
+                  border: Border.all(
+                      color: Colors.white12, width: ScreenUtil().setWidth(1)),
+                  color: context.watch<CurrentTheme>().isNightMode
+                      ? easyDarkColor
+                      : Colors.white,
+                  borderRadius: borderRadius),
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(padding, padding, padding, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    title,
+                    SizedBox(
+                      height:
+                          ScreenUtil().setHeight(target.title!.isEmpty ? 0 : 8),
+                    ),
+                    Text(
+                      content,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 5,
+                      style: const TextStyle(color: Color(0xff636363)),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          currentTime,
+                          style: TextStyle(
+                              fontSize: ScreenUtil().setSp(12),
+                              color: const Color(0xff969696)),
+                        ),
+                        baseAnimatedOpacity(
+                            value: isShowCheckBox,
+                            child: Checkbox(
+                                shape: const CircleBorder(),
+                                activeColor: themeColor,
+                                materialTapTargetSize:
+                                    MaterialTapTargetSize.shrinkWrap,
+                                value: target.isSelect,
+                                onChanged: (value) =>
+                                    handleChangeCheckBox(value!, index)))
+                      ],
+                    ),
+                  ],
+                ),
+              )),
+        ),
       ),
     );
   }
@@ -482,7 +496,6 @@ class _NotePageState extends State<NotePage> {
                     handleSearch,
                     TextInputAction.search,
                     S.of(context).searchNote,
-                    fillColor: searchBarFillColor,
                     prefixIcon: Icon(
                       Icons.search,
                       size: ScreenUtil().setSp(15),
@@ -497,7 +510,7 @@ class _NotePageState extends State<NotePage> {
               ],
             ),
             onRefresh: _pullRefresh,
-            color: const Color(0xFF4483f6),
+            color: themeColor,
           ),
         ),
       ),
@@ -505,11 +518,16 @@ class _NotePageState extends State<NotePage> {
           value: !isShowCheckBox,
           child: DragAbleFloatingActionButton(
             parentKey: _parentKey,
-            child: FloatingActionButton(
-              backgroundColor: context.read<CurrentTheme>().isNightMode
-                  ? Colors.black
-                  : themeColor,
-              child: const Icon(Icons.add, color: Colors.white),
+            child: NeumorphicButton(
+              style: const NeumorphicStyle(
+                boxShape: NeumorphicBoxShape.circle(),
+                shape: NeumorphicShape.concave,
+                depth: 4,
+              ),
+              child: Icon(
+                Icons.add,
+                color: context.read<CurrentTheme>().darkOrWhiteColor,
+              ),
               onPressed: () => toCreateOrEditorNotePage(),
             ),
           )),

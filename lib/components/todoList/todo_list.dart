@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
@@ -214,7 +214,6 @@ class TodoListState extends State<TodoList>
     String value = target['value'].toString();
     final bool done = target['done'];
     String time = target['time'];
-    bool isTop = target['isTop'];
     TextDecoration? decoration = done ? TextDecoration.lineThrough : null;
     Color color = context.read<CurrentTheme>().isNightMode
         ? done
@@ -225,14 +224,14 @@ class TodoListState extends State<TodoList>
             : Colors.black;
     return SizeTransition(
       sizeFactor: _animation,
-      child: Container(
-          color: context.watch<CurrentTheme>().isNightMode
-              ? isTop
-                  ? const Color.fromRGBO(26, 26, 26, 1)
-                  : Colors.black12
-              : isTop
-                  ? const Color.fromRGBO(244, 244, 244, 1)
-                  : Colors.white,
+      child: Neumorphic(
+          style:  const NeumorphicStyle(
+              depth: 0,
+              border: NeumorphicBorder(
+                color:Colors.black12,
+                width: 0.5,
+              ),
+              shape: NeumorphicShape.convex),
           child: Center(
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -516,6 +516,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
                           child: NeumorphicButton(
                               onPressed: () => handleClick(e),
                               style: NeumorphicStyle(
+                                shape:  NeumorphicShape.concave,
                                 boxShape: e == 0
                                     ? const NeumorphicBoxShape.stadium()
                                     : const NeumorphicBoxShape.stadium(),

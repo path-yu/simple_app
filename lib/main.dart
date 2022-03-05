@@ -88,14 +88,12 @@ class _MyAppState extends State<MyApp> {
       themeMode: context.watch<CurrentTheme>().value,
       theme: const NeumorphicThemeData(
         baseColor: Color(0xfff7f7f7),
-        lightSource: LightSource.bottom,
         depth: 8,
         // depth: 10,
       ),
       darkTheme: const NeumorphicThemeData(
         baseColor: darkColor,
         depth: 8,
-        lightSource: LightSource.bottom,
       ),
       //应用支持的语言列表
       supportedLocales: const [

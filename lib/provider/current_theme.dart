@@ -8,7 +8,7 @@ class CurrentTheme with ChangeNotifier {
   ThemeMode themeMode;
 
   ThemeMode get value => themeMode;
-  
+
   CurrentTheme({this.themeMode = ThemeMode.light});
   // 是否为夜间模式
   bool get isNightMode => themeMode == ThemeMode.dark ? true : false;
@@ -17,7 +17,12 @@ class CurrentTheme with ChangeNotifier {
   Color get themeBackgroundColor =>
       isNightMode ? easyDarkColor : const Color.fromRGBO(246, 246, 246, 1.0);
 
+  // 渐变色
+  List<Color> get gradientColors => isNightMode
+      ? [Colors.black12, Colors.black]
+      : [const Color.fromRGBO(152, 203, 179, 0.5), themeColor];
   Color get darkOrWhiteColor => isNightMode ? Colors.white : Colors.black;
+  
   changeMode(ThemeMode mode) async {
     themeMode = mode;
     final SharedPreferences prefs = await SharedPreferences.getInstance();

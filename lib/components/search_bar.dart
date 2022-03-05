@@ -1,4 +1,4 @@
-import "package:flutter/material.dart";
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:simple_app/common/color.dart';
 
@@ -40,36 +40,43 @@ class SearchBarState extends State<SearchBar> {
       constraints: BoxConstraints(
           maxHeight: ScreenUtil().setSp(40),
           maxWidth: ScreenUtil().setSp(widget.inputWidth)),
-      child: TextField(
-        controller: widget._todoController,
-        textInputAction: widget.textInputAction,
-        onSubmitted: widget.addConfirm,
-        focusNode: textFieldFocusNode,
-        style:
-            TextStyle(color: Colors.black87, fontSize: ScreenUtil().setSp(15)),
-        decoration: InputDecoration(
-          contentPadding: const EdgeInsets.symmetric(vertical: 4.0),
-          hintText: widget.placeHolder,
+      child: Neumorphic(
+        style: NeumorphicStyle(
+            shape: NeumorphicShape.concave,
+            depth: 4,
+            boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
+            lightSource: LightSource.topLeft,
+            ),
+        child: TextField(
+          controller: widget._todoController,
+          textInputAction: widget.textInputAction,
+          onSubmitted: widget.addConfirm,
+          focusNode: textFieldFocusNode,
+          style: TextStyle(
+              color: Colors.black87, fontSize: ScreenUtil().setSp(15)),
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.symmetric(vertical: 4.0),
+            hintText: widget.placeHolder,
 
-          hintStyle: TextStyle(
-              fontSize: ScreenUtil().setSp(15), color: Colors.black26),
-          prefixIcon: widget.prefixIcon,
-          // 设置右边图标
-          suffixIcon: IconButton(
-              enableFeedback: false,
-              icon: const Icon(Icons.clear),
-              iconSize: ScreenUtil().setSp(18),
-              splashColor: Colors.transparent,
-              color: themeColor,
-              onPressed: () {
-                widget._todoController.text = "";
-                textFieldFocusNode.unfocus();
-              }),
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: BorderSide.none),
-          filled: true,
-          fillColor: widget.fillColor,
+            hintStyle: TextStyle(
+                fontSize: ScreenUtil().setSp(15), color: Colors.black26),
+            prefixIcon: widget.prefixIcon,
+            // 设置右边图标
+            suffixIcon: IconButton(
+                enableFeedback: false,
+                icon: const Icon(Icons.clear),
+                iconSize: ScreenUtil().setSp(18),
+                splashColor: Colors.transparent,
+                color: themeColor,
+                onPressed: () {
+                  widget._todoController.text = "";
+                  textFieldFocusNode.unfocus();
+                }),
+            border: const OutlineInputBorder(
+                borderSide: BorderSide.none),
+            filled: true,
+            fillColor: widget.fillColor,
+          ),
         ),
       ),
     );

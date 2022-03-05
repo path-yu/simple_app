@@ -152,7 +152,8 @@ class _TodoListPageState extends State<TodoListPage> {
     int index = todoAllList.indexOf(target);
     // 如果是done false 说明当前点击的是正在进行的todo项, 则将其删除,并将其添加到已经完成中 反之类似
     if (done == false) {
-      int removeIndex = underwayList.indexWhere((val) => val['id'] == target['id']);
+      int removeIndex =
+          underwayList.indexWhere((val) => val['id'] == target['id']);
       _underWayTodoListKey.currentState!.animatedRemoveItem(removeIndex);
       await Future.delayed(const Duration(milliseconds: 350), () {
         _completeToDoListKey.currentState?.addItem();
@@ -161,7 +162,8 @@ class _TodoListPageState extends State<TodoListPage> {
         setState(() => completeIsSpread = true);
       });
     } else {
-      int removeIndex = completeToDoList.indexWhere((val) => val['id'] == target['id']);
+      int removeIndex =
+          completeToDoList.indexWhere((val) => val['id'] == target['id']);
       _completeToDoListKey.currentState?.animatedRemoveItem(removeIndex);
       await Future.delayed(const Duration(milliseconds: 350), () {
         _underWayTodoListKey.currentState?.addItem();
@@ -239,7 +241,7 @@ class _TodoListPageState extends State<TodoListPage> {
   Widget build(BuildContext context) {
     Color stickyTopColor = context.watch<CurrentTheme>().isNightMode
         ? const Color.fromRGBO(45, 45, 45, 1)
-        : const Color(0xfff7f7f7);
+        : const Color.fromRGBO(144,201,172, 1);
     return HideKeyboard(
         child: Scaffold(
             appBar: buildBaseAppBar(title: S.of(context).todoList),
@@ -258,7 +260,7 @@ class _TodoListPageState extends State<TodoListPage> {
                         sliver: SliverList(
                           delegate: SliverChildBuilderDelegate(
                             (context, i) => Container(
-                              color: stickyTopColor,
+                              // color: stickyTopColor,
                               padding: EdgeInsets.all(ScreenUtil().setSp(20)),
                               child: Row(
                                 mainAxisAlignment:
@@ -285,16 +287,11 @@ class _TodoListPageState extends State<TodoListPage> {
                         ),
                       ),
                       SliverStickyHeader(
-                        header: Container(
-                          color: stickyTopColor,
-                          padding: EdgeInsets.all(ScreenUtil().setHeight(10)),
-                          child: buildTodoListTitle(
-                            S.of(context).underway,
-                            underwayList.length,
+                        header: buildTodoListTitle(
+                            S.of(context).underway, underwayList.length,
                             isSpread: underwayListIsSpread,
                             onTap: updateUnderwaySpread,
-                          ),
-                        ),
+                            backgroundColor: stickyTopColor),
                         sliver: SliverList(
                           delegate: SliverChildBuilderDelegate(
                             (context, i) => TodoList(
@@ -312,14 +309,11 @@ class _TodoListPageState extends State<TodoListPage> {
                         ),
                       ),
                       SliverStickyHeader(
-                        header: Container(
-                          color: stickyTopColor,
-                          padding: EdgeInsets.all(ScreenUtil().setHeight(10)),
-                          child: buildTodoListTitle(
-                              S.of(context).complete, completeToDoList.length,
-                              isSpread: completeIsSpread,
-                              onTap: updateCompleteSpread),
-                        ),
+                        header: buildTodoListTitle(
+                            S.of(context).complete, completeToDoList.length,
+                            isSpread: completeIsSpread,
+                            onTap: updateCompleteSpread,
+                            backgroundColor: stickyTopColor),
                         sliver: SliverList(
                           delegate: SliverChildBuilderDelegate(
                             (context, i) => TodoList(
