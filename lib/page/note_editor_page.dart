@@ -44,9 +44,6 @@ class _NoteEditorPageState extends State<NoteEditorPage>
   //定义一个标题输入controller
   final TextEditingController _titleController = TextEditingController();
 
-  //标题
-  String? title = "";
-
   //数据是否正在加载中
   bool isLoading = false;
 
@@ -56,6 +53,8 @@ class _NoteEditorPageState extends State<NoteEditorPage>
   // 是否显示工具栏
   bool visible = false;
 
+  //是否保存?
+  bool isSave = false;
   // 将json 转为 delta
   Delta getDelta(doc) {
     return Delta.fromJson(json.decode(doc) as List);
@@ -63,21 +62,19 @@ class _NoteEditorPageState extends State<NoteEditorPage>
 
   bool isAddWillPopScopeCallback = false;
 
-  // 监听标题编辑 事件
-  void titleChange(String value) {
-    title = value;
-  }
-
+  // 记录上一次当前的编辑内容
   String? rawNoteDeltaData;
+  // 记录标题
+  String? rawTitle;
   //  读取便签内容
   Future<NotusDocument> _loadDocument({required bool isEditor}) async {
     //如果为编辑 则从数据库取出对应的数据
     if (isEditor) {
       List<Note> res = await DBProvider().findNoteListData(widget.id!);
       _titleController.text = res[0].title!;
-      titleChange(_titleController.text);
       Delta deltaData = getDelta(res[0].content);
       rawNoteDeltaData = jsonEncode(deltaData);
+      rawTitle = res[0].title!;
       return NotusDocument.fromDelta(deltaData);
     } else {
       // 返回默认值
@@ -98,7 +95,7 @@ class _NoteEditorPageState extends State<NoteEditorPage>
     if (widget.isEditor) {
       // 写入文本内容
       Note note = Note(
-          title: title!,
+          title: _titleController.text,
           content: contents,
           id: widget.id,
           time: DateTime.now().millisecondsSinceEpoch);
@@ -112,7 +109,7 @@ class _NoteEditorPageState extends State<NoteEditorPage>
     } else {
       // 写入文本内容
       Note note = Note(
-          title: title!,
+          title: _titleController.text,
           content: contents,
           time: DateTime.now().millisecondsSinceEpoch);
       int res = await DBProvider().saveData(note);
@@ -123,6 +120,10 @@ class _NoteEditorPageState extends State<NoteEditorPage>
         showToast(S.of(context).saveFail);
       }
     }
+    // 更新保存状态
+    rawNoteDeltaData = contents;
+    rawTitle = _titleController.text;
+    isSave = true;
   }
 
   //删除便签
@@ -145,26 +146,38 @@ class _NoteEditorPageState extends State<NoteEditorPage>
 
   // 加载需要编辑写入的文本内容
   _loadData() async {
-    final document = await _loadDocument(isEditor: widget.isEditor);
     if (_zefyrController == null) {
-      setState(() {
-        _zefyrController = ZefyrController(document);
-        // 更新光标光标位置到最后
-        _zefyrController?.updateSelection(TextSelection.fromPosition(
-            TextPosition(
-                affinity: TextAffinity.downstream, offset: document.length)));
-      });
+      final document = await _loadDocument(isEditor: widget.isEditor);
+      setState(() => {});
+      _zefyrController = ZefyrController(document);
+      // 更新光标光标位置到最后
+      _zefyrController?.updateSelection(TextSelection.fromPosition(TextPosition(
+          affinity: TextAffinity.downstream, offset: document.length)));
       // 监听编辑器
       _zefyrController?.addListener(_listenerZefyrChang);
+      //监听输入变化
+      _titleController.addListener(_listenerTitleChange);
     }
   }
 
-  // 监听输入变化
+  // 监听内容输入变化
   void _listenerZefyrChang() {
     // 读取便签内容
     final contents = jsonEncode(_zefyrController?.document);
     if (contents != rawNoteDeltaData) {
       setState(() => isAddWillPopScopeCallback = true);
+      isSave = false;
+    } else {
+      setState(() => isAddWillPopScopeCallback = false);
+    }
+  }
+
+  void _listenerTitleChange() {
+    // 读取便签内容
+    final value = _titleController.text;
+    if (value != rawTitle) {
+      setState(() => isAddWillPopScopeCallback = true);
+      isSave = false;
     } else {
       setState(() => isAddWillPopScopeCallback = false);
     }
@@ -172,6 +185,9 @@ class _NoteEditorPageState extends State<NoteEditorPage>
 
   // 拦截用户返回
   Future<bool> handleWillPop() async {
+    if (isSave) {
+      return true;
+    }
     if (await showConfirmDialog(context,
             message: S.of(context).tipSaveMessage) !=
         null) {
@@ -205,6 +221,7 @@ class _NoteEditorPageState extends State<NoteEditorPage>
     super.dispose();
     WidgetsBinding.instance?.removeObserver(this);
     _zefyrController?.removeListener(_listenerZefyrChang);
+    _titleController.removeListener(_listenerTitleChange);
   }
 
   @override
@@ -213,8 +230,6 @@ class _NoteEditorPageState extends State<NoteEditorPage>
 
     /// 监听页面生命周期 ,添加观察者
     WidgetsBinding.instance?.addObserver(this);
-    //监听输入变化
-    _titleController.addListener(() => titleChange(_titleController.text));
   }
 
   String formateTime(DateTime time) {
@@ -306,27 +321,28 @@ class _NoteEditorPageState extends State<NoteEditorPage>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          ConstrainedBox(
-                            constraints: BoxConstraints(
-                                maxHeight: ScreenUtil().setHeight(40)),
+                          Transform.scale(
+                            scale: 0.8,
                             child: Neumorphic(
                               style: NeumorphicStyle(
-                                  depth: -4,
+                                  depth: -5,
                                   boxShape: NeumorphicBoxShape.roundRect(
                                       BorderRadius.circular(50))),
                               child: TextField(
                                   controller: _titleController,
                                   style: TextStyle(
-                                      color: Colors.black87,
-                                      fontSize: ScreenUtil().setSp(13)),
+                                      color: context
+                                          .read<CurrentTheme>()
+                                          .darkOrWhiteColor,
+                                      fontSize: ScreenUtil().setSp(14)),
                                   decoration: InputDecoration(
                                       hintText: S.of(context).title,
                                       border: InputBorder.none,
                                       hintStyle: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.grey),
-                                      contentPadding: EdgeInsets.all(
-                                          ScreenUtil().setSp(16)))),
+                                      contentPadding: EdgeInsets.only(
+                                          left: ScreenUtil().setWidth(16)))),
                             ),
                           ),
                           Visibility(
@@ -335,7 +351,7 @@ class _NoteEditorPageState extends State<NoteEditorPage>
                                 padding:
                                     EdgeInsets.all(ScreenUtil().setHeight(10)),
                                 child: Row(
-                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(S.of(context).lastUpdateTime + ':',
                                         style: greyTextStyle),
