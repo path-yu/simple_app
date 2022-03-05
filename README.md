@@ -8,7 +8,7 @@
   3. 计算器
   4. 计时器
 
-## 功能如下
+## 特色点如下
 
 1. 国际化(支持中英文语言环境切换)
 2. 夜间模式
@@ -24,7 +24,10 @@
 12. todo滑动列表右滑菜单
 13. 计算器表达式字体放大缩小动画,字体自动缩放大小
 14. 便签列表瀑布流展示
-15. ...
+15. 微光背景
+16. 新拟物风格ui
+17. 音乐播放振动
+18. ...
 
 ## 环境配置如下
 
@@ -52,4 +55,8 @@
 ## 打包部署命令
 ```shell
 flutter build apk --obfuscate --split-debug-info=splitMap --target-platform android-arm,android-arm64,android-x64 --split-per-abi
+```
+打包arm64架构app
+```
+flutter build apk --obfuscate --split-debug-info=splitMap --target-platform android-arm64
 ```
