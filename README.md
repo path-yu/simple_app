@@ -56,7 +56,7 @@
 ```shell
 flutter build apk --obfuscate --split-debug-info=splitMap --target-platform android-arm,android-arm64,android-x64 --split-per-abi
 ```
-打包arm64架构app
+## 打包arm64架构app
 ```
 flutter build apk --obfuscate --split-debug-info=splitMap --target-platform android-arm64
 ```
