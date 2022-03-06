@@ -60,3 +60,25 @@ flutter build apk --obfuscate --split-debug-info=splitMap --target-platform andr
 ```
 flutter build apk --obfuscate --split-debug-info=splitMap --target-platform android-arm64
 ```
+
+### app相关截图如下
+![calculator.png](https://upload-images.jianshu.io/upload_images/20032554-c2a1648a1a6f9a13.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+![count_down_home.png](https://upload-images.jianshu.io/upload_images/20032554-f4e79de1d8b68b92.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+![count_down_ing.png](https://upload-images.jianshu.io/upload_images/20032554-9aaea95e175e65a8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+![edit_creae_note_page.png](https://upload-images.jianshu.io/upload_images/20032554-23bf59b5385d5852.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+![home.png](https://upload-images.jianshu.io/upload_images/20032554-7382a36eab4379f6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+![note_page.png](https://upload-images.jianshu.io/upload_images/20032554-f71aa2c730780b19.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+![setting.png](https://upload-images.jianshu.io/upload_images/20032554-34701e3d1497d6c8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+![startPage.png](https://upload-images.jianshu.io/upload_images/20032554-7c4be9756b500435.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+![stick_todoList.png](https://upload-images.jianshu.io/upload_images/20032554-ce7d45c828dbfb45.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+![todoList.png](https://upload-images.jianshu.io/upload_images/20032554-f1430f7df3650799.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
