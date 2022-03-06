@@ -56,6 +56,9 @@ class _NoteEditorPageState extends State<NoteEditorPage>
   //是否保存?
   bool isSave = false;
 
+  //更新时间
+  int? updateTime;
+
   // 滚动控制器
   final ScrollController _scrollController = ScrollController();
 
@@ -83,11 +86,14 @@ class _NoteEditorPageState extends State<NoteEditorPage>
       _titleController.text = res[0].title!;
       Delta deltaData = getDelta(res[0].content);
       rawNoteDeltaData = jsonEncode(deltaData);
+      updateTime = res[0].updateTime;
       rawTitle = res[0].title!;
       return NotusDocument.fromDelta(deltaData);
     } else {
       // 返回默认值
       final delta = Delta()..insert('\n');
+      rawTitle = '';
+      rawNoteDeltaData = jsonEncode(delta);
       return NotusDocument.fromDelta(delta);
     }
   }
@@ -100,14 +106,16 @@ class _NoteEditorPageState extends State<NoteEditorPage>
     if (contents.length == 17) {
       return showToast(S.of(context).NoteNotNullMessage);
     }
+    int now = DateTime.now().millisecondsSinceEpoch;
     // 如果isEditor 则 更新数据 否者写入数据
     if (widget.isEditor) {
-      // 写入文本内容
+      // 更新
       Note note = Note(
           title: _titleController.text,
           content: contents,
           id: widget.id,
-          time: DateTime.now().millisecondsSinceEpoch);
+          updateTime: now,
+          time: widget.time!);
       int res = await DBProvider().update(note);
       if (res > 0) {
         isNeedUpdate = true;
@@ -116,11 +124,13 @@ class _NoteEditorPageState extends State<NoteEditorPage>
         showToast(S.of(context).updateFail);
       }
     } else {
-      // 写入文本内容
+      // 保存文本内容
       Note note = Note(
           title: _titleController.text,
           content: contents,
-          time: DateTime.now().millisecondsSinceEpoch);
+          updateTime: now,
+          time: now);
+
       int res = await DBProvider().saveData(note);
       if (res > 0) {
         isNeedUpdate = true;
@@ -157,8 +167,7 @@ class _NoteEditorPageState extends State<NoteEditorPage>
   _loadData() async {
     if (_zefyrController == null) {
       final document = await _loadDocument(isEditor: widget.isEditor);
-      setState(() => {});
-      _zefyrController = ZefyrController(document);
+      setState(() => {_zefyrController = ZefyrController(document)});
       // 更新光标光标位置到最后
       _zefyrController?.updateSelection(TextSelection.fromPosition(TextPosition(
           affinity: TextAffinity.downstream, offset: document.length)));
@@ -270,20 +279,22 @@ class _NoteEditorPageState extends State<NoteEditorPage>
         ? '0' + time.minute.toString()
         : time.minute.toString();
     String timeSlot = '';
-    if (hour >= 3 && hour <= 6) {
-      timeSlot = S.of(context).beforeDawn;
-    } else if (hour >= 6 && hour <= 8) {
-      timeSlot = S.of(context).morning;
+    if (hour >= 1 && hour <= 5) {
+      timeSlot = S.of(context).beforeDawn; // 凌晨
+    } else if (hour >= 5 && hour <= 8) {
+      timeSlot = S.of(context).morning; // 早上
+    } else if (hour >= 8 && hour <= 11) {
+      timeSlot = S.of(context).forenoon; // 上午
     } else if (hour >= 11 && hour <= 13) {
-      timeSlot = S.of(context).noon;
+      timeSlot = S.of(context).noon; // 中午
     } else if (hour >= 13 && hour <= 17) {
-      timeSlot = S.of(context).afternoon;
+      timeSlot = S.of(context).afternoon; //下午
     } else if (hour >= 17 && hour <= 19) {
-      timeSlot = S.of(context).evening;
+      timeSlot = S.of(context).evening; //傍晚
     } else if (hour >= 19 && hour <= 23) {
-      timeSlot = S.of(context).night;
+      timeSlot = S.of(context).night; //晚上
     } else {
-      timeSlot = S.of(context).lateNight;
+      timeSlot = S.of(context).lateNight; //深页
     }
     if (hour >= 13) {
       hourStr = (hour - 12).toString();
@@ -300,8 +311,8 @@ class _NoteEditorPageState extends State<NoteEditorPage>
   Widget build(BuildContext context) {
     var fontEndTime = '';
     var endTime = '';
-    if (widget.time != null) {
-      var date = DateTime.fromMillisecondsSinceEpoch(widget.time!);
+    if (widget.time != null && updateTime != null) {
+      var date = DateTime.fromMillisecondsSinceEpoch(updateTime!);
       fontEndTime = formatDate(
           date,
           context.watch<CurrentLocale>().languageIsEnglishMode

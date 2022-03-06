@@ -39,7 +39,8 @@ class DBProvider {
         "id integer primary key AUTOINCREMENT,"
         "title TEXT,"
         "content TEXT,"
-        "time INTEGER "
+        "time INTEGER,"
+        "updateTime INTEGER "
         ""
         ")");
   }

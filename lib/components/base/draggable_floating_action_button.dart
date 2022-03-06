@@ -55,11 +55,9 @@ class _DragAbleFloatingActionButtonState
         _key.currentContext?.findRenderObject() as RenderBox;
     try {
       final Size size = renderBox.size;
-      print(size);
       setState(() {
         _minOffset = const Offset(30, 30);
         _maxOffset = Offset(maxWidth! - size.width, maxHeight! - size.height);
-        print(_maxOffset);
       });
     } catch (e) {
       if (kDebugMode) {

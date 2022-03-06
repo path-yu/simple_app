@@ -204,27 +204,24 @@ class _TodoListPageState extends State<TodoListPage> {
 
     int newIndex =
         todoAllList.indexWhere((element) => element['id'] == newTarget['id']);
+
     // 如果为第一项 则只更新置顶状态
     if (oldTopIndex == 0 && newTopIndex == 0) {
-      todoAllList[oldIndex]['oldTopIndex'] = 0;
-      todoAllList[newIndex]['newTopIndex'] = 0;
-      todoAllList[oldIndex]['isTop'] = isTopping;
+      todoAllList[0]['isTop'] = isTopping;
     } else {
-      // 交互数据
+      if (isTopping) {
+        todoAllList[oldIndex]['oldTopIndex'] = oldTopIndex;
+        todoAllList[oldIndex]['newTopIndex'] = newTopIndex;
+        todoAllList[oldIndex]['isTop'] = isTopping;
+      } else {
+        // 取消置顶则,重置状态
+        todoAllList[oldIndex]['oldTopIndex'] = null;
+        todoAllList[oldIndex]['newTopIndex'] = null;
+        todoAllList[oldIndex]['isTop'] = false;
+      }
       var temp = todoAllList[oldIndex];
       todoAllList[oldIndex] = todoAllList[newIndex];
       todoAllList[newIndex] = temp;
-      // 交互下标
-      todoAllList[oldIndex]['oldTopIndex'] = oldTopIndex;
-      todoAllList[oldIndex]['newTopIndex'] = newTopIndex;
-      todoAllList[newIndex]['oldTopIndex'] = newTopIndex;
-      todoAllList[newIndex]['newTopIndex'] = oldTopIndex;
-      // 置顶 则 更新 新数据 否者 更新老数据
-      if (isTopping) {
-        todoAllList[newIndex]['isTop'] = isTopping;
-      } else {
-        todoAllList[oldIndex]['isTop'] = isTopping;
-      }
     }
     changeState();
   }

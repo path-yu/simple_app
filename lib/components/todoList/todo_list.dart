@@ -144,11 +144,12 @@ class TodoListState extends State<TodoList>
         if (resultIndex == 0 && index == 0) {
           newIndex = 0;
           oldIndex = 0;
+        } else {
+          //如果当前指定的元素为最后一个,则返回最后一个置顶下标, 否则置顶下标 + 1
+          newIndex =
+              resultIndex == myList.length - 1 ? resultIndex : resultIndex + 1;
+          oldIndex = target['oldIndex'] ?? index;
         }
-        //如果当前指定的元素为最后一个,则返回最后一个置顶下标, 否则置顶下标 + 1
-        newIndex =
-            resultIndex == myList.length - 1 ? resultIndex : resultIndex + 1;
-        oldIndex = target['oldIndex'] ?? index;
       } else {
         // 如果为第一个置顶 则不需要交换
         if (index == 0) {

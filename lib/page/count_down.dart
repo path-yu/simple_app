@@ -57,7 +57,7 @@ class _CountDownPageState extends State<CountDownPage> {
   // 是否开启声音
   bool enableAudio = true;
   void handleStartClick() {
-    if (pickerTime.inSeconds < 6) return;
+    if (pickerTime.inSeconds < 10) return;
     setState(() => show = true);
     const timeout = Duration(seconds: 1);
     progressValue = 0;
@@ -415,7 +415,7 @@ class _CountDownPageState extends State<CountDownPage> {
                                   S.of(context).startTiming,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                      color: pickerTime.inSeconds > 6
+                                      color: pickerTime.inSeconds >= 10
                                           ? context
                                                   .read<CurrentTheme>()
                                                   .isNightMode
