@@ -226,13 +226,14 @@ class TodoListState extends State<TodoList>
   @override
   void initState() {
     super.initState();
-    myList = mapListAddDrag(widget.listData);
+    myList = mapListAddAttr(widget.listData);
   }
 
-  List mapListAddDrag(list) {
+  // 给列表数据添加新的状态值
+  List mapListAddAttr(list) {
     return list.map((e) {
-      e['isDrag'] = false;
-      e['isShowBorder'] = false;
+      e['isDrag'] = false;// 元素是否拖拽
+      e['isShowBorder'] = false; // 是否显示边框, 在拖拽元素进入到当前元素时显示
       return e;
     }).toList();
   }
@@ -246,7 +247,7 @@ class TodoListState extends State<TodoList>
   @override
   void didUpdateWidget(covariant TodoList oldWidget) {
     super.didUpdateWidget(oldWidget);
-    myList = mapListAddDrag(widget.listData);
+    myList = mapListAddAttr(widget.listData);
     _getContainerHeight(null);
   }
 
@@ -293,12 +294,14 @@ class TodoListState extends State<TodoList>
           if (newIndex != null && newIndex < myList.length) {
             var newTarget = myList[newIndex];
             var oldTarget = myList[index];
+            // 限定只能在相同done类型的todo 进行拖拽交换
             if (newTarget['done'] == oldTarget['done']) {
               widget.swapTodo(newTarget, oldTarget);
             }
           }
         },
         onWillAccept: (int? newIndex) {
+          // 防止数组越界 error
           if (newIndex != null &&
               newIndex < myList.length &&
               newIndex != index) {

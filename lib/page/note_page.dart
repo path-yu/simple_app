@@ -1,4 +1,4 @@
-import 'dart:convert';
+ import 'dart:convert';
 
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:date_format/date_format.dart' hide S;
@@ -396,25 +396,29 @@ class _NotePageState extends State<NotePage> {
           ? Expanded(
               child: SizedBox(
               height: ScreenUtil().setSp(20),
-              child: ListView.builder(
-                itemCount: 15,
-                physics: const BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics()),
-                scrollDirection: Axis.vertical,
-                itemBuilder: (BuildContext context, int index) {
-                  if (index == 0) {
-                    return Center(
-                      child: Text(messageText!,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(color: Colors.grey)),
-                    );
-                  } else {
-                    return const SizedBox(
-                      width: 40,
-                      height: 40,
-                    );
-                  }
-                },
+              child: Scrollbar(
+                interactive: true,
+                showTrackOnHover: true,
+                child: ListView.builder(
+                  itemCount: 15,
+                  physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()),
+                  scrollDirection: Axis.vertical,
+                  itemBuilder: (BuildContext context, int index) {
+                    if (index == 0) {
+                      return Center(
+                        child: Text(messageText!,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(color: Colors.grey)),
+                      );
+                    } else {
+                      return const SizedBox(
+                        width: 40,
+                        height: 40,
+                      );
+                    }
+                  },
+                ),
               ),
             ))
           : Expanded(
