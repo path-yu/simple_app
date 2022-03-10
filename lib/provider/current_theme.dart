@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_app/common/color.dart';
 import 'package:simple_app/common/global.dart';
@@ -24,11 +25,16 @@ class CurrentTheme with ChangeNotifier {
       ? [Colors.black12, Colors.black]
       : [const Color.fromRGBO(152, 203, 179, 0.5), themeColor];
   Color get darkOrWhiteColor => isNightMode ? Colors.white : Colors.black;
-  
+
   changeMode(ThemeMode mode) async {
     themeMode = mode;
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool(ConstantKey.isNightMode, isNightMode);
+    SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      systemNavigationBarColor: themeOrDarkColor,
+    );
+    SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
     notifyListeners();
   }
 

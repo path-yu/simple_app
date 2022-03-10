@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -47,12 +45,12 @@ void main(List<String> args) {
     ));
     // 初始化本地通知插件
     await flutterLocalNotificationsPluginInit();
-    if (Platform.isAndroid) {
-      // 以下两行 设置android状态栏为透明的沉浸。写在组件渲染之后，是为了在渲染后进行set赋值，覆盖状态栏，写在渲染之前MaterialApp组件会覆盖掉这个值。
-      SystemUiOverlayStyle systemUiOverlayStyle =
-          const SystemUiOverlayStyle(statusBarColor: Colors.transparent);
-      SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
-    }
+    // 以下两行 设置android状态栏为透明的沉浸。写在组件渲染之后，
+    SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      systemNavigationBarColor: nightMode?.themeOrDarkColor,
+    );
+    SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
   });
 }
 
