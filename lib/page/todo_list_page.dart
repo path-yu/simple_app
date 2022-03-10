@@ -240,6 +240,14 @@ class _TodoListPageState extends State<TodoListPage> {
 
     int newIndex =
         todoAllList.indexWhere((element) => element['id'] == newTarget['id']);
+    // 重置状态
+    todoAllList[oldIndex]['isTop'] = false;
+    todoAllList[oldIndex]['newTopIndex'] = null;
+    todoAllList[oldIndex]['newTopIndex'] = null;
+    todoAllList[newIndex]['isTop'] = false;
+    todoAllList[newIndex]['newTopIndex'] = null;
+    todoAllList[newIndex]['newTopIndex'] = null;
+    // 交换下标
     var temp = todoAllList[oldIndex];
     todoAllList[oldIndex] = todoAllList[newIndex];
     todoAllList[newIndex] = temp;

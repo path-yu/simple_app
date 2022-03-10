@@ -70,7 +70,7 @@ class TodoListState extends State<TodoList>
   double padding = ScreenUtil().setHeight(10);
 
   // 每个todo 平均高度
-  double averageHeight = 48;
+  double averageHeight = 50;
 
   //列表总数
   int? count;
@@ -232,6 +232,7 @@ class TodoListState extends State<TodoList>
   List mapListAddDrag(list) {
     return list.map((e) {
       e['isDrag'] = false;
+      e['isShowBorder'] = false;
       return e;
     }).toList();
   }
@@ -268,13 +269,24 @@ class TodoListState extends State<TodoList>
       child: DragTarget(
         builder: (BuildContext context, List<int?> candidateData,
             List<dynamic> rejectedData) {
-          return TodoItem(
-            color: color,
-            data: target,
-            index: index,
-            handleCheckBoxChange: handleCheckBoxChange,
-            decoration: decoration,
-            backgroundColor: backgroundColor,
+          return Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                  color: myList[index]['isShowBorder']
+                      ? themeColor
+                      : Colors.transparent,
+                  width: 1,
+                  style: BorderStyle.solid),
+              borderRadius: BorderRadius.circular(5), // 设置四周圆角
+            ),
+            child: TodoItem(
+              color: color,
+              data: target,
+              index: index,
+              handleCheckBoxChange: handleCheckBoxChange,
+              decoration: decoration,
+              backgroundColor: backgroundColor,
+            ),
           );
         },
         onAccept: (int? newIndex) {
@@ -284,6 +296,25 @@ class TodoListState extends State<TodoList>
             if (newTarget['done'] == oldTarget['done']) {
               widget.swapTodo(newTarget, oldTarget);
             }
+          }
+        },
+        onWillAccept: (int? newIndex) {
+          if (newIndex != null &&
+              newIndex < myList.length &&
+              newIndex != index) {
+            setState(() {
+              myList[index]['isShowBorder'] = true;
+            });
+          }
+          return true;
+        },
+        onLeave: (int? newIndex) {
+          if (newIndex != null &&
+              newIndex < myList.length &&
+              newIndex != index) {
+            setState(() {
+              myList[index]['isShowBorder'] = false;
+            });
           }
         },
       ),
@@ -322,7 +353,7 @@ class TodoListState extends State<TodoList>
                     opacity: myList[index]['isDrag'] ? 0 : 1,
                     child: _buildItem(animation, index),
                   ),
-                  delay: const Duration(seconds: 1),
+                  delay: const Duration(milliseconds: 350),
                   onDragStarted: () {
                     setState(() => myList[index]['isDrag'] = true);
                   },
@@ -331,6 +362,7 @@ class TodoListState extends State<TodoList>
                   },
                   data: index,
                   feedback: Material(
+                    elevation: 0.3,
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width - (padding * 2),
                       height: averageHeight,
@@ -401,13 +433,7 @@ class TodoItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Neumorphic(
       style: NeumorphicStyle(
-          depth: 0,
-          color: backgroundColor,
-          border: const NeumorphicBorder(
-            color: Colors.black12,
-            width: 0.5,
-          ),
-          shape: NeumorphicShape.convex),
+          depth: 0, color: backgroundColor, shape: NeumorphicShape.convex),
       child: Center(
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
