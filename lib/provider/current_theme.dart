@@ -17,6 +17,8 @@ class CurrentTheme with ChangeNotifier {
   Color get themeBackgroundColor =>
       isNightMode ? easyDarkColor : const Color.fromRGBO(246, 246, 246, 1.0);
 
+  // 暗色或主题色
+  Color get themeOrDarkColor => isNightMode ? darkColor : themeColor;
   // 渐变色
   List<Color> get gradientColors => isNightMode
       ? [Colors.black12, Colors.black]

@@ -36,14 +36,13 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   final NeumorphicStyle _neumorphicStyle = NeumorphicStyle(
-      // shape: NeumorphicShape.concave,
       depth: -4,
       boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)));
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildBaseAppBar(title: S.of(context).setting),
+      appBar: buildBaseAppBar(title: S.of(context).setting,backgroundColor: context.watch<CurrentTheme>().themeOrDarkColor),
       body: Container(
         padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
         child: LayoutBuilder(
