@@ -29,6 +29,12 @@ class _CalculatorPageState extends State<CalculatorPage> {
   final primary = navigatorKey.currentState!.context
       .watch<CurrentTheme>()
       .themeBackgroundColor;
+
+  // 按钮大小
+  final int buttonSize = 68;
+
+  // 按钮间隔
+  final double space = 10;
   List operatorList = [
     'AC',
     'x',
@@ -87,10 +93,13 @@ class _CalculatorPageState extends State<CalculatorPage> {
     'AC',
     '％',
   ];
+
   // 是否为计算运算符
   bool isCalcOperator(String value) => operatorSymbolList.contains(value);
+
   // 是否为数字运算符
   bool isNumberOperator(String value) => numOperatorList.contains(value);
+
   // 是否为其他操作运算符
   bool isOtherOperator(String value) => otherOperatorList.contains(value);
 
@@ -490,8 +499,8 @@ class _CalculatorPageState extends State<CalculatorPage> {
               SizedBox(
                 width: double.infinity,
                 child: Wrap(
-                    spacing: 10,
-                    runSpacing: 10,
+                    spacing: space,
+                    runSpacing: space,
                     alignment: WrapAlignment.spaceBetween,
                     children: operatorList.map((e) {
                       Widget child;
@@ -508,21 +517,27 @@ class _CalculatorPageState extends State<CalculatorPage> {
                       }
                       return SizedBox(
                           width: e == 0
-                              ? ScreenUtil().setWidth(166)
-                              : ScreenUtil().setWidth(68),
+                              ? ScreenUtil().setWidth((buttonSize + space) * 2)
+                              : ScreenUtil().setWidth(buttonSize),
                           height: e == 0
-                              ? ScreenUtil().setWidth(68)
-                              : ScreenUtil().setWidth(68),
+                              ? ScreenUtil().setWidth(buttonSize)
+                              : ScreenUtil().setWidth(buttonSize),
                           child: NeumorphicButton(
                               onPressed: () => handleClick(e),
                               style: NeumorphicStyle(
-                                shape:  NeumorphicShape.concave,
+                                shape: NeumorphicShape.concave,
                                 boxShape: e == 0
                                     ? const NeumorphicBoxShape.stadium()
                                     : const NeumorphicBoxShape.stadium(),
                               ),
                               child: Center(
-                                child: child,
+                                child: Transform.scale(
+                                  scale: operatorSymbolList.contains(e) ||
+                                          ['.', '='].contains(e)
+                                      ? 1.8
+                                      : 1,
+                                  child: child,
+                                ),
                               )));
                     }).toList()),
               )
