@@ -1,4 +1,4 @@
- import 'dart:convert';
+import 'dart:convert';
 
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:date_format/date_format.dart' hide S;
@@ -56,12 +56,14 @@ class _NotePageState extends State<NotePage> {
 
   // 动画过渡
   final Duration _duration = const Duration(milliseconds: 350);
+
   // 动画控制器
   Animation<double>? animationController;
 
   //圆角
   BorderRadius borderRadius = BorderRadius.circular(ScreenUtil().setSp(20));
   final GlobalKey _parentKey = GlobalKey();
+
   @override
   void initState() {
     if (isSelectAll) {}
@@ -102,11 +104,16 @@ class _NotePageState extends State<NotePage> {
   Future _pullRefresh() async {
     await getData(DBProvider().findAll, "", true);
     _noteController.text = "";
+    if (noteList.isEmpty) {
+      setState(() {
+        messageText = S.of(context).notNoteMessage;
+      });
+    }
     return null;
   }
 
   // 开始搜索
-  handleSearch(String value) {
+  handleSearch(String value) async {
     if (value.isEmpty) {
       return showToast(S.of(context).placeSearchContent);
     } else {
@@ -399,24 +406,21 @@ class _NotePageState extends State<NotePage> {
               child: Scrollbar(
                 interactive: true,
                 showTrackOnHover: true,
-                child: ListView.builder(
-                  itemCount: 15,
-                  physics: const BouncingScrollPhysics(
-                      parent: AlwaysScrollableScrollPhysics()),
-                  scrollDirection: Axis.vertical,
-                  itemBuilder: (BuildContext context, int index) {
-                    if (index == 0) {
-                      return Center(
-                        child: Text(messageText!,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(color: Colors.grey)),
-                      );
-                    } else {
-                      return const SizedBox(
-                        width: 40,
-                        height: 40,
-                      );
-                    }
+                child: LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                    return SizedBox(
+                      height: constraints.maxHeight,
+                      child: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(
+                            parent: AlwaysScrollableScrollPhysics()),
+                        scrollDirection: Axis.vertical,
+                        child: Center(
+                          child: Text(messageText!,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(color: Colors.grey)),
+                        ),
+                      ),
+                    );
                   },
                 ),
               ),
