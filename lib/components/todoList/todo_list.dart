@@ -24,6 +24,8 @@ class TodoList extends StatefulWidget {
   final void Function()? updateSpread;
   // 是否展开
   bool isSpread;
+  // 交换todo
+  final void Function(Map oldTarget, Map newTarget) swapTodo;
   TodoList(
       {required Key key,
       required this.listData,
@@ -32,7 +34,8 @@ class TodoList extends StatefulWidget {
       required this.searchBarKey,
       required this.updateTodoTopping,
       this.updateSpread,
-      required this.isSpread})
+      required this.isSpread,
+      required this.swapTodo})
       : super(key: key);
 
   @override
@@ -102,8 +105,8 @@ class TodoListState extends State<TodoList>
     }
   }
 
-  void handleCheckBoxChange(
-      bool value, Map target, bool done, int index) async {
+  void handleCheckBoxChange(bool value, Map target, int index) async {
+    final bool done = target['done'];
     // 先更新todo done自身状态, 在调用父级方法更新列表数据
     setState(() {
       myList[index]['done'] = value;
@@ -210,13 +213,7 @@ class TodoListState extends State<TodoList>
     });
   }
 
-  Widget _buildItem(Animation<double> _animation, int index) {
-    Map target = myList[index];
-    String value = target['value'].toString();
-    final bool done = target['done'];
-    String time = target['time'];
-    bool isTop = target['isTop'];
-    TextDecoration? decoration = done ? TextDecoration.lineThrough : null;
+  Color getTodoTextColor(bool done) {
     Color color = context.read<CurrentTheme>().isNightMode
         ? done
             ? Colors.grey
@@ -224,6 +221,10 @@ class TodoListState extends State<TodoList>
         : done
             ? Colors.grey
             : Colors.black;
+    return color;
+  }
+
+  Color getTodoBackgroundColor(bool isTop) {
     Color backgroundColor = context.read<CurrentTheme>().isNightMode
         ? isTop
             ? Colors.black45
@@ -231,51 +232,41 @@ class TodoListState extends State<TodoList>
         : isTop
             ? Colors.grey.shade300
             : Colors.white;
+    return backgroundColor;
+  }
 
+  Widget _buildItem(Animation<double> _animation, int index) {
+    Map target = myList[index];
+    final bool done = target['done'];
+    bool isTop = target['isTop'];
+    TextDecoration? decoration =
+        done ? TextDecoration.lineThrough : TextDecoration.none;
+    Color color = getTodoTextColor(done);
+    Color backgroundColor = getTodoBackgroundColor(isTop);
     return SizeTransition(
       sizeFactor: _animation,
-      child: Neumorphic(
-          style: NeumorphicStyle(
-              depth: 0,
-              color: backgroundColor,
-              border: const NeumorphicBorder(
-                color: Colors.black12,
-                width: 0.5,
-              ),
-              shape: NeumorphicShape.convex),
-          child: Center(
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Checkbox(
-                          value: done,
-                          shape: const CircleBorder(),
-                          activeColor: themeColor,
-                          onChanged: (value) => handleCheckBoxChange(
-                              value!, target, done, index)),
-                      Text(
-                        value,
-                        style: TextStyle(decoration: decoration, color: color),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        time,
-                        textAlign: TextAlign.right,
-                        style: TextStyle(decoration: decoration, color: color),
-                      ),
-                      SizedBox(
-                        width: ScreenUtil().setWidth(30),
-                      )
-                    ],
-                  ),
-                ]),
-          )),
+      child: DragTarget(
+        builder: (BuildContext context, List<int?> candidateData,
+            List<dynamic> rejectedData) {
+          return TodoItem(
+            color: color,
+            data: target,
+            index: index,
+            handleCheckBoxChange: handleCheckBoxChange,
+            decoration: decoration,
+            backgroundColor: backgroundColor,
+          );
+        },
+        onAccept: (int? newIndex) {
+          if (newIndex != null && newIndex < myList.length) {
+            var newTarget = myList[newIndex];
+            var oldTarget = myList[index];
+            if (newTarget['done'] == oldTarget['done']) {
+              widget.swapTodo(newTarget, oldTarget);
+            }
+          }
+        },
+      ),
     );
   }
 
@@ -296,13 +287,35 @@ class TodoListState extends State<TodoList>
             (BuildContext context, int index, Animation<double> animation) {
           Map target = myList[index];
           bool isTop = target['isTop'];
+          bool done = target['done'];
+          TextDecoration? decoration =
+              done ? TextDecoration.lineThrough : TextDecoration.none;
+          Color color = getTodoTextColor(target['done']);
+          Color backgroundColor = getTodoBackgroundColor(isTop);
           return Container(
             margin: EdgeInsets.only(top: index == 0 ? 0 : marin),
             child: Slidable(
               groupTag: '0',
-              child: Column(
-                children: [_buildItem(animation, index)],
-              ),
+              child: LongPressDraggable(
+                  child: _buildItem(animation, index),
+                  delay: const Duration(milliseconds: 200),
+                  data: index,
+                  feedback: Material(
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width - (padding * 2),
+                      height: averageHeight,
+                      child: Opacity(
+                        opacity: 0.8,
+                        child: TodoItem(
+                          color: color,
+                          data: target,
+                          index: index,
+                          decoration: decoration,
+                          backgroundColor: backgroundColor,
+                        ),
+                      ),
+                    ),
+                  )),
               endActionPane: ActionPane(
                 motion: const DrawerMotion(),
                 extentRatio: isTop ? 0.6 : 0.5,
@@ -334,6 +347,72 @@ class TodoListState extends State<TodoList>
           );
         },
       )),
+    );
+  }
+}
+
+// 当前正在拖拽的todo项widget
+class TodoItem extends StatelessWidget {
+  final Map data;
+  final int index;
+  final Function? handleCheckBoxChange;
+  final TextDecoration decoration;
+  final Color color;
+  final Color backgroundColor;
+  const TodoItem(
+      {Key? key,
+      required this.data,
+      required this.index,
+      this.handleCheckBoxChange,
+      required this.decoration,
+      required this.color,
+      required this.backgroundColor})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Neumorphic(
+      style: NeumorphicStyle(
+          depth: 0,
+          color: backgroundColor,
+          border: const NeumorphicBorder(
+            color: Colors.black12,
+            width: 0.5,
+          ),
+          shape: NeumorphicShape.convex),
+      child: Center(
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Row(
+            children: [
+              Checkbox(
+                  value: data['done'],
+                  shape: const CircleBorder(),
+                  activeColor: themeColor,
+                  onChanged: handleCheckBoxChange != null
+                      ? (value) => handleCheckBoxChange!(value, data, index)
+                      : null),
+              Text(
+                data['value'],
+                style: TextStyle(decoration: decoration, color: color),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                data['time'],
+                textAlign: TextAlign.right,
+                style: TextStyle(decoration: decoration, color: color),
+              ),
+              SizedBox(
+                width: ScreenUtil().setWidth(30),
+              )
+            ],
+          ),
+        ]),
+      ),
     );
   }
 }

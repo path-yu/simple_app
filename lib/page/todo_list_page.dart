@@ -234,6 +234,18 @@ class _TodoListPageState extends State<TodoListPage> {
     setState(() => completeIsSpread = !completeIsSpread);
   }
 
+  void swapTodo(oldTarget, newTarget) {
+    int oldIndex =
+        todoAllList.indexWhere((element) => element['id'] == oldTarget['id']);
+
+    int newIndex =
+        todoAllList.indexWhere((element) => element['id'] == newTarget['id']);
+    var temp = todoAllList[oldIndex];
+    todoAllList[oldIndex] = todoAllList[newIndex];
+    todoAllList[newIndex] = temp;
+    changeState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Color stickyTopColor = context.watch<CurrentTheme>().isNightMode
@@ -301,6 +313,7 @@ class _TodoListPageState extends State<TodoListPage> {
                               updateTodoTopping: updateTodoTopping,
                               isSpread: underwayListIsSpread,
                               updateSpread: updateCompleteSpread,
+                              swapTodo: swapTodo,
                             ),
                             childCount: 1,
                           ),
@@ -323,6 +336,7 @@ class _TodoListPageState extends State<TodoListPage> {
                               updateTodoTopping: updateTodoTopping,
                               isSpread: completeIsSpread,
                               updateSpread: updateCompleteSpread,
+                              swapTodo: swapTodo,
                             ),
                             childCount: 1,
                           ),
