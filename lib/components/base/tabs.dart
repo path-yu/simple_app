@@ -3,10 +3,14 @@ import "package:flutter/cupertino.dart";
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:simple_app/common/color.dart';
+import 'package:simple_app/common/global.dart';
 import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/page/setting_page.dart';
 import 'package:simple_app/page/tool_kit_page.dart';
+import 'package:simple_app/utils/Notification.dart';
+import 'package:simple_app/utils/index.dart';
 import 'package:simple_app/utils/show_toast.dart';
+
 class Tabs extends StatefulWidget {
   const Tabs({Key? key}) : super(key: key);
 
@@ -28,6 +32,15 @@ class _TabsState extends State<Tabs> {
     currentPage = tabsList[currentIndex];
     super.initState();
     BackButtonInterceptor.add(myInterceptor, name: '/', context: context);
+    // 获取正在进行中的任务列表
+    getLocalStorageData(ConstantKey.todoListKey).then((res) {
+      List underwayList = filterListData(res, false);
+      if (underwayList.isNotEmpty) {
+        showNotification(
+            message: S.of(context).todoNotCompleteMessage,
+            payload: '/todo_list_page');
+      }
+    });
   }
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {

@@ -37,6 +37,7 @@ void main(List<String> args) {
     } else {
       nightMode = CurrentTheme(themeMode: ThemeMode.light);
     }
+
     runApp(MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => locale),
@@ -66,11 +67,6 @@ class MyApp extends StatefulWidget {
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class _MyAppState extends State<MyApp> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return NeumorphicApp(

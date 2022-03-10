@@ -75,6 +75,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "notSearchNoteMessage": MessageLookupByLibrary.simpleMessage(
             "Unfortunately, no data was found!"),
         "note": MessageLookupByLibrary.simpleMessage("note"),
+        "notificationDescription":
+            MessageLookupByLibrary.simpleMessage("For a better day!"),
+        "notificationName":
+            MessageLookupByLibrary.simpleMessage("important notice"),
         "outCalculationRange":
             MessageLookupByLibrary.simpleMessage("Out of calculation range!"),
         "placeSearchContent": MessageLookupByLibrary.simpleMessage(
@@ -95,6 +99,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "todoCompleteMessage": MessageLookupByLibrary.simpleMessage(
             "Today\'s todo has been completed, please make persistent efforts."),
         "todoList": MessageLookupByLibrary.simpleMessage("Todo list"),
+        "todoNotCompleteMessage": MessageLookupByLibrary.simpleMessage(
+            "Today\'s agency has not been completed yet. Please remember to complete it on time"),
         "todoNoticeTitle":
             MessageLookupByLibrary.simpleMessage("This is an announcement."),
         "toolKit": MessageLookupByLibrary.simpleMessage("Tool kit"),

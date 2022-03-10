@@ -230,11 +230,41 @@ class S {
     );
   }
 
+  /// `Today's agency has not been completed yet. Please remember to complete it on time`
+  String get todoNotCompleteMessage {
+    return Intl.message(
+      'Today\'s agency has not been completed yet. Please remember to complete it on time',
+      name: 'todoNotCompleteMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `No notification permission, go to the settings interface to set the permission?`
   String get noNotificationPermission {
     return Intl.message(
       'No notification permission, go to the settings interface to set the permission?',
       name: 'noNotificationPermission',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `important notice`
+  String get notificationName {
+    return Intl.message(
+      'important notice',
+      name: 'notificationName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `For a better day!`
+  String get notificationDescription {
+    return Intl.message(
+      'For a better day!',
+      name: 'notificationDescription',
       desc: '',
       args: [],
     );

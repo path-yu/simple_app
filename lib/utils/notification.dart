@@ -5,6 +5,7 @@ import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/main.dart';
 
 import 'request_notice_permission.dart';
+
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 const AndroidInitializationSettings initializationSettingsAndroid =
@@ -23,13 +24,16 @@ Future<void> showNotification(
   title ??= S.of(navigatorKey.currentState!.context).todoNoticeTitle;
   // 判断是否有通知权限
   if (await requestNoticePermission()) {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails('your channel id', 'your channel name',
-            channelDescription: 'your channel description',
+    AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails('your channel id',
+            S.of(navigatorKey.currentState!.context).notificationName,
+            channelDescription: S
+                .of(navigatorKey.currentState!.context)
+                .notificationDescription,
             importance: Importance.max,
             priority: Priority.high,
             ticker: 'ticker');
-    const NotificationDetails platformChannelSpecifics =
+    NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
 
     await flutterLocalNotificationsPlugin

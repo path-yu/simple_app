@@ -24,7 +24,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "NoteNotNullMessage": MessageLookupByLibrary.simpleMessage("内容不能为空!"),
         "addTodo": MessageLookupByLibrary.simpleMessage("添加代办事项"),
-        "addTodoMessage": MessageLookupByLibrary.simpleMessage("您添加了一条新todo!"),
+        "addTodoMessage": MessageLookupByLibrary.simpleMessage("您添加了一条新代办事项!"),
         "afternoon": MessageLookupByLibrary.simpleMessage("下午"),
         "beforeDawn": MessageLookupByLibrary.simpleMessage("凌晨"),
         "calculator": MessageLookupByLibrary.simpleMessage("计算器"),
@@ -67,6 +67,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "notSearchNoteMessage":
             MessageLookupByLibrary.simpleMessage("很遗憾,没有搜索到数据!"),
         "note": MessageLookupByLibrary.simpleMessage("便签"),
+        "notificationDescription":
+            MessageLookupByLibrary.simpleMessage("为了美好的每一天!"),
+        "notificationName": MessageLookupByLibrary.simpleMessage("重要通知"),
         "outCalculationRange": MessageLookupByLibrary.simpleMessage("超出计算范围!"),
         "placeSearchContent": MessageLookupByLibrary.simpleMessage("请输入搜索内容!"),
         "saveFail": MessageLookupByLibrary.simpleMessage("保存失败"),
@@ -80,8 +83,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "tipSaveMessage": MessageLookupByLibrary.simpleMessage("你还未保存?是否保存?"),
         "title": MessageLookupByLibrary.simpleMessage("标题"),
         "todoCompleteMessage":
-            MessageLookupByLibrary.simpleMessage("今日的todo已经完成, 请再接再厉!"),
+            MessageLookupByLibrary.simpleMessage("今日的代办事项已经完成, 请再接再厉!"),
         "todoList": MessageLookupByLibrary.simpleMessage("待办事项列表"),
+        "todoNotCompleteMessage":
+            MessageLookupByLibrary.simpleMessage("今天的代办事项还未完成哦,请记得按时完成哦"),
         "todoNoticeTitle": MessageLookupByLibrary.simpleMessage("这是一条通知"),
         "toolKit": MessageLookupByLibrary.simpleMessage("工具箱"),
         "topping": MessageLookupByLibrary.simpleMessage("置顶"),
