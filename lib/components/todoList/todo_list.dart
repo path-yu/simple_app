@@ -12,20 +12,28 @@ import 'package:simple_app/utils/show_dialog.dart';
 class TodoList extends StatefulWidget {
   // 接受父组件传递的listdata
   final List listData;
+
   //切换todo 状态
   final Function checkBoxChange;
+
   //删除todo
   final Function deleteToDoListItem;
+
   //搜索框key
   final GlobalKey<SearchBarState> searchBarKey;
+
   // 更新置顶状态
   final Function updateTodoTopping;
+
   //更新展开状态
   final void Function()? updateSpread;
+
   // 是否展开
   bool isSpread;
+
   // 交换todo
   final void Function(Map oldTarget, Map newTarget) swapTodo;
+
   TodoList(
       {required Key key,
       required this.listData,
@@ -54,14 +62,19 @@ class TodoListState extends State<TodoList>
 
   // 当前组件的高度
   double? currentHeight;
+
   // 边距
   double marin = ScreenUtil().setHeight(10);
+
 // 内边距
   double padding = ScreenUtil().setHeight(10);
+
   // 每个todo 平均高度
   double averageHeight = 48;
+
   //列表总数
   int? count;
+
   void removeItem(_index) {
     animatedRemoveItem(_index);
     // 因为删除动画需要时间300 毫秒 所以需要等待300ms后
@@ -176,31 +189,6 @@ class TodoListState extends State<TodoList>
         newTopIndex: newIndex, oldTopIndex: oldIndex);
   }
 
-  @override
-  void initState() {
-    super.initState();
-    myList = widget.listData;
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    WidgetsBinding.instance?.removeObserver(this);
-  }
-
-  @override
-  void didUpdateWidget(covariant TodoList oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    myList = widget.listData;
-    _getContainerHeight(null);
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    WidgetsBinding.instance?.addPostFrameCallback(_getContainerHeight);
-  }
-
   _getContainerHeight(_) {
     count ??= myList.length;
     setState(() {
@@ -233,6 +221,38 @@ class TodoListState extends State<TodoList>
             ? Colors.grey.shade300
             : Colors.white;
     return backgroundColor;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    myList = mapListAddDrag(widget.listData);
+  }
+
+  List mapListAddDrag(list) {
+    return list.map((e) {
+      e['isDrag'] = false;
+      return e;
+    }).toList();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance?.removeObserver(this);
+  }
+
+  @override
+  void didUpdateWidget(covariant TodoList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    myList = mapListAddDrag(widget.listData);
+    _getContainerHeight(null);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    WidgetsBinding.instance?.addPostFrameCallback(_getContainerHeight);
   }
 
   Widget _buildItem(Animation<double> _animation, int index) {
@@ -281,7 +301,8 @@ class TodoListState extends State<TodoList>
           child: AnimatedList(
         shrinkWrap: true,
         key: _listkey,
-        physics: const NeverScrollableScrollPhysics(), // 去掉回弹效果 避免滑动冲突
+        physics: const NeverScrollableScrollPhysics(),
+        // 去掉回弹效果 避免滑动冲突
         initialItemCount: widget.listData.length,
         itemBuilder:
             (BuildContext context, int index, Animation<double> animation) {
@@ -297,22 +318,28 @@ class TodoListState extends State<TodoList>
             child: Slidable(
               groupTag: '0',
               child: LongPressDraggable(
-                  child: _buildItem(animation, index),
-                  delay: const Duration(milliseconds: 200),
+                  child: Opacity(
+                    opacity: myList[index]['isDrag'] ? 0 : 1,
+                    child: _buildItem(animation, index),
+                  ),
+                  delay: const Duration(seconds: 1),
+                  onDragStarted: () {
+                    setState(() => myList[index]['isDrag'] = true);
+                  },
+                  onDragEnd: (details) {
+                    setState(() => myList[index]['isDrag'] = false);
+                  },
                   data: index,
                   feedback: Material(
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width - (padding * 2),
                       height: averageHeight,
-                      child: Opacity(
-                        opacity: 0.8,
-                        child: TodoItem(
-                          color: color,
-                          data: target,
-                          index: index,
-                          decoration: decoration,
-                          backgroundColor: backgroundColor,
-                        ),
+                      child: TodoItem(
+                        color: color,
+                        data: target,
+                        index: index,
+                        decoration: decoration,
+                        backgroundColor: backgroundColor,
                       ),
                     ),
                   )),
@@ -359,6 +386,7 @@ class TodoItem extends StatelessWidget {
   final TextDecoration decoration;
   final Color color;
   final Color backgroundColor;
+
   const TodoItem(
       {Key? key,
       required this.data,
