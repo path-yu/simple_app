@@ -81,7 +81,6 @@ class _TodoListPageState extends State<TodoListPage> {
 
   void init() async {
     var data = await getLocalStorageData(ConstantKey.todoListKey);
-    await Future.delayed(const Duration(milliseconds: 300));
     setState(() {
       loading = false;
     });

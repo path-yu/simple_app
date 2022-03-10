@@ -24,7 +24,12 @@ class CurrentTheme with ChangeNotifier {
   List<Color> get gradientColors => isNightMode
       ? [Colors.black12, Colors.black]
       : [const Color.fromRGBO(152, 203, 179, 0.5), themeColor];
+  //暗色 或 白色
   Color get darkOrWhiteColor => isNightMode ? Colors.white : Colors.black;
+
+  // 主题色 or 副主题色
+  Color get mainThemeOrSecondThemeColor =>
+      isNightMode ? Colors.blue : themeColor;
 
   changeMode(ThemeMode mode) async {
     themeMode = mode;

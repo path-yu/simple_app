@@ -1,9 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_app/generated/l10n.dart';
+import 'package:simple_app/provider/current_theme.dart';
 
 final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
@@ -22,8 +25,9 @@ Future<dynamic> getLocalStorageData(key) async {
 List filterListData(List arr, bool done) {
   return arr.where((element) => element['done'] == done).toList();
 }
+
 // showCupertinoModalPopup 展示ios的风格弹出框，通常情况下和CupertinoActionSheet配合使用，
-showBaseCupertinoModalPopup(BuildContext context,Function onConfirm){
+showBaseCupertinoModalPopup(BuildContext context, Function onConfirm) {
   showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) {
@@ -33,6 +37,18 @@ showBaseCupertinoModalPopup(BuildContext context,Function onConfirm){
           actions: <Widget>[
             CupertinoActionSheetAction(
               child: Text(
+                S.of(context).cancel,
+                style: TextStyle(
+                    fontSize: ScreenUtil().setSp(25),
+                    color: context
+                        .read<CurrentTheme>()
+                        .mainThemeOrSecondThemeColor),
+              ),
+              onPressed: () => Navigator.pop(context),
+              isDefaultAction: true,
+            ),
+            CupertinoActionSheetAction(
+              child: Text(
                 S.of(context).delete,
                 style: TextStyle(fontSize: ScreenUtil().setSp(25)),
               ),
@@ -40,18 +56,9 @@ showBaseCupertinoModalPopup(BuildContext context,Function onConfirm){
                 onConfirm();
                 Navigator.pop(context);
               },
-              isDefaultAction: true,
-            ),
-            CupertinoActionSheetAction(
-              child: Text(
-                S.of(context).cancel,
-                style: TextStyle(fontSize: ScreenUtil().setSp(25)),
-              ),
-              onPressed: () => Navigator.pop(context),
               isDestructiveAction: true,
             ),
           ],
         );
       });
 }
-

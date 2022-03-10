@@ -42,11 +42,11 @@ class SearchBarState extends State<SearchBar> {
           maxWidth: ScreenUtil().setSp(widget.inputWidth)),
       child: Neumorphic(
         style: NeumorphicStyle(
-            shape: NeumorphicShape.concave,
-            depth: 4,
-            boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
-            lightSource: LightSource.topLeft,
-            ),
+          shape: NeumorphicShape.concave,
+          depth: 4,
+          boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
+          lightSource: LightSource.topLeft,
+        ),
         child: TextField(
           controller: widget._todoController,
           textInputAction: widget.textInputAction,
@@ -72,8 +72,7 @@ class SearchBarState extends State<SearchBar> {
                   widget._todoController.text = "";
                   textFieldFocusNode.unfocus();
                 }),
-            border: const OutlineInputBorder(
-                borderSide: BorderSide.none),
+            border: const OutlineInputBorder(borderSide: BorderSide.none),
             filled: true,
             fillColor: widget.fillColor,
           ),

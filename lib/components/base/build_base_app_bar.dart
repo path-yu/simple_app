@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import "package:provider/provider.dart";
 import 'package:simple_app/main.dart';
@@ -15,6 +16,13 @@ AppBar buildBaseAppBar(
     toolbarHeight: ScreenUtil().setSp(55),
     leading: leading,
     actions: action,
+    systemOverlayStyle: SystemUiOverlayStyle(
+      // Status bar color
+      statusBarColor: Colors.transparent,
+      systemNavigationBarColor: navigatorKey.currentState!.context
+          .watch<CurrentTheme>()
+          .themeOrDarkColor,
+    ),
     backgroundColor: backgroundColor ??
         navigatorKey.currentState!.context
             .watch<CurrentTheme>()

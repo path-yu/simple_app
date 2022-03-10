@@ -147,7 +147,11 @@ class TodoListState extends State<TodoList>
       } else {
         newIndex = index;
       }
-      oldIndex = target['newTopIndex'];
+      if (target['newTopIndex'] != null) {
+        oldIndex = target['newTopIndex'];
+      } else {
+        oldIndex = index;
+      }
       isTopping = false;
     } else {
       // 置顶
@@ -218,7 +222,7 @@ class TodoListState extends State<TodoList>
             ? Colors.black45
             : Colors.black12
         : isTop
-            ? Colors.grey.shade300
+            ? Colors.grey.shade200
             : Colors.white;
     return backgroundColor;
   }
@@ -232,7 +236,7 @@ class TodoListState extends State<TodoList>
   // 给列表数据添加新的状态值
   List mapListAddAttr(list) {
     return list.map((e) {
-      e['isDrag'] = false;// 元素是否拖拽
+      e['isDrag'] = false; // 元素是否拖拽
       e['isShowBorder'] = false; // 是否显示边框, 在拖拽元素进入到当前元素时显示
       return e;
     }).toList();
@@ -383,25 +387,25 @@ class TodoListState extends State<TodoList>
                 extentRatio: isTop ? 0.6 : 0.5,
                 children: [
                   SlidableAction(
+                    flex: isTop ? 2 : 1,
+                    spacing: 1,
+                    onPressed: (BuildContext context) =>
+                        handleTopping(index, target),
+                    backgroundColor: themeColor,
+                    foregroundColor: Colors.white,
+                    label: isTop
+                        ? S.of(context).cancelTopping
+                        : S.of(context).topping,
+                  ),
+                  SlidableAction(
                     spacing: 1,
                     // An action can be bigger than the others.
                     flex: 1,
                     onPressed: (BuildContext context) =>
                         handleRemoveItem(index),
-                    backgroundColor: themeColor,
+                    backgroundColor: const Color.fromRGBO(255, 88, 103, 1),
                     foregroundColor: Colors.white,
                     label: S.of(context).delete,
-                  ),
-                  SlidableAction(
-                    flex: isTop ? 2 : 1,
-                    spacing: 1,
-                    onPressed: (BuildContext context) =>
-                        handleTopping(index, target),
-                    backgroundColor: const Color(0xFF0392CF),
-                    foregroundColor: Colors.white,
-                    label: isTop
-                        ? S.of(context).cancelTopping
-                        : S.of(context).topping,
                   ),
                 ],
               ),
