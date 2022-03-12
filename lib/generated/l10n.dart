@@ -699,6 +699,16 @@ class S {
       args: [],
     );
   }
+
+  /// `No longer tips?`
+  String get noLongerTips {
+    return Intl.message(
+      'No longer tips?',
+      name: 'noLongerTips',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

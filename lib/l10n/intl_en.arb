@@ -63,5 +63,6 @@
   "evening": "evening",
   "night": "night",
   "lateNight": "late at night",
-  "tipSaveMessage": "You haven't saved it yet? Save?"
+  "tipSaveMessage": "You haven't saved it yet? Save?",
+  "noLongerTips": "No longer tips?"
 }

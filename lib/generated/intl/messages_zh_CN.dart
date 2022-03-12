@@ -57,6 +57,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "night": MessageLookupByLibrary.simpleMessage("晚上"),
         "nightMode": MessageLookupByLibrary.simpleMessage("夜间模式"),
         "noDevelopment": MessageLookupByLibrary.simpleMessage("暂未开发"),
+        "noLongerTips": MessageLookupByLibrary.simpleMessage("不再提示?"),
         "noNotificationPermission":
             MessageLookupByLibrary.simpleMessage("没有通知权限, 前往设置界面设置权限?"),
         "noSelectNoteMessage": MessageLookupByLibrary.simpleMessage("请选择数据"),

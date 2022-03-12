@@ -112,6 +112,18 @@ class _TodoListPageState extends State<TodoListPage> {
       showNotification(
           message: S.of(context).addTodoMessage, payload: '/todo_list_page');
       addTodoLitItem();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Row(
+          children: <Widget>[
+            const Icon(
+              Icons.check,
+              color: themeColor,
+            ),
+            Text(S.of(context).addTodoMessage)
+          ],
+        ),
+        duration: const Duration(seconds: 2),
+      ));
     }
   }
 
@@ -268,8 +280,7 @@ class _TodoListPageState extends State<TodoListPage> {
             body: loading
                 ? const Loading()
                 : Scrollbar(
-                    interactive: true,
-                    showTrackOnHover: true,
+                    radius: const Radius.circular(30),
                     child: CustomScrollView(
                       shrinkWrap: false,
                       physics: const BouncingScrollPhysics(

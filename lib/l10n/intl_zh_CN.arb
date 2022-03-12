@@ -19,8 +19,8 @@
   "todoCompleteMessage": "今日的代办事项已经完成, 请再接再厉!",
   "todoNotCompleteMessage": "今天的代办事项还未完成哦,请记得按时完成哦",
   "noNotificationPermission": "没有通知权限, 前往设置界面设置权限?",
-  "notificationName":"重要通知",
-  "notificationDescription":"为了美好的每一天!",
+  "notificationName": "重要通知",
+  "notificationDescription": "为了美好的每一天!",
   "underway": "正在进行",
   "deleteTodoMessage": "确定删除当前代办事项吗?",
   "complete": "已经完成",
@@ -63,5 +63,6 @@
   "evening": "傍晚",
   "night": "晚上",
   "lateNight": "深夜",
-  "tipSaveMessage": "你还未保存?是否保存?"
+  "tipSaveMessage": "你还未保存?是否保存?",
+  "noLongerTips": "不再提示?"
 }

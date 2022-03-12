@@ -3,8 +3,6 @@ import 'package:simple_app/generated/l10n.dart';
 import 'package:simple_app/main.dart';
 import 'package:simple_app/utils/show_dialog.dart';
 
-
-
 // 获取app 是否具有通知权限 如果没有则弹出对话框 跳转到设置界面
 Future requestNoticePermission() async {
   // 判断是否没有通知权限 如果没有则弹出对话框 打开设置界面提示用户添加权限

@@ -75,7 +75,16 @@ class TodoListState extends State<TodoList>
   //列表总数
   int? count;
 
+  // 是否不再提示删除弹窗
+  bool isNoTips = false;
+
   void removeItem(_index) {
+    count = myList.length - 1;
+    _getContainerHeight(null);
+    // 如果删完了则更新展开状态
+    if (count == 0) {
+      widget.updateSpread!();
+    }
     animatedRemoveItem(_index);
     // 因为删除动画需要时间300 毫秒 所以需要等待300ms后
     // 调用父组件的方法删除对应的原数据  因为父组件调用了setState所以会触发子组件重新build 所以需要避免发生下标异常
@@ -101,20 +110,21 @@ class TodoListState extends State<TodoList>
   }
 
   void handleRemoveItem(index) async {
+    if (isNoTips) {
+      return removeItem(index);
+    }
     // 失去焦点
     widget.searchBarKey.currentState!.textFieldFocusNode.unfocus();
+    bool checkBoxValue = false;
     // 弹出对话框并等待其关闭 等获取它的返回值
-    bool? delete = await showConfirmDialog(context,
-        message: S.of(context).deleteTodoMessage);
+    bool? value = await showConfirmDialog(context,
+        message: S.of(context).deleteTodoMessage, onChange: (value) {
+      checkBoxValue = value!;
+    });
 
-    if (delete != null) {
-      count = myList.length - 1;
-      _getContainerHeight(null);
-      // 如果删完了则更新展开状态
-      if (count == 0) {
-        widget.updateSpread!();
-      }
+    if (value != null) {
       removeItem(index);
+      isNoTips = checkBoxValue;
     }
   }
 
