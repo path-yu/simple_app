@@ -451,39 +451,31 @@ class TodoItem extends StatelessWidget {
     return Neumorphic(
       style: NeumorphicStyle(
           depth: 0, color: backgroundColor, shape: NeumorphicShape.convex),
-      child: Center(
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Row(
-            children: [
-              Checkbox(
-                  value: data['done'],
-                  shape: const CircleBorder(),
-                  activeColor: themeColor,
-                  onChanged: handleCheckBoxChange != null
-                      ? (value) => handleCheckBoxChange!(value, data, index)
-                      : null),
-              Text(
-                data['value'],
-                style: TextStyle(decoration: decoration, color: color),
-              ),
-            ],
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Checkbox(
+            value: data['done'],
+            shape: const CircleBorder(),
+            activeColor: themeColor,
+            onChanged: handleCheckBoxChange != null
+                ? (value) => handleCheckBoxChange!(value, data, index)
+                : null),
+        Expanded(
+            child: Text(
+          data['value'],
+          style: TextStyle(
+              decoration: decoration,
+              color: color,
+              overflow: TextOverflow.ellipsis),
+        )),
+        Padding(
+          padding: EdgeInsets.only(right: ScreenUtil().setWidth(10)),
+          child: Text(
+            data['time'],
+            textAlign: TextAlign.right,
+            style: TextStyle(decoration: decoration, color: color),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text(
-                data['time'],
-                textAlign: TextAlign.right,
-                style: TextStyle(decoration: decoration, color: color),
-              ),
-              SizedBox(
-                width: ScreenUtil().setWidth(30),
-              )
-            ],
-          ),
-        ]),
-      ),
+        ),
+      ]),
     );
   }
 }
