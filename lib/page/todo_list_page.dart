@@ -220,7 +220,12 @@ class _TodoListPageState extends State<TodoListPage> {
 
     // 如果为第一项 则只更新置顶状态
     if (oldTopIndex == 0 && newTopIndex == 0) {
-      todoAllList[0]['isTop'] = isTopping;
+      // 判断是否为正在进行的todo项
+      if (oldTarget['done'] == true) {
+        todoAllList[oldIndex]['isTop'] = isTopping;
+      } else {
+        todoAllList[0]['isTop'] = isTopping;
+      }
     } else {
       if (isTopping) {
         todoAllList[oldIndex]['oldTopIndex'] = oldTopIndex;

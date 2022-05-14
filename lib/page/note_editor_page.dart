@@ -150,7 +150,7 @@ class _NoteEditorPageState extends State<NoteEditorPage>
     isNeedUpdate = true;
     // 弹出对话框判断用户是否真的需要删除
     var res = await showConfirmDialog(context,
-        message: S.of(context).deleteTodoMessage);
+        message: S.of(context).deleteTodoMessage,showTips: false);
     if (res != null) {
       int res = await DBProvider().deleteData(widget.id!);
       if (res > 0) {
@@ -225,7 +225,7 @@ class _NoteEditorPageState extends State<NoteEditorPage>
       return true;
     }
     if (await showConfirmDialog(context,
-            message: S.of(context).tipSaveMessage) !=
+            message: S.of(context).tipSaveMessage,showTips: false) !=
         null) {
       await _saveDocument();
       // 返回下一页, 更新数据

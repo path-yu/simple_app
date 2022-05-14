@@ -11,6 +11,8 @@ Future<bool?> showConfirmDialog(BuildContext context,
     String? message,
     String? cancelText,
     String? confirmText,
+    // 是否显示不在提示框
+    bool showTips = true,
     void Function(bool?)? onChange}) {
   tips ??= S.of(context).hint;
   message ??= S.of(context).dialogDeleteMessage;
@@ -27,6 +29,7 @@ Future<bool?> showConfirmDialog(BuildContext context,
           message: message!,
           label: S.of(context).noLongerTips,
           onChange: onChange,
+          showTips: showTips,
         ),
         actions: <Widget>[
           TextButton(
@@ -55,8 +58,9 @@ class WrapMaterialCheckBox extends StatefulWidget {
   // checkBox 左边文字
   final String label;
   final void Function(bool?)? onChange;
+  final bool showTips;
   const WrapMaterialCheckBox(
-      {Key? key, required this.message, required this.label, this.onChange})
+      {Key? key, required this.message, required this.label, this.onChange, required this.showTips})
       : super(key: key);
 
   @override
@@ -75,7 +79,7 @@ class WrapMaterialCheckBoxState extends State<WrapMaterialCheckBox> {
           child: Column(
             children: [
               Text(widget.message),
-              Row(
+             widget.showTips ? Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
@@ -97,7 +101,7 @@ class WrapMaterialCheckBoxState extends State<WrapMaterialCheckBox> {
                   ),
                   Text(widget.label)
                 ],
-              )
+              ) :Container()
             ],
           ),
         ));

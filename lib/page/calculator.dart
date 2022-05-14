@@ -197,7 +197,6 @@ class _CalculatorPageState extends State<CalculatorPage> {
   // 点击运算符
   void handleClick(dynamic operator) {
     if (filterInput(operator.toString())) return;
-
     // 记录当前点击的运算符和上一次的运算符 首次只能点击 数字
     if (currentClickOperator != null) {
       if (!['x', '=', 'AC', '％'].contains(operator)) {
