@@ -49,8 +49,12 @@
     • Java version OpenJDK Runtime Environment (build 11.0.10+0-b96-7249189)
     • All Android licenses accepted.
 ```
-
-
+推荐安装 2.10.0 版本 [flutter](https://storage.flutter-io.cn/flutter_infra_release/releases/stable/windows/flutter_windows_2.10.0-stable.zip)
+###  Flutter 设定镜像配置环境变量
+```shell
+ set PUB_HOSTED_URL=https://pub.flutter-io.cn
+ set FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
+```
 
 ## 打包部署命令
 ```shell
