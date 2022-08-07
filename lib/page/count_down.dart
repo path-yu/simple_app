@@ -38,8 +38,6 @@ class _CountDownPageState extends State<CountDownPage> {
   double strokeWidth = ScreenUtil().setHeight(12);
   // 进度条进度
   double progressValue = 0;
-  // 倒计时是否结束
-  bool success = false;
   // 当前时间
   int? hour;
   int? minutes;
@@ -56,8 +54,10 @@ class _CountDownPageState extends State<CountDownPage> {
   bool enable = false;
   // 是否开启声音
   bool enableAudio = true;
+
+  final num _threshold = 5;
   void handleStartClick() {
-    if (pickerTime.inSeconds < 10) return;
+    if (pickerTime.inSeconds <= _threshold - 1) return;
     setState(() => show = true);
     const timeout = Duration(seconds: 1);
     progressValue = 0;
@@ -82,7 +82,6 @@ class _CountDownPageState extends State<CountDownPage> {
       startSecond++;
       int diffSecond = totalSecond - startSecond;
       timerId = timer;
-      success = false;
       if (enableAudio) {
         _myPlayer!.startPlayer(
           fromDataBuffer:
@@ -109,16 +108,8 @@ class _CountDownPageState extends State<CountDownPage> {
       // 倒计时完成
       if (diffSecond == 0) {
         timer.cancel();
-        await Future.delayed(const Duration(milliseconds: 300));
-        setState(() {
-          show = false;
-          hour = null;
-          minutes = null;
-          second = null;
-          pickerTime = const Duration(seconds: 0);
-          progressValue = 0;
-        });
-        success = true;
+        await Future.delayed(const Duration(milliseconds: 800));
+        countdownEnd();
         if (await Vibration.hasCustomVibrationsSupport() != null) {
           Vibration.vibrate(duration: 2500, amplitude: 128);
         }
@@ -127,18 +118,31 @@ class _CountDownPageState extends State<CountDownPage> {
     });
   }
 
+  void countdownEnd() {
+    setState(() {
+      show = false;
+      hour = null;
+      minutes = null;
+      second = null;
+      pickerTime = const Duration(seconds: 0);
+      progressValue = 0;
+    });
+  }
+
   Future<bool> handleOnWillPop() async {
     // 判断是否结束
-    if (success) {
+    if (progressValue == 0) {
       return true;
+    } else {
+      // 判断是否退出
+      if (await showConfirmDialog(context,
+              message: S.of(context).cancelCountDownMessage, showTips: false) !=
+          null) {
+        timerId?.cancel();
+        countdownEnd();
+      }
+      return false;
     }
-    // 判断是否退出
-    if (await showConfirmDialog(context,
-            message: S.of(context).cancelCountDownMessage) !=
-        null) {
-      return true;
-    }
-    return false;
   }
 
   TextStyle textStyle = TextStyle(
@@ -285,8 +289,6 @@ class _CountDownPageState extends State<CountDownPage> {
                                       backgroundColor: isNightMode
                                           ? Colors.grey.shade800
                                           : Colors.grey.shade300,
-                                      circularStrokeCap:
-                                          CircularStrokeCap.round,
                                       linearGradient:
                                           LinearGradient(colors: colors),
                                       percent: progressValue,
@@ -415,7 +417,7 @@ class _CountDownPageState extends State<CountDownPage> {
                                   S.of(context).startTiming,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                      color: pickerTime.inSeconds >= 10
+                                      color: pickerTime.inSeconds >= _threshold
                                           ? context
                                                   .read<CurrentTheme>()
                                                   .isNightMode
