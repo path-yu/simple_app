@@ -114,19 +114,14 @@ class _CalculatorPageState extends State<CalculatorPage> {
       return true;
     }
     // 如果当前点击了计算运算符
-    if (isCalcOperator(operator)) {
-      // 如果为空, 则不进行计算
-      if (expression.isEmpty) {
-        return true;
+    if (isCalcOperator(operator) && !expressionIsEmpty) {
+      String lastExpression = expression[expression.length - 1];
+      // 判断表达式前一位是否为数字而且不为运算符, 如果是则计算, 否则过滤
+      if (isNumberOperator(lastExpression) &&
+          !operatorSymbolList.contains(lastExpression)) {
+        return false;
       } else {
-        String lastExpression = expression[expression.length - 1];
-        // 判断表达式前一位是否为数字而且不为运算符, 如果是则计算, 否则过滤
-        if (isNumberOperator(lastExpression) &&
-            !operatorSymbolList.contains(lastExpression)) {
-          return false;
-        } else {
-          return true;
-        }
+        return true;
       }
     }
     // 如果当前点击了数字运算符
@@ -134,62 +129,36 @@ class _CalculatorPageState extends State<CalculatorPage> {
       // 过滤输入0 时的数据异常边界值
       if (operator == '0') {
         if (expressionIsEmpty) return true;
-        // 过滤一直例如10+0 , 一直输入0000的情况
         if (expression.length == 1) {
-          if (expression == '0') {
-            return true;
-          } else {
-            return false;
-          }
+          return expression == '0';
+        }
+        // 判断倒数第二项是否不为为数字, 而且最后一位为0, 过滤类似 10+0 一直输入000
+        var str = expression[expression.length - 2];
+        var last = expression[expression.length - 1];
+        if (!isNumberOperator(str) && last == '0') {
+          return !(str == '.');
         } else {
-          // 判断倒数第二项是否不为为数字, 而且最后一位不为0,且不等于小数点
-          var str = expression[expression.length - 2];
-          var last = expression[expression.length - 1];
-          if (!isNumberOperator(str) && last == '0' && last != '.') {
-            if (str == '.') {
-              return false;
-            } else {
-              return true;
-            }
-          } else {
-            return false;
-          }
+          return false;
         }
       } else {
         if (expression.isNotEmpty && calcResultList.isNotEmpty) {
           String last = calcResultList.last;
           // 过滤最后一位数字为0时,输入02222类型情况
-          if (last.length == 1 && last == '0') {
-            return true;
-          } else {
-            return false;
-          }
+          return last.length == 1 && last == '0';
         }
         return false;
       }
     }
     // 其他运算符
-    if (isOtherOperator(operator)) {
-      // 如果输入的小数点.
-      if (operator == '.') {
-        if (expression.isNotEmpty) {
-          String lastExpression = expression[expression.length - 1];
-          // 确保计算式最后一位为数字而且不为运算符
-          if (isNumberOperator(lastExpression) &&
-              !operatorSymbolList.contains(lastExpression)) {
-            // 判断最后一位是否只有一位小数点,如果不为一位则过滤 避免一直输入小数点
-            if (findStrCount(calcResultList.last, '.') != 0) {
-              return true;
-            } else {
-              return false;
-            }
-          } else {
-            return true;
-          }
-        } else {
-          return false;
-        }
+    if (operator == '.' && expression.isNotEmpty) {
+      String lastExpression = expression[expression.length - 1];
+      // 确保计算式最后一位为数字而且不为运算符
+      if (isNumberOperator(lastExpression) &&
+          !operatorSymbolList.contains(lastExpression)) {
+        // 判断最后一位是否只有一位小数点,如果不为一位则过滤 避免一直输入小数点
+        return findStrCount(calcResultList.last, '.') != 0;
       }
+      return true;
     }
     return false;
   }
