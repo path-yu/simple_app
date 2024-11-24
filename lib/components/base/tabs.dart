@@ -77,15 +77,6 @@ class _TabsState extends State<Tabs> {
           ),
           label: S.of(context).setting),
     ];
-    //设置尺寸（填写设计中设备的屏幕尺寸）如果设计基于360dp * 690dp的屏幕
-    ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
-        designSize: const Size(375, 750),
-        context: context,
-        minTextAdapt: true,
-        orientation: Orientation.portrait);
 
     return Scaffold(
       backgroundColor: const Color.fromRGBO(244, 245, 245, 0.5),
@@ -93,7 +84,6 @@ class _TabsState extends State<Tabs> {
         type: BottomNavigationBarType.fixed,
         currentIndex: currentIndex,
         items: bottomTabsList,
-        selectedItemColor: themeColor,
         onTap: (index) {
           setState(() {
             currentIndex = index;

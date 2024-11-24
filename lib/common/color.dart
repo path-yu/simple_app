@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 // 主题色 121,188,154
-const Color themeColor = Color.fromRGBO(121, 188, 157, 1);
+// const Color themeColor = Color.fromRGBO(121, 188, 157, 1);
 // 副主题色
 const Color secondThemeColor = Colors.blue;
 //0xff79BD98

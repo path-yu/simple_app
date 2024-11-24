@@ -36,27 +36,25 @@ showBaseCupertinoModalPopup(BuildContext context, Function onConfirm) {
           message: Text(S.of(context).deleteMessage),
           actions: <Widget>[
             CupertinoActionSheetAction(
+              onPressed: () => Navigator.pop(context),
+              isDefaultAction: true,
               child: Text(
                 S.of(context).cancel,
                 style: TextStyle(
-                    fontSize: ScreenUtil().setSp(25),
-                    color: context
-                        .read<CurrentTheme>()
-                        .mainThemeOrSecondThemeColor),
+                  fontSize: ScreenUtil().setSp(25),
+                ),
               ),
-              onPressed: () => Navigator.pop(context),
-              isDefaultAction: true,
             ),
             CupertinoActionSheetAction(
-              child: Text(
-                S.of(context).delete,
-                style: TextStyle(fontSize: ScreenUtil().setSp(25)),
-              ),
               onPressed: () {
                 onConfirm();
                 Navigator.pop(context);
               },
               isDestructiveAction: true,
+              child: Text(
+                S.of(context).delete,
+                style: TextStyle(fontSize: ScreenUtil().setSp(25)),
+              ),
             ),
           ],
         );

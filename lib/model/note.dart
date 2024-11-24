@@ -18,12 +18,12 @@ class Note {
       required this.updateTime});
 
   //将json 序列化为model对象
-  Note.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+  Note.fromJson(Map<String, dynamic> json, int value) {
     title = json['title'];
     content = json['content'];
     time = json['time'];
     updateTime = json['updateTime'];
+    id = value;
   }
 
   Map<String, dynamic> toJson() {

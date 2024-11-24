@@ -1,10 +1,15 @@
-import 'dart:io';
-
-import 'package:path/path.dart';
+import 'dart:io' if (dart.library.html) 'dart:html';
+import 'package:flutter/foundation.dart';
+import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:sembast_web/sembast_web.dart';
 import 'package:simple_app/model/note.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:sembast/sembast.dart';
+// import 'package:sembast/sembast_io.dart'
+//     if (dart.library.html) 'package:sembast_web/sembast_web.dart';
+import 'package:sembast/sembast_io.dart';
 
+// if (dart.library.html) 'package:sembast_web/sembast_web.dart';
 class DBProvider {
   static final DBProvider _singleton = DBProvider._internal();
 
@@ -15,98 +20,91 @@ class DBProvider {
   DBProvider._internal();
 
   Database? _dbInstance;
+  final _store = intMapStoreFactory.store('NoteList');
 
   // 获取db 实例对象 操作数据库
-  Future<Database?> get db async {
+  Future<Database> get db async {
     if (_dbInstance != null) {
-      return _dbInstance;
+      return _dbInstance!;
     }
     _dbInstance = await _initDB();
-    return _dbInstance;
+    return _dbInstance!;
   }
 
   // 初始化数据库
   Future<Database> _initDB() async {
-    Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, 'NoteList');
-    return await openDatabase(path,
-        version: 1, onCreate: _onCreate, onUpgrade: _onUpgrade);
+    DatabaseFactory dbFactory;
+    String dbPath;
+    if (!kIsWeb) {
+      var dir = await getApplicationDocumentsDirectory();
+      await dir.create(recursive: true);
+      dbPath = p.join(dir.path, 'NoteList.db');
+      dbFactory = databaseFactoryIo;
+    } else {
+      dbPath = 'NoteList.db';
+      dbFactory = databaseFactoryWeb;
+    }
+    return await dbFactory.openDatabase(dbPath);
   }
-
-  /// 创建Table
-  Future _onCreate(Database db, int version) async {
-    return await db.execute("CREATE TABLE NoteList ("
-        "id integer primary key AUTOINCREMENT,"
-        "title TEXT,"
-        "content TEXT,"
-        "time INTEGER,"
-        "updateTime INTEGER "
-        ""
-        ")");
-  }
-
-  /// 更新Table
-  Future _onUpgrade(Database db, int oldVersion, int newVersion) async {}
 
   // 保存储存数据
-  Future saveData(Note note) async {
-    var _db = await db;
-    //  向数据库插入
-    return await _db?.insert('NoteList', note.toJson());
+  Future<int> saveData(Note note) async {
+    final db = await this.db;
+    return await _store.add(db, note.toJson());
   }
 
   // 查询所有数据
   Future<List<Note>> findAll() async {
-    var _db = await db;
-    List<Map<String, dynamic>> result = await _db!.query('NoteList');
-    return result.isNotEmpty
-        ? result.map((e) {
-            return Note.fromJson(e);
-          }).toList()
-        : [];
+    final db = await this.db;
+    final records = await _store.find(db);
+    return records.map((record) {
+      return Note.fromJson(record.value, record.key);
+    }).toList();
   }
 
-  //根据id 查询数据
-  Future<List<Note>> findNoteListData(int id) async {
-    var _db = await db;
-    List<Map<String, dynamic>> result =
-        await _db!.query('NoteList', where: 'id = ?', whereArgs: [id]);
-    return result.isNotEmpty
-        ? result.map((e) {
-            return Note.fromJson(e);
-          }).toList()
-        : [];
+  // 根据id 查询数据
+  Future<Note?> findNoteById(int id) async {
+    final db = await this.db;
+    final record = await _store.record(id).get(db);
+    if (record != null) {
+      return Note.fromJson(record, id);
+    }
+    return null;
   }
 
   // 根据 note id 更新数据
   Future<int> update(Note note) async {
-    var _db = await db;
-    return await _db!.update('NoteList', note.toJson(),
-        where: 'id = ?', whereArgs: [note.id]);
+    final db = await this.db;
+    final finder = Finder(filter: Filter.byKey(note.id));
+    return await _store.update(db, note.toJson(), finder: finder);
   }
 
   // 根据 note id 删除数据
   Future<int> deleteData(int id) async {
-    var _db = await db;
-    return await _db!.delete('NoteList', where: 'id = ?', whereArgs: [id]);
+    final db = await this.db;
+    final finder = Finder(filter: Filter.byKey(id));
+    return await _store.delete(db, finder: finder);
   }
 
   // 根据 note id 批量删除数据
   Future<int> deleteByIds(List<int> ids) async {
-    var _db = await db;
-    var list = ids.join(',');
-    return await _db!.rawDelete(
-      'delete from NoteList where id in ($list)',
-    );
+    final db = await this.db;
+    final finder = Finder(filter: Filter.inList('id', ids));
+    return await _store.delete(db, finder: finder);
   }
 
-  //  根据标题 模糊查询
+  // 根据标题 模糊查询
   Future<List<Note>> findTitleNoteList(String title) async {
-    var _db = await db;
-    List<Map<String, dynamic>> result = await _db!.rawQuery(
-        "SELECT * FROM NoteList WHERE title LIKE '%$title%' or content like '%$title%'");
-    return result.map((e) {
-      return Note.fromJson(e);
+    final db = await this.db;
+    final finder = Finder(
+      filter: Filter.or([
+        Filter.matches('title', title),
+        Filter.matches('content', title),
+      ]),
+    );
+    final records = await _store.find(db, finder: finder);
+    return records.map((record) {
+      return Note.fromJson(record.value, record.key);
     }).toList();
   }
 }

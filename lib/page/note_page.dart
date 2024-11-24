@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:date_format/date_format.dart' hide S;
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
@@ -66,7 +66,6 @@ class _NotePageState extends State<NotePage> {
 
   @override
   void initState() {
-    if (isSelectAll) {}
     super.initState();
     getData(DBProvider().findAll);
   }
@@ -144,13 +143,12 @@ class _NotePageState extends State<NotePage> {
     } else {
       params = {'isEditor': false};
     }
-
     Navigator.push(
         context,
         CupertinoPageRoute(
             builder: ((context) => NoteEditorPage(
                   id: params['id'],
-                  time: params['time'] ??= null,
+                  time: params['time'],
                   isEditor: params['isEditor'],
                 )))).then((value) {
       if (!params['isEditor']) {
@@ -172,13 +170,12 @@ class _NotePageState extends State<NotePage> {
       selectIndexList.add(noteList[index].id);
     });
     // 弹窗底部菜单
-    Scaffold.of(context).showBottomSheet<void>(
+    Scaffold.of(context).showBottomSheet(
       (BuildContext context) {
-        return Container(
+        return SizedBox(
           height: ScreenUtil().setHeight(60),
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  colors: context.read<CurrentTheme>().gradientColors)),
+          // decoration: BoxDecoration(
+          //    ),
           child: Center(
             child: InkWell(
               onTap: handleDelete,
@@ -284,7 +281,7 @@ class _NotePageState extends State<NotePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             verticalDirection: VerticalDirection.up,
             children: [
-                baseText(S.of(context).selected + ' ', fontSize: 18),
+                baseText('${S.of(context).selected} ', fontSize: 18),
                 AnimatedFlipCounter(
                   value: selectIndexList.length,
                   curve: Curves.bounceIn,
@@ -295,7 +292,7 @@ class _NotePageState extends State<NotePage> {
                       textBaseline: TextBaseline.alphabetic),
                 ),
                 // baseText(selectIndexList.length.toString() + ' ', fontSize: 20),
-                baseText(' ' + S.of(context).item + ' ', fontSize: 18)
+                baseText(' ${S.of(context).item} ', fontSize: 18)
               ])
         : Text(
             S.of(context).note,
@@ -326,70 +323,62 @@ class _NotePageState extends State<NotePage> {
             ? [yyyy, '-', mm, '-', dd]
             : [yyyy, '年', mm, '月', dd, '日']);
     var padding = ScreenUtil().setSp(20);
-    return Neumorphic(
-      style: NeumorphicStyle(
-          lightSource: LightSource.bottomRight,
-          boxShape: NeumorphicBoxShape.roundRect(borderRadius),
-          depth: 2,
-          shape: NeumorphicShape.concave),
-      child: InkWell(
-        onTap: () => toCreateOrEditorNotePage(
-            id: target.id, time: target.time, index: index),
-        onLongPress: () => handLongPress(index, context),
-        // 和盒子容器保持一致
-        borderRadius: borderRadius,
-        child: AnimatedContainer(
-          duration: const Duration(seconds: 1),
-          child: DecoratedBox(
-              decoration: BoxDecoration(
-                  border: Border.all(
-                      color: Colors.white12, width: ScreenUtil().setWidth(1)),
-                  color: context.watch<CurrentTheme>().isNightMode
-                      ? easyDarkColor
-                      : Colors.white,
-                  borderRadius: borderRadius),
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(padding, padding, padding, 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    title,
-                    SizedBox(
-                      height:
-                          ScreenUtil().setHeight(target.title!.isEmpty ? 0 : 8),
-                    ),
-                    Text(
-                      content,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 5,
-                      style: const TextStyle(color: Color(0xff636363)),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          currentTime,
-                          style: TextStyle(
-                              fontSize: ScreenUtil().setSp(12),
-                              color: const Color(0xff969696)),
-                        ),
-                        baseAnimatedOpacity(
-                            value: isShowCheckBox,
-                            child: Checkbox(
-                                shape: const CircleBorder(),
-                                activeColor: themeColor,
-                                materialTapTargetSize:
-                                    MaterialTapTargetSize.shrinkWrap,
-                                value: target.isSelect,
-                                onChanged: (value) =>
-                                    handleChangeCheckBox(value!, index)))
-                      ],
-                    ),
-                  ],
-                ),
-              )),
-        ),
+    return InkWell(
+      onTap: () => toCreateOrEditorNotePage(
+          id: target.id, time: target.time, index: index),
+      onLongPress: () => handLongPress(index, context),
+      // 和盒子容器保持一致
+      borderRadius: borderRadius,
+      child: AnimatedContainer(
+        duration: const Duration(seconds: 1),
+        child: DecoratedBox(
+            decoration: BoxDecoration(
+                border: Border.all(
+                    color: Colors.white12, width: ScreenUtil().setWidth(1)),
+                color: context.watch<CurrentTheme>().isNightMode
+                    ? easyDarkColor
+                    : Colors.white,
+                borderRadius: borderRadius),
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(padding, padding, padding, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  title,
+                  SizedBox(
+                    height:
+                        ScreenUtil().setHeight(target.title!.isEmpty ? 0 : 8),
+                  ),
+                  Text(
+                    content,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 5,
+                    style: const TextStyle(color: Color(0xff636363)),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        currentTime,
+                        style: TextStyle(
+                            fontSize: ScreenUtil().setSp(12),
+                            color: const Color(0xff969696)),
+                      ),
+                      baseAnimatedOpacity(
+                          value: isShowCheckBox,
+                          child: Checkbox(
+                              shape: const CircleBorder(),
+                              materialTapTargetSize:
+                                  MaterialTapTargetSize.shrinkWrap,
+                              value: target.isSelect,
+                              onChanged: (value) =>
+                                  handleChangeCheckBox(value!, index)))
+                    ],
+                  ),
+                ],
+              ),
+            )),
       ),
     );
   }
@@ -405,7 +394,7 @@ class _NotePageState extends State<NotePage> {
               height: ScreenUtil().setSp(20),
               child: Scrollbar(
                 interactive: true,
-                showTrackOnHover: true,
+                // showTrackOnHover: true,
                 child: LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
                     return SizedBox(
@@ -442,6 +431,8 @@ class _NotePageState extends State<NotePage> {
 
   @override
   Widget build(BuildContext context) {
+    Color primaryColor = Theme.of(context).primaryColor;
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
     return HideKeyboard(
         child: Scaffold(
       appBar: buildBaseAppBar(
@@ -456,7 +447,7 @@ class _NotePageState extends State<NotePage> {
                       transitionBuilder:
                           (Widget child, Animation<double> animation) {
                         //执行缩放动画
-                        return ScaleTransition(child: child, scale: animation);
+                        return ScaleTransition(scale: animation, child: child);
                       },
                       child: Icon(
                         isSelectAll
@@ -474,8 +465,8 @@ class _NotePageState extends State<NotePage> {
                 duration: _duration,
                 transitionBuilder: (Widget child, Animation<double> value) {
                   return ScaleTransition(
-                    child: child,
                     scale: value,
+                    child: child,
                   );
                 },
                 child: Icon(
@@ -483,36 +474,32 @@ class _NotePageState extends State<NotePage> {
                   key: ValueKey<bool>(isShowCheckBox),
                 ),
               ))),
-      body: WillPopScope(
-        // 判断是否添加对应的回调 如果需要拦截则添加 不需要则 为null ,避免拦截ios下的 右滑返回
-        onWillPop: isShowCheckBox ? handleWillPop : null,
-        child: Container(
-          padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
-          key: _parentKey,
-          child: RefreshIndicator(
-            child: Column(
-              children: [
-                Center(
-                  child: SearchBar(
-                    _noteController,
-                    handleSearch,
-                    TextInputAction.search,
-                    S.of(context).searchNote,
-                    prefixIcon: Icon(
-                      Icons.search,
-                      size: ScreenUtil().setSp(20),
-                      color: themeColor,
-                    ),
+      body: Container(
+        padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
+        key: _parentKey,
+        child: RefreshIndicator(
+          onRefresh: _pullRefresh,
+          color: Theme.of(context).primaryColor,
+          child: Column(
+            children: [
+              Center(
+                child: MySearchBar(
+                  _noteController,
+                  handleSearch,
+                  TextInputAction.search,
+                  S.of(context).searchNote,
+                  prefixIcon: Icon(
+                    Icons.search,
+                    size: ScreenUtil().setSp(20),
+                    color: primaryColor,
                   ),
                 ),
-                SizedBox(
-                  height: ScreenUtil().setHeight(20),
-                ),
-                buildNoteListCard(),
-              ],
-            ),
-            onRefresh: _pullRefresh,
-            color: themeColor,
+              ),
+              SizedBox(
+                height: ScreenUtil().setHeight(20),
+              ),
+              buildNoteListCard(),
+            ],
           ),
         ),
       ),
@@ -520,21 +507,11 @@ class _NotePageState extends State<NotePage> {
           value: !isShowCheckBox,
           child: DragAbleFloatingActionButton(
             parentKey: _parentKey,
-            child: SizedBox(
-                height: 56,
-                width: 56,
-                child: NeumorphicButton(
-                  style: const NeumorphicStyle(
-                    boxShape: NeumorphicBoxShape.circle(),
-                    shape: NeumorphicShape.concave,
-                    depth: 4,
-                  ),
-                  child: Icon(
-                    Icons.add,
-                    color: context.read<CurrentTheme>().darkOrWhiteColor,
-                  ),
-                  onPressed: () => toCreateOrEditorNotePage(),
-                )),
+            child: FloatingActionButton(
+              backgroundColor: colorScheme.primary,
+              onPressed: toCreateOrEditorNotePage,
+              child: const Icon(Icons.add),
+            ),
           )),
     ));
   }

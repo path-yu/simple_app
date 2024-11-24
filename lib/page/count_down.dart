@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -31,9 +31,9 @@ class _CountDownPageState extends State<CountDownPage> {
   // 是否显示倒计时看板
   bool show = false;
   // 圆形大小背景
-  double size = ScreenUtil().setHeight(326);
-  // 进度条宽高度
-  double progressSize = ScreenUtil().setHeight(350);
+  double size = ScreenUtil().setHeight(296);
+  // 进度条 半径
+  double progressSize = ScreenUtil().setHeight(160);
   // 进度条大小
   double strokeWidth = ScreenUtil().setHeight(12);
   // 进度条进度
@@ -152,8 +152,8 @@ class _CountDownPageState extends State<CountDownPage> {
       ..strokeWidth = 1
       ..color = Colors.white,
   );
-  final NeumorphicSwitchStyle _neumorphicSwitchStyle =
-      const NeumorphicSwitchStyle(activeTrackColor: themeColor);
+  // final NeumorphicSwitchStyle _neumorphicSwitchStyle =
+  //     const NeumorphicSwitchStyle(activeTrackColor: themeColor);
   @override
   void dispose() {
     super.dispose();
@@ -192,248 +192,226 @@ class _CountDownPageState extends State<CountDownPage> {
 
   @override
   Widget build(BuildContext context) {
+    Color primaryColor = Theme.of(context).primaryColor;
+
     List<Color> colors = [];
     bool isNightMode = context.read<CurrentTheme>().isNightMode;
     if (isNightMode) {
       colors = [Colors.black12, Colors.black];
     } else {
-      colors = [const Color.fromRGBO(152, 203, 179, 0.5), themeColor];
+      colors = [const Color.fromRGBO(152, 203, 179, 0.5), primaryColor];
     }
-    return Neumorphic(
-      child: WillPopScope(
-          child: Scaffold(
-            appBar: buildBaseAppBar(title: S.of(context).countDown),
-            body: Center(
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 350),
-                transitionBuilder: (child, animation) {
-                  return ScaleTransition(
-                    scale: animation,
-                    child: child,
-                  );
-                },
-                child: Container(
-                  key: ValueKey<bool>(show),
-                  child: show
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Column(
-                              // mainAxisAlignment: MainAxisAlignment.center,
+    return Scaffold(
+      appBar: buildBaseAppBar(title: S.of(context).countDown),
+      body: Center(
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 350),
+          transitionBuilder: (child, animation) {
+            return ScaleTransition(
+              scale: animation,
+              child: child,
+            );
+          },
+          child: Container(
+            key: ValueKey<bool>(show),
+            child: show
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Column(
+                        // mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: progressSize,
+                            margin: EdgeInsets.only(
+                                bottom: ScreenUtil().setHeight(20)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Container(
-                                  width: progressSize,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      NeumorphicSwitch(
-                                        style: _neumorphicSwitchStyle,
-                                        height: ScreenUtil().setHeight(30),
-                                        value: enableAudio,
-                                        onChanged: (value) =>
-                                            handleSwitchChange(value, 'audio'),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      AnimatedOpacity(
-                                        opacity: enableAudio ? 1 : 0.5,
-                                        duration: _duration,
-                                        child: Text(
-                                          S.of(context).enableAudioMessage,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  margin: EdgeInsets.only(
-                                      bottom: ScreenUtil().setHeight(20)),
+                                Switch(
+                                  value: enableAudio,
+                                  onChanged: (value) =>
+                                      handleSwitchChange(value, 'audio'),
                                 ),
-                                Container(
-                                  width: progressSize,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      NeumorphicSwitch(
-                                        style: _neumorphicSwitchStyle,
-                                        height: ScreenUtil().setHeight(30),
-                                        value: enable,
-                                        onChanged: (value) =>
-                                            handleSwitchChange(
-                                                value, 'background'),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      AnimatedOpacity(
-                                        opacity: enable ? 1 : 0.5,
-                                        duration: _duration,
-                                        child: Text(
-                                            S.of(context).enableShimmerMessage),
-                                      ),
-                                    ],
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                AnimatedOpacity(
+                                  opacity: enableAudio ? 1 : 0.5,
+                                  duration: _duration,
+                                  child: Text(
+                                    S.of(context).enableAudioMessage,
                                   ),
-                                  margin: EdgeInsets.only(
-                                      bottom: ScreenUtil().setHeight(20)),
                                 ),
                               ],
                             ),
-                            Stack(
+                          ),
+                          Container(
+                            width: progressSize,
+                            margin: EdgeInsets.only(
+                                bottom: ScreenUtil().setHeight(20)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Positioned(
-                                  child: SizedBox(
-                                    height: progressSize,
-                                    width: progressSize,
-                                    child: CircularPercentIndicator(
-                                      lineWidth: strokeWidth,
-                                      animateFromLastPercent: true,
-                                      backgroundColor: isNightMode
-                                          ? Colors.grey.shade800
-                                          : Colors.grey.shade300,
-                                      linearGradient:
-                                          LinearGradient(colors: colors),
-                                      percent: progressValue,
-                                      radius: (progressSize),
-                                      animation: true,
+                                Switch(
+                                  value: enable,
+                                  onChanged: (value) =>
+                                      handleSwitchChange(value, 'background'),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                AnimatedOpacity(
+                                  opacity: enable ? 1 : 0.5,
+                                  duration: _duration,
+                                  child:
+                                      Text(S.of(context).enableShimmerMessage),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      Stack(
+                        children: [
+                          Positioned(
+                            child: CircularPercentIndicator(
+                              // lineWidth: strokeWidth,
+                              animateFromLastPercent: true,
+                              backgroundColor: isNightMode
+                                  ? Colors.grey.shade800
+                                  : Colors.grey.shade300,
+                              linearGradient: LinearGradient(colors: colors),
+                              percent: progressValue,
+                              radius: progressSize,
+                              lineWidth: strokeWidth,
+                              animation: true,
+                            ),
+                          ),
+                          Positioned(
+                              top: strokeWidth,
+                              left: strokeWidth,
+                              child: ClipOval(
+                                child: Shimmer.fromColors(
+                                  enabled: enable,
+                                  baseColor: isNightMode
+                                      ? Colors.black12
+                                      : primaryColor,
+                                  highlightColor: isNightMode
+                                      ? Colors.black
+                                      : Colors.green.shade200,
+                                  period: const Duration(seconds: 1),
+                                  child: Container(
+                                    width: size,
+                                    height: size,
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                          begin: Alignment.centerLeft,
+                                          end: Alignment.centerRight,
+                                          colors: colors),
                                     ),
                                   ),
                                 ),
-                                Positioned(
-                                    top: strokeWidth,
-                                    left: strokeWidth,
-                                    child: ClipOval(
-                                      child: Shimmer.fromColors(
-                                        enabled: enable,
-                                        child: Container(
-                                          width: size,
-                                          height: size,
-                                          decoration: BoxDecoration(
-                                            gradient: LinearGradient(
-                                                begin: Alignment.centerLeft,
-                                                end: Alignment.centerRight,
-                                                colors: colors),
+                              )),
+                          Positioned(
+                            top: strokeWidth,
+                            left: strokeWidth,
+                            child: ClipOval(
+                                child: SizedBox(
+                                    width: size,
+                                    height: size,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Visibility(
+                                            visible: hour != null,
+                                            child: Center(
+                                              child: AnimatedFlipCounter(
+                                                value: hour ??= 0,
+                                                duration: _duration,
+                                                textStyle: textStyle,
+                                              ),
+                                            )),
+                                        Visibility(
+                                          visible: hour != 0,
+                                          child: Text(
+                                            ':',
+                                            style: textStyle,
                                           ),
                                         ),
-                                        baseColor: isNightMode
-                                            ? Colors.black12
-                                            : themeColor,
-                                        highlightColor: isNightMode
-                                            ? Colors.black
-                                            : Colors.green.shade200,
-                                        period: const Duration(seconds: 1),
-                                      ),
-                                    )),
-                                Positioned(
-                                  top: strokeWidth,
-                                  left: strokeWidth,
-                                  child: ClipOval(
-                                      child: SizedBox(
-                                          width: size,
-                                          height: size,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Visibility(
-                                                  visible: hour != null,
-                                                  child: Center(
-                                                    child: AnimatedFlipCounter(
-                                                      value: hour ??= 0,
-                                                      duration: _duration,
-                                                      textStyle: textStyle,
-                                                    ),
-                                                  )),
-                                              Visibility(
-                                                visible: hour != 0,
-                                                child: Text(
-                                                  ':',
-                                                  style: textStyle,
-                                                ),
+                                        Visibility(
+                                            visible: minutes != null,
+                                            child: Center(
+                                              child: AnimatedFlipCounter(
+                                                value: minutes ??= 0,
+                                                duration: _duration,
+                                                textStyle: textStyle,
                                               ),
-                                              Visibility(
-                                                  visible: minutes != null,
-                                                  child: Center(
-                                                    child: AnimatedFlipCounter(
-                                                      value: minutes ??= 0,
-                                                      duration: _duration,
-                                                      textStyle: textStyle,
-                                                    ),
-                                                  )),
-                                              Visibility(
-                                                visible: hour == 0
-                                                    ? minutes != 0
-                                                    : true,
-                                                child: Text(
-                                                  ':',
-                                                  style: textStyle,
-                                                ),
+                                            )),
+                                        Visibility(
+                                          visible:
+                                              hour == 0 ? minutes != 0 : true,
+                                          child: Text(
+                                            ':',
+                                            style: textStyle,
+                                          ),
+                                        ),
+                                        Visibility(
+                                            visible: second != null,
+                                            child: Center(
+                                              child: AnimatedFlipCounter(
+                                                value: second ??= 0,
+                                                duration: _duration,
+                                                textStyle: textStyle,
                                               ),
-                                              Visibility(
-                                                  visible: second != null,
-                                                  child: Center(
-                                                    child: AnimatedFlipCounter(
-                                                      value: second ??= 0,
-                                                      duration: _duration,
-                                                      textStyle: textStyle,
-                                                    ),
-                                                  ))
-                                            ],
-                                          ))),
-                                )
-                              ],
-                            )
-                          ],
-                        )
-                      : Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: ScreenUtil().setHeight(100),
-                              child: CupertinoTheme(
-                                  data: CupertinoThemeData(
-                                      textTheme: CupertinoTextThemeData(
-                                          pickerTextStyle: TextStyle(
-                                              color: context
-                                                  .read<CurrentTheme>()
-                                                  .darkOrWhiteColor,
-                                              fontSize:
-                                                  ScreenUtil().setSp(25)))),
-                                  child: Builder(
-                                      builder: (context) =>
-                                          CupertinoTimerPicker(
-                                              onTimerDurationChanged: (time) =>
-                                                  setState(() =>
-                                                      pickerTime = time)))),
-                            ),
-                            SizedBox(
-                              height: ScreenUtil().setHeight(50),
-                            ),
-                            SizedBox(
-                              width: 200,
-                              child: NeumorphicButton(
-                                style: const NeumorphicStyle(
-                                    boxShape: NeumorphicBoxShape.stadium()),
-                                onPressed: handleStartClick,
-                                child: Text(
-                                  S.of(context).startTiming,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: pickerTime.inSeconds >= _threshold
-                                          ? context
-                                                  .read<CurrentTheme>()
-                                                  .isNightMode
-                                              ? Colors.white
-                                              : Colors.black
-                                          : Colors.grey),
-                                ),
-                              ),
-                            )
-                          ],
+                                            ))
+                                      ],
+                                    ))),
+                          )
+                        ],
+                      )
+                    ],
+                  )
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: ScreenUtil().setHeight(100),
+                        child: CupertinoTheme(
+                            data: CupertinoThemeData(
+                                textTheme: CupertinoTextThemeData(
+                                    pickerTextStyle: TextStyle(
+                                        fontSize: ScreenUtil().setSp(25)))),
+                            child: Builder(
+                                builder: (context) => CupertinoTimerPicker(
+                                    onTimerDurationChanged: (time) =>
+                                        setState(() => pickerTime = time)))),
+                      ),
+                      SizedBox(
+                        height: ScreenUtil().setHeight(50),
+                      ),
+                      SizedBox(
+                        width: 200,
+                        child: ElevatedButton(
+                          onPressed: handleStartClick,
+                          child: Text(
+                            S.of(context).startTiming,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: pickerTime.inSeconds >= _threshold
+                                    ? context.read<CurrentTheme>().isNightMode
+                                        ? Colors.white
+                                        : Colors.black
+                                    : Colors.grey),
+                          ),
                         ),
-                ),
-              ),
-            ),
+                      )
+                    ],
+                  ),
           ),
-          onWillPop: show ? handleOnWillPop : null),
+        ),
+      ),
     );
   }
 }

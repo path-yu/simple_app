@@ -1,4 +1,4 @@
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_app/common/color.dart';
@@ -35,14 +35,18 @@ class _SettingPageState extends State<SettingPage> {
     }
   }
 
-  final NeumorphicStyle _neumorphicStyle = NeumorphicStyle(
-      depth: -4,
-      boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)));
+  // final NeumorphicStyle _neumorphicStyle = NeumorphicStyle(
+  //     depth: -4,
+  //     boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)));
 
   @override
   Widget build(BuildContext context) {
+    Color primaryColor = Theme.of(context).primaryColor;
+
     return Scaffold(
-      appBar: buildBaseAppBar(title: S.of(context).setting,backgroundColor: context.watch<CurrentTheme>().themeOrDarkColor),
+      appBar: buildBaseAppBar(
+        title: S.of(context).setting,
+      ),
       body: Container(
         padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
         child: LayoutBuilder(
@@ -54,69 +58,62 @@ class _SettingPageState extends State<SettingPage> {
                     parent: AlwaysScrollableScrollPhysics()),
                 child: Column(
                   children: [
-                    Neumorphic(
-                      style: _neumorphicStyle,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                baseIcon(Icons.language_rounded,
-                                    color: themeColor),
-                                SizedBox(
-                                  width: ScreenUtil().setWidth(10),
-                                ),
-                                baseText(
-                                  S.of(context).switchLanguage,
-                                )
-                              ],
-                            ),
-                            NeumorphicSwitch(
-                              height: ScreenUtil().setHeight(30),
-                              style: const NeumorphicSwitchStyle(
-                                  activeTrackColor: themeColor),
-                              value: context
-                                  .watch<CurrentLocale>()
-                                  .languageIsEnglishMode,
-                              onChanged: changeLanguage,
-                            )
-                          ],
-                        ),
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              baseIcon(Icons.language_rounded,
+                                  color: primaryColor),
+                              SizedBox(
+                                width: ScreenUtil().setWidth(10),
+                              ),
+                              baseText(
+                                S.of(context).switchLanguage,
+                              )
+                            ],
+                          ),
+                          Switch(
+                            // height: ScreenUtil().setHeight(30),
+                            // style: const NeumorphicSwitchStyle(
+                            //     activeTrackColor: themeColor),
+                            value: context
+                                .watch<CurrentLocale>()
+                                .languageIsEnglishMode,
+                            onChanged: changeLanguage,
+                          )
+                        ],
                       ),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
-                    Neumorphic(
-                      style: _neumorphicStyle,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                baseIcon(Icons.mode_night_rounded,
-                                    color: themeColor),
-                                SizedBox(
-                                  width: ScreenUtil().setWidth(10),
-                                ),
-                                baseText(
-                                  S.of(context).nightMode,
-                                )
-                              ],
-                            ),
-                            NeumorphicSwitch(
-                              height: ScreenUtil().setHeight(30),
-                              style: const NeumorphicSwitchStyle(
-                                  activeTrackColor: themeColor),
-                              value: context.watch<CurrentTheme>().isNightMode,
-                              onChanged: changeNightMode,
-                            )
-                          ],
-                        ),
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              baseIcon(Icons.mode_night_rounded,
+                                  color: primaryColor),
+                              SizedBox(
+                                width: ScreenUtil().setWidth(10),
+                              ),
+                              baseText(
+                                S.of(context).nightMode,
+                              )
+                            ],
+                          ),
+                          Switch(
+                            // style: const NeumorphicSwitchStyle(
+                            //     activeTrackColor: themeColor),
+                            value: context.watch<CurrentTheme>().isNightMode,
+                            onChanged: changeNightMode,
+                          )
+                        ],
                       ),
                     )
                   ],

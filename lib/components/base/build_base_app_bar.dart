@@ -19,14 +19,7 @@ AppBar buildBaseAppBar(
     systemOverlayStyle: SystemUiOverlayStyle(
       // Status bar color
       statusBarColor: Colors.transparent,
-      systemNavigationBarColor: navigatorKey.currentState!.context
-          .watch<CurrentTheme>()
-          .themeOrDarkColor,
     ),
-    backgroundColor: backgroundColor ??
-        navigatorKey.currentState!.context
-            .watch<CurrentTheme>()
-            .themeOrDarkColor,
     title: titleWidget ??
         Text(
           title!,

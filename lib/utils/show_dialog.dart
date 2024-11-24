@@ -18,8 +18,7 @@ Future<bool?> showConfirmDialog(BuildContext context,
   message ??= S.of(context).dialogDeleteMessage;
   cancelText ??= S.of(context).cancel;
   confirmText ??= S.of(context).confirm;
-  TextStyle textStyle = TextStyle(
-      color: context.read<CurrentTheme>().mainThemeOrSecondThemeColor);
+  TextStyle textStyle = TextStyle();
   return showDialog<bool>(
     context: context,
     builder: (context) {
@@ -60,7 +59,11 @@ class WrapMaterialCheckBox extends StatefulWidget {
   final void Function(bool?)? onChange;
   final bool showTips;
   const WrapMaterialCheckBox(
-      {Key? key, required this.message, required this.label, this.onChange, required this.showTips})
+      {Key? key,
+      required this.message,
+      required this.label,
+      this.onChange,
+      required this.showTips})
       : super(key: key);
 
   @override
@@ -79,29 +82,28 @@ class WrapMaterialCheckBoxState extends State<WrapMaterialCheckBox> {
           child: Column(
             children: [
               Text(widget.message),
-             widget.showTips ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 30,
-                    height: 30,
-                    child: Checkbox(
-                      shape: const CircleBorder(),
-                      activeColor: context
-                          .read<CurrentTheme>()
-                          .mainThemeOrSecondThemeColor,
-                      value: checkBoxValue,
-                      onChanged: (bool? value) {
-                        setState(() => checkBoxValue = value!);
-                        if (widget.onChange != null) {
-                          widget.onChange!(value);
-                        }
-                      },
-                    ),
-                  ),
-                  Text(widget.label)
-                ],
-              ) :Container()
+              widget.showTips
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: Checkbox(
+                            shape: const CircleBorder(),
+                            value: checkBoxValue,
+                            onChanged: (bool? value) {
+                              setState(() => checkBoxValue = value!);
+                              if (widget.onChange != null) {
+                                widget.onChange!(value);
+                              }
+                            },
+                          ),
+                        ),
+                        Text(widget.label)
+                      ],
+                    )
+                  : Container()
             ],
           ),
         ));

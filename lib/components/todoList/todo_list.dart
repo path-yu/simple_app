@@ -1,4 +1,4 @@
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +20,7 @@ class TodoList extends StatefulWidget {
   final Function deleteToDoListItem;
 
   //搜索框key
-  final GlobalKey<SearchBarState> searchBarKey;
+  final GlobalKey<MySearchBarState> searchBarKey;
 
   // 更新置顶状态
   final Function updateTodoTopping;
@@ -78,34 +78,34 @@ class TodoListState extends State<TodoList>
   // 是否不再提示删除弹窗
   bool isNoTips = false;
 
-  void removeItem(_index) {
+  void removeItem(index) {
     count = myList.length - 1;
     _getContainerHeight(null);
     // 如果删完了则更新展开状态
     if (count == 0) {
       widget.updateSpread!();
     }
-    animatedRemoveItem(_index);
+    animatedRemoveItem(index);
     // 因为删除动画需要时间300 毫秒 所以需要等待300ms后
     // 调用父组件的方法删除对应的原数据  因为父组件调用了setState所以会触发子组件重新build 所以需要避免发生下标异常
     // 假设原数组中两个元素, 当删除第二个即下标为1的元素时, 如果此时直接调用父组件的删除, 会触发子组件重新build
     // 由于动画是异步执行的, 所以它会等待build后在进行调用 重新数组的长度为1 ,而原生删除的下标为1, 则有可能此时会触发异常
     Future.delayed(const Duration(milliseconds: 350), () {
-      widget.deleteToDoListItem(widget.listData[_index]);
+      widget.deleteToDoListItem(widget.listData[index]);
     });
   }
 
-  void animatedRemoveItem(_index) {
+  void animatedRemoveItem(index) {
     _listkey.currentState?.removeItem(
-        _index, (context, animation) => _buildItem(animation, _index),
+        index, (context, animation) => _buildItem(animation, index),
         duration: _kDuration);
   }
 
   void addItem() async {
-    final _index = widget.listData.length;
+    final index = widget.listData.length;
     count = myList.length + 1;
     _getContainerHeight(null);
-    _listkey.currentState?.insertItem(_index, duration: _kDuration);
+    _listkey.currentState?.insertItem(index, duration: _kDuration);
     await Future.delayed(const Duration(milliseconds: 350));
   }
 
@@ -255,7 +255,7 @@ class TodoListState extends State<TodoList>
   @override
   void dispose() {
     super.dispose();
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
   }
 
   @override
@@ -268,11 +268,12 @@ class TodoListState extends State<TodoList>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    WidgetsBinding.instance?.addPostFrameCallback(_getContainerHeight);
+    WidgetsBinding.instance.addPostFrameCallback(_getContainerHeight);
   }
 
-  Widget _buildItem(Animation<double> _animation, int index) {
+  Widget _buildItem(Animation<double> animation, int index) {
     Map target = myList[index];
+    Color themeColor = Theme.of(context).primaryColor;
     final bool done = target['done'];
     bool isTop = target['isTop'];
     TextDecoration? decoration =
@@ -280,7 +281,7 @@ class TodoListState extends State<TodoList>
     Color color = getTodoTextColor(done);
     Color backgroundColor = getTodoBackgroundColor(isTop);
     return SizeTransition(
-      sizeFactor: _animation,
+      sizeFactor: animation,
       child: DragTarget(
         builder: (BuildContext context, List<int?> candidateData,
             List<dynamic> rejectedData) {
@@ -304,8 +305,9 @@ class TodoListState extends State<TodoList>
             ),
           );
         },
-        onAccept: (int? newIndex) {
-          if (newIndex != null && newIndex < myList.length) {
+        onAcceptWithDetails: (DragTargetDetails<int> detail) {
+          int newIndex = detail.data;
+          if (newIndex < myList.length) {
             var newTarget = myList[newIndex];
             var oldTarget = myList[index];
             // 限定只能在相同done类型的todo 进行拖拽交换
@@ -314,11 +316,10 @@ class TodoListState extends State<TodoList>
             }
           }
         },
-        onWillAccept: (int? newIndex) {
+        onWillAcceptWithDetails: (DragTargetDetails<int> detail) {
+          int newIndex = detail.data;
           // 防止数组越界 error
-          if (newIndex != null &&
-              newIndex < myList.length &&
-              newIndex != index) {
+          if (newIndex < myList.length && newIndex != index) {
             setState(() {
               myList[index]['isShowBorder'] = true;
             });
@@ -340,6 +341,7 @@ class TodoListState extends State<TodoList>
 
   @override
   Widget build(BuildContext context) {
+    Color themeColor = Theme.of(context).primaryColor;
     return AnimatedContainer(
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOutCirc,
@@ -365,33 +367,6 @@ class TodoListState extends State<TodoList>
             margin: EdgeInsets.only(top: index == 0 ? 0 : marin),
             child: Slidable(
               groupTag: '0',
-              child: LongPressDraggable(
-                  child: Opacity(
-                    opacity: myList[index]['isDrag'] ? 0 : 1,
-                    child: _buildItem(animation, index),
-                  ),
-                  delay: const Duration(milliseconds: 350),
-                  onDragStarted: () {
-                    setState(() => myList[index]['isDrag'] = true);
-                  },
-                  onDragEnd: (details) {
-                    setState(() => myList[index]['isDrag'] = false);
-                  },
-                  data: index,
-                  feedback: Material(
-                    elevation: 0.3,
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width - (padding * 2),
-                      height: averageHeight,
-                      child: TodoItem(
-                        color: color,
-                        data: target,
-                        index: index,
-                        decoration: decoration,
-                        backgroundColor: backgroundColor,
-                      ),
-                    ),
-                  )),
               endActionPane: ActionPane(
                 motion: const DrawerMotion(),
                 extentRatio: isTop ? 0.6 : 0.5,
@@ -419,6 +394,33 @@ class TodoListState extends State<TodoList>
                   ),
                 ],
               ),
+              child: LongPressDraggable(
+                  delay: const Duration(milliseconds: 350),
+                  onDragStarted: () {
+                    setState(() => myList[index]['isDrag'] = true);
+                  },
+                  onDragEnd: (details) {
+                    setState(() => myList[index]['isDrag'] = false);
+                  },
+                  data: index,
+                  feedback: Material(
+                    elevation: 0.3,
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width - (padding * 2),
+                      height: averageHeight,
+                      child: TodoItem(
+                        color: color,
+                        data: target,
+                        index: index,
+                        decoration: decoration,
+                        backgroundColor: backgroundColor,
+                      ),
+                    ),
+                  ),
+                  child: Opacity(
+                    opacity: myList[index]['isDrag'] ? 0 : 1,
+                    child: _buildItem(animation, index),
+                  )),
             ),
           );
         },
@@ -448,34 +450,29 @@ class TodoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Neumorphic(
-      style: NeumorphicStyle(
-          depth: 0, color: backgroundColor, shape: NeumorphicShape.convex),
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Checkbox(
-            value: data['done'],
-            shape: const CircleBorder(),
-            activeColor: themeColor,
-            onChanged: handleCheckBoxChange != null
-                ? (value) => handleCheckBoxChange!(value, data, index)
-                : null),
-        Expanded(
-            child: Text(
-          data['value'],
-          style: TextStyle(
-              decoration: decoration,
-              color: color,
-              overflow: TextOverflow.ellipsis),
-        )),
-        Padding(
-          padding: EdgeInsets.only(right: ScreenUtil().setWidth(10)),
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+      Checkbox(
+          value: data['done'],
+          shape: const CircleBorder(),
+          onChanged: handleCheckBoxChange != null
+              ? (value) => handleCheckBoxChange!(value, data, index)
+              : null),
+      Expanded(
           child: Text(
-            data['time'],
-            textAlign: TextAlign.right,
-            style: TextStyle(decoration: decoration, color: color),
-          ),
+        data['value'],
+        style: TextStyle(
+            decoration: decoration,
+            color: color,
+            overflow: TextOverflow.ellipsis),
+      )),
+      Padding(
+        padding: EdgeInsets.only(right: ScreenUtil().setWidth(10)),
+        child: Text(
+          data['time'],
+          textAlign: TextAlign.right,
+          style: TextStyle(decoration: decoration, color: color),
         ),
-      ]),
-    );
+      ),
+    ]);
   }
 }

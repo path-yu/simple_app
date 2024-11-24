@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:decimal/decimal.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_app/components/base/build_base_app_bar.dart';
@@ -26,9 +26,6 @@ class _CalculatorPageState extends State<CalculatorPage> {
       navigatorKey.currentState!.context.watch<CurrentTheme>().isNightMode
           ? Colors.white
           : const Color(0xff999999);
-  final primary = navigatorKey.currentState!.context
-      .watch<CurrentTheme>()
-      .themeBackgroundColor;
 
   // 按钮大小
   final int buttonSize = 68;
@@ -205,6 +202,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
       if (findStrCount(last, '.') == 0 &&
           !operatorSymbolList.contains(last) &&
           prevClickOperator == '.') {
+        // ignore: prefer_interpolation_to_compose_strings
         calcResultList.last += '.' + currentClickOperator;
       } else {
         calcResultList.last += currentClickOperator;
@@ -435,32 +433,32 @@ class _CalculatorPageState extends State<CalculatorPage> {
                     Visibility(
                         visible: expression.isNotEmpty,
                         child: AnimatedDefaultTextStyle(
-                            child: AutoSizeText(
-                              expression,
-                              minFontSize: 16,
-                              textAlign: TextAlign.right,
-                              maxLines: 1,
-                            ),
                             style: TextStyle(
                                 color: expressionColor,
                                 fontSize: isScaleText
                                     ? ScreenUtil().setSp(30)
                                     : ScreenUtil().setSp(48)),
-                            duration: const Duration(milliseconds: 250))),
+                            duration: const Duration(milliseconds: 250),
+                            child: AutoSizeText(
+                              expression,
+                              minFontSize: 16,
+                              textAlign: TextAlign.right,
+                              maxLines: 1,
+                            ))),
                     // answer
                     AnimatedDefaultTextStyle(
-                        child: AutoSizeText(
-                          answerResult != '0' ? '= ' + answerResult : '0',
-                          minFontSize: 16,
-                          textAlign: TextAlign.right,
-                          maxLines: 1,
-                        ),
                         style: TextStyle(
                             color: answerColor,
                             fontSize: isScaleText
                                 ? ScreenUtil().setSp(48)
                                 : ScreenUtil().setSp(30)),
-                        duration: const Duration(milliseconds: 250))
+                        duration: const Duration(milliseconds: 250),
+                        child: AutoSizeText(
+                          answerResult != '0' ? '= $answerResult' : '0',
+                          minFontSize: 16,
+                          textAlign: TextAlign.right,
+                          maxLines: 1,
+                        ))
                   ],
                 ),
               ),
@@ -481,7 +479,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
                         child = Text(e is int ? e.toString() : e,
                             style: TextStyle(
                                 color: textColor,
-                                fontSize: ScreenUtil().setSp(22)));
+                                fontSize: ScreenUtil().setSp(16)));
                       }
                       return SizedBox(
                           width: e == 0
@@ -490,14 +488,14 @@ class _CalculatorPageState extends State<CalculatorPage> {
                           height: e == 0
                               ? ScreenUtil().setWidth(buttonSize)
                               : ScreenUtil().setWidth(buttonSize),
-                          child: NeumorphicButton(
+                          child: ElevatedButton(
                               onPressed: () => handleClick(e),
-                              style: NeumorphicStyle(
-                                shape: NeumorphicShape.concave,
-                                boxShape: e == 0
-                                    ? const NeumorphicBoxShape.stadium()
-                                    : const NeumorphicBoxShape.stadium(),
-                              ),
+                              style: ElevatedButton.styleFrom(
+                                  // shape: NeumorphicShape.concave,
+                                  // boxShape: e == 0
+                                  //     ? const NeumorphicBoxShape.stadium()
+                                  //     : const NeumorphicBoxShape.stadium(),
+                                  ),
                               child: Center(
                                 child: Transform.scale(
                                   scale: operatorSymbolList.contains(e) ||

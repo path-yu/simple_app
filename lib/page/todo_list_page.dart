@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:date_format/date_format.dart' hide S;
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simple_app/common/color.dart';
 import 'package:simple_app/common/global.dart';
 import 'package:simple_app/components/base/build_base_app_bar.dart';
 import 'package:simple_app/components/base/hide_key_bord.dart';
@@ -38,7 +38,8 @@ class _TodoListPageState extends State<TodoListPage> {
       GlobalKey<TodoListState>();
   final GlobalKey<TodoListState> _completeToDoListKey =
       GlobalKey<TodoListState>();
-  final GlobalKey<SearchBarState> _searchBarKey = GlobalKey<SearchBarState>();
+  final GlobalKey<MySearchBarState> _searchBarKey =
+      GlobalKey<MySearchBarState>();
 
   // 输入框输入值
   String _inputValue = "";
@@ -105,19 +106,24 @@ class _TodoListPageState extends State<TodoListPage> {
 
   // 监听键盘点击了确认按钮
   void addConfirm(String value) {
+    Color primaryColor = Theme.of(context).primaryColor;
+
     if (value.isEmpty) {
       showToast(S.of(context).notEmpty);
     } else {
-      // 向通知栏添加一个消息
-      showNotification(
-          message: S.of(context).addTodoMessage, payload: '/todo_list_page');
+      // // 向通知栏添加一个消息
+
+      if (!kIsWeb) {
+        showNotification(
+            message: S.of(context).addTodoMessage, payload: '/todo_list_page');
+      }
       addTodoLitItem();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Row(
           children: <Widget>[
-            const Icon(
+            Icon(
               Icons.check,
-              color: themeColor,
+              color: primaryColor,
             ),
             Text(S.of(context).addTodoMessage)
           ],
@@ -278,6 +284,8 @@ class _TodoListPageState extends State<TodoListPage> {
     Color stickyTopColor = context.watch<CurrentTheme>().isNightMode
         ? const Color.fromRGBO(45, 45, 45, 1)
         : const Color.fromRGBO(144, 201, 172, 0.7);
+    Color primaryColor = Theme.of(context).primaryColor;
+
     return HideKeyboard(
         child: Scaffold(
             appBar: buildBaseAppBar(title: S.of(context).todoList),
@@ -306,7 +314,7 @@ class _TodoListPageState extends State<TodoListPage> {
                                   children: [
                                     Expanded(
                                         child: Center(
-                                            child: SearchBar(
+                                            child: MySearchBar(
                                       _todoController,
                                       addConfirm,
                                       TextInputAction.done,
@@ -314,7 +322,7 @@ class _TodoListPageState extends State<TodoListPage> {
                                       key: _searchBarKey,
                                       prefixIcon: Icon(
                                         Icons.add,
-                                        color: themeColor,
+                                        color: primaryColor,
                                         size: ScreenUtil().setSp(20),
                                       ),
                                     )))

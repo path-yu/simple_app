@@ -10,14 +10,13 @@ FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 const AndroidInitializationSettings initializationSettingsAndroid =
     AndroidInitializationSettings('@mipmap/ic_launcher');
-const IOSInitializationSettings initializationSettingsIOS =
-    IOSInitializationSettings();
-const MacOSInitializationSettings initializationSettingsMacOS =
-    MacOSInitializationSettings();
+// const IOSInitializationSettings initializationSettingsIOS =
+//     IOSInitializationSettings();
+// const MacOSInitializationSettings initializationSettingsMacOS =
+//     MacOSInitializationSettings();
 const InitializationSettings initializationSettings = InitializationSettings(
-    android: initializationSettingsAndroid,
-    iOS: initializationSettingsIOS,
-    macOS: initializationSettingsMacOS);
+  android: initializationSettingsAndroid,
+);
 // 显示通知栏
 Future<void> showNotification(
     {required String message, String? payload, String? title}) async {
@@ -42,10 +41,10 @@ Future<void> showNotification(
 }
 
 // 点击通知栏触发的事件 跳转到todoListPage 页面
-void selectNotification(String? payload) async {
-  debugPrint('notification payload: $payload');
-  if (payload != null) {
-    navigatorKey.currentState?.pushNamed(payload);
+void selectNotification(NotificationResponse? response) async {
+  debugPrint('notification payload: $response.payload');
+  if (response?.payload != null) {
+    navigatorKey.currentState?.pushNamed(response?.payload as String);
   }
 }
 
@@ -53,5 +52,5 @@ void selectNotification(String? payload) async {
 Future<bool?> flutterLocalNotificationsPluginInit() {
 // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
   return flutterLocalNotificationsPlugin.initialize(initializationSettings,
-      onSelectNotification: selectNotification);
+      onDidReceiveBackgroundNotificationResponse: selectNotification);
 }

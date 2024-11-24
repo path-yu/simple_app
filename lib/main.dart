@@ -1,6 +1,8 @@
-import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_quill/translations.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_app/common/color.dart';
@@ -44,13 +46,10 @@ void main(List<String> args) {
       child: const MyApp(),
     ));
     // 初始化本地通知插件
-    await flutterLocalNotificationsPluginInit();
-    // 以下两行 设置android状态栏为透明的沉浸。写在组件渲染之后，
-    SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      systemNavigationBarColor: nightMode?.themeOrDarkColor,
-    );
-    SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+    // 是否为web环境
+    if (!kIsWeb) {
+      await flutterLocalNotificationsPluginInit();
+    }
   });
 }
 
@@ -67,49 +66,51 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return NeumorphicApp(
-      debugShowCheckedModeBanner: false,
-      initialRoute: '/',
-      routes: routes,
-      title: 'simple_app',
-      // 国际化
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        S.delegate
-      ],
-      themeMode: context.watch<CurrentTheme>().value,
-      theme: const NeumorphicThemeData(
-        baseColor: Color(0xfff7f7f7),
-        depth: 8,
-        // depth: 10,
+    return ScreenUtilInit(
+      designSize: const Size(375, 750),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        initialRoute: '/',
+        routes: routes,
+        title: 'simple_app',
+        // 国际化
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          FlutterQuillLocalizations.delegate,
+          S.delegate
+        ],
+        themeMode: context.watch<CurrentTheme>().value,
+        theme: ThemeData(
+          brightness: Brightness.light,
+        ),
+        darkTheme:
+            ThemeData(brightness: Brightness.dark, primaryColor: darkColor),
+        //应用支持的语言列表
+        supportedLocales: const [
+          Locale('en', 'US'), // English
+          Locale('zh', 'CN'), // 中文
+        ],
+        // 保存全局navigatorkey
+        navigatorKey: navigatorKey,
+        // 当前语言
+        locale: context.watch<CurrentLocale>().value,
+        localeResolutionCallback: (deviceLocale, supportedLocales) {
+          _prefs.then((prefs) {
+            strLocale = prefs.getString(ConstantKey.localeKey);
+            // 如果本地环境不为中文,而且没有设置过语言,则设置为英文
+            if (locale == null &&
+                localeToStrLocale(deviceLocale!) != 'zh' &&
+                strLocale == null) {
+              locale?.setLocale(const Locale('en', 'US'));
+            }
+          });
+          return null;
+        },
       ),
-      darkTheme: const NeumorphicThemeData(
-        baseColor: darkColor,
-        depth: 8,
-      ),
-      //应用支持的语言列表
-      supportedLocales: const [
-        Locale('en', 'US'), // English
-        Locale('zh', 'CN'), // 中文
-      ],
-      // 保存全局navigatorkey
-      navigatorKey: navigatorKey,
-      // 当前语言
-      locale: context.watch<CurrentLocale>().value,
-      localeResolutionCallback: (deviceLocale, supportedLocales) {
-        _prefs.then((prefs) {
-          strLocale = prefs.getString(ConstantKey.localeKey);
-          // 如果本地环境不为中文,而且没有设置过语言,则设置为英文
-          if (locale == null &&
-              localeToStrLocale(deviceLocale!) != 'zh' &&
-              strLocale == null) {
-            locale?.setLocale(const Locale('en', 'US'));
-          }
-        });
-        return null;
-      },
     );
   }
 }
